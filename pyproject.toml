@@ -1,0 +1,29 @@
+[tool.black]
+line-length = 120
+
+[tool.pylint.master]
+persistent = false
+score = false
+
+[tool.pylint.messages_control]
+disable = "all"
+enable = [
+  "miscellaneous",
+  "similarities",
+]
+
+[tool.pylint.similarities]
+ignore-comments = true
+ignore-docstrings = true
+ignore-imports = true
+min-similarity-lines = 8
+
+[tool.pylint.reports]
+reports = false
+
+[tool.pylint.miscellaneous]
+notes = [
+  "FIXME",
+  "XXX",
+  "TODO",
+]

@@ -1,0 +1,40 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+from io import BytesIO
+from typing import Any, Tuple
+
+from PIL import Image
+
+
+class Decoder:
+    def decode(self) -> Any:
+        raise NotImplementedError
+
+
+class ImageDataDecoder(Decoder):
+    def __init__(self, image_data: bytes) -> None:
+        self._image_data = image_data
+
+    def decode(self) -> Image:
+        f = BytesIO(self._image_data)
+        return Image.open(f).convert(mode="RGB")
+
+
+class TargetDecoder(Decoder):
+    def __init__(self, target: Any):
+        self._target = target
+
+    def decode(self) -> Any:
+        return self._target
+
+
+class TupleDecoder(Decoder):
+    def __init__(self, *decoders: Decoder):
+        self._decoders: Tuple[Decoder, ...] = decoders
+
+    def decode(self) -> Any:
+        return (decoder.decode() for decoder in self._decoders)
