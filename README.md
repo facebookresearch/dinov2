@@ -11,12 +11,15 @@ Vasil Khalidov,
 Patrick Labatut,
 Armand Joulin,
 Piotr Bojanowski
-
+<div align="center">
+  
 [[`Paper`](https://arxiv.org/abs/2304.07193)] [[`Blog`](https://ai.facebook.com/blog/dino-v2-computer-vision-self-supervised-learning/)] [[`Demo`](https://dinov2.metademolab.com)] [[`BibTeX`](#citing-dinov2)]
+  
+</div>
 
-PyTorch implementation and pretrained models for DINOv2. For details, see the paper: **DINOv2: Learning Robust Visual Features without Supervision**.
+PyTorch implementation and pretrained models for DINOv2. For details, see the paper: **[DINOv2: Learning Robust Visual Features without Supervision](https://arxiv.org/abs/2304.07193)**.
 
-DINOv2 models produce high-performance visual features that can be directly employed with classifiers as simple as linear layers on a variety of computer vision tasks; these visual features are robust and perform well across domains without any requirement for fine-tuning. The models were pretrained on a dataset of 142 M images without using any labels or annotations.
+DINOv2 models produces high-performance visual features that can be directly employed with classifiers as simple as linear layers on a variety of computer vision tasks; these visual features are robust and perform well across domains without any requirement for fine-tuning. The models were pretrained on a dataset of 142 M images without using any labels or annotations.
 
 
 https://user-images.githubusercontent.com/60359573/230078733-5faffa19-e6ce-4c55-9200-62dd76f8236a.mp4
@@ -26,7 +29,7 @@ https://user-images.githubusercontent.com/60359573/230078733-5faffa19-e6ce-4c55-
 </div>
 
 ## Pretrained models
-
+<div align="center">
 <table>
   <tr>
     <th>model</th>
@@ -64,6 +67,7 @@ https://user-images.githubusercontent.com/60359573/230078733-5faffa19-e6ce-4c55-
     <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_pretrain.pth">backbone only</a></td>
   </tr>
 </table>
+  </div>
 
 
 ### Pretrained models via PyTorch Hub
@@ -187,7 +191,7 @@ python dinov2/run/eval/linear.py \
 ```
 
 We release the weights from evaluating the different models:
-
+<div align="center">
 <table>
   <tr>
     <th>model</th>
@@ -215,7 +219,7 @@ We release the weights from evaluating the different models:
     <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_linear_head.pth">linear head weights</a></td>
   </tr>
 </table>
-
+</div>
 The performance of the provided pretrained model weights can be evaluated as follows on ImageNet-1k:
 
 ```
