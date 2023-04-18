@@ -27,7 +27,7 @@ https://user-images.githubusercontent.com/60359573/230078733-5faffa19-e6ce-4c55-
 ## Pretrained models
 
 <div align="center">
-<table>
+<table style="margin: auto">
   <tr>
     <th>model</th>
     <th># of<br />params</th>
@@ -189,7 +189,7 @@ python dinov2/run/eval/linear.py \
 We release the weights from evaluating the different models:
 
 <div align="center">
-<table>
+<table style="margin: auto">
   <tr>
     <th>model</th>
     <th>ImageNet<br />top-1</th>
