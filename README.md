@@ -26,7 +26,6 @@ https://user-images.githubusercontent.com/60359573/230078733-5faffa19-e6ce-4c55-
 
 ## Pretrained models
 
-<div align="center">
 <table style="margin: auto">
   <tr>
     <th>model</th>
@@ -64,7 +63,6 @@ https://user-images.githubusercontent.com/60359573/230078733-5faffa19-e6ce-4c55-
     <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_pretrain.pth">backbone only</a></td>
   </tr>
 </table>
-  </div>
 
 ### Pretrained models via PyTorch Hub
 
@@ -188,7 +186,6 @@ python dinov2/run/eval/linear.py \
 
 We release the weights from evaluating the different models:
 
-<div align="center">
 <table style="margin: auto">
   <tr>
     <th>model</th>
@@ -216,7 +213,7 @@ We release the weights from evaluating the different models:
     <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_linear_head.pth">linear head weights</a></td>
   </tr>
 </table>
-</div>
+
 The performance of the provided pretrained model weights can be evaluated as follows on ImageNet-1k:
 
 ```
