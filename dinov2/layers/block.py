@@ -19,18 +19,21 @@ from .drop_path import DropPath
 from .layer_scale import LayerScale
 from .mlp import Mlp
 
+HAS_CUDA = torch.cuda.is_available()
+
 
 logger = logging.getLogger("dinov2")
 
 
-try:
-    from xformers.ops import fmha
-    from xformers.ops import scaled_index_add, index_select_cat
+XFORMERS_AVAILABLE = False
+if HAS_CUDA:
+    try:
+        from xformers.ops import fmha
+        from xformers.ops import scaled_index_add, index_select_cat
 
-    XFORMERS_AVAILABLE = True
-except ImportError:
-    logger.warning("xFormers not available")
-    XFORMERS_AVAILABLE = False
+        XFORMERS_AVAILABLE = True
+    except ImportError:
+        logger.warning("xFormers not available")
 
 
 class Block(nn.Module):

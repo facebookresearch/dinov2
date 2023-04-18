@@ -12,18 +12,22 @@ import logging
 
 from torch import Tensor
 from torch import nn
+from torch import cuda
+
+HAS_CUDA = cuda.is_available()
 
 
 logger = logging.getLogger("dinov2")
 
 
-try:
-    from xformers.ops import memory_efficient_attention, unbind, fmha
+XFORMERS_AVAILABLE = False
+if HAS_CUDA:
+    try:
+        from xformers.ops import memory_efficient_attention, unbind, fmha
 
-    XFORMERS_AVAILABLE = True
-except ImportError:
-    logger.warning("xFormers not available")
-    XFORMERS_AVAILABLE = False
+        XFORMERS_AVAILABLE = True
+    except ImportError:
+        logger.warning("xFormers not available")
 
 
 class Attention(nn.Module):
