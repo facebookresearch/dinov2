@@ -68,7 +68,7 @@ class Attention(nn.Module):
 
 class MemEffAttention(Attention):
     def forward(self, x: Tensor, attn_bias=None) -> Tensor:
-        if not XFORMERS_AVAILABLE:
+        if not XFORMERS_AVAILABLE or not x.is_cuda:
             assert attn_bias is None, "xFormers is required for nested tensors usage"
             return super().forward(x)
 
