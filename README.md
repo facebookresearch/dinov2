@@ -10,7 +10,7 @@ Marc Szafraniec,
 Vasil Khalidov,
 Patrick Labatut,
 Armand Joulin,
-Piotr Bojanowski 
+Piotr Bojanowski
 
 [[`Paper`](https://arxiv.org/abs/2304.07193)] [[`Blog`](https://ai.facebook.com/blog/dino-v2-computer-vision-self-supervised-learning/)] [[`Demo`](https://dinov2.metademolab.com)] [[`BibTeX`](#citing-dinov2)]
 
@@ -66,9 +66,9 @@ https://user-images.githubusercontent.com/60359573/230078733-5faffa19-e6ce-4c55-
 
 ### Pretrained models via PyTorch Hub
 
-Please follow the instructions [here](https://pytorch.org/get-started/locally/) to install the PyTorch and torchvision dependencies (these are the only required dependencies). Installing both PyTorch and torchvision with CUDA support is strongly recommended.
+Please follow the instructions [here](https://pytorch.org/get-started/locally/) to install PyTorch (the only required dependency for loading the model). Installing PyTorch with CUDA support is strongly recommended.
 
-The corresponding model card can be found in the [[`MODEL_CARD.md`](MODEL_CARD.md)] file.
+A corresponding [model card](MODEL_CARD.md) is included in the repository.
 
 ```python
 import torch
@@ -81,16 +81,16 @@ dinov2_vitg14 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14')
 
 ## Installation
 
-The training and evaluation code requires PyTorch 2.0 and xFormers 0.0.18 as well as a number of other 3rd party packages. To setup all the required dependencies for training and evaluation, please follow the instructions below:
+The training and evaluation code requires PyTorch 2.0 and [xFormers](https://github.com/facebookresearch/xformers) 0.0.18 as well as a number of other 3rd party packages. Note that the code has only been tested with the specified versions and also expects a Linux environment. To setup all the required dependencies for training and evaluation, please follow the instructions below:
 
-*conda* **(Recommended)** - Create and activate a `dinov2` conda environment using the provided environment definition:
+*[conda](https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html)* **(Recommended)** - Clone the repository and then create and activate a `dinov2` conda environment using the provided environment definition:
 
 ```shell
 conda env create -f conda.yaml
 conda activate dinov2
 ```
 
-*pip* - Use the provided `requirements.txt` to install the dependencies:
+*[pip](https://pip.pypa.io/en/stable/getting-started/)* - Clone the repository and then use the provided `requirements.txt` to install the dependencies:
 
 ```shell
 pip install -r requirements.txt
@@ -98,7 +98,10 @@ pip install -r requirements.txt
 
 ## Data preparation
 
-Expected contents for the ImageNet-1k data folder:
+### ImageNet-1k
+
+The root directory of the dataset should hold the following contents:
+
 - `<root>/test/ILSVRC2012_test_00000001.JPEG`
 - `<root>/test/[..]`
 - `<root>/test/ILSVRC2012_test_00100000.JPEG`
@@ -110,13 +113,19 @@ Expected contents for the ImageNet-1k data folder:
 - `<root>/val/n15075141/ILSVRC2012_val_00049174.JPEG`
 - `<root>/labels.txt`
 
-For ImageNet-22k, please adapt the Dataset object accordingly.
+### ImageNet-22k
+
+Please adapt the [dataset class](dinov2/data/datasets/image_net_22k.py) to match your local setup.
+
+<br />
+
+:warning: To execute the commands provided in the next sections for training and evaluation, the `dinov2` package should be included in the Python module search path, i.e. simply prefix the command to run with `PYTHONPATH=.`.
 
 ## Training
 
 ### Fast setup: training DINOv2 ViT-L/16 on ImageNet-1k
 
-Run DINOv2 on 4 A100-80GB nodes (32 GPUs) in a SLURM cluster environment with submitit.
+Run DINOv2 training on 4 A100-80GB nodes (32 GPUs) in a SLURM cluster environment with submitit:
 
 ```shell
 python dinov2/run/train/train.py \
@@ -132,9 +141,9 @@ The training code saves the weights of the teacher in the `eval` folder every 12
 
 ### Long setup: training DINOv2 ViT-L/14 on ImageNet-22k
 
-Run on 12 A100-80GB nodes (96 GPUs) in a SLURM cluster environment with submitit.
+Run DINOv2 training on 12 A100-80GB nodes (96 GPUs) in a SLURM cluster environment with submitit:
 
-```
+```shell
 python dinov2/run/train/train.py \
     --nodes 12 \
     --config-file dinov2/configs/train/vitl14.yaml \
@@ -153,7 +162,7 @@ The training code regularly saves the teacher weights. In order to evaluate the 
 
 ### k-NN classification on ImageNet-1k
 
-```
+```shell
 python dinov2/run/eval/knn.py \
     --config-file <PATH/TO/OUTPUT/DIR>/config.yaml \
     --pretrained-weights <PATH/TO/OUTPUT/DIR>/eval/training_24999/teacher_checkpoint.pth \
@@ -164,7 +173,7 @@ python dinov2/run/eval/knn.py \
 
 ### Logistic regression classification on ImageNet-1k
 
-```
+```shell
 python dinov2/run/eval/log_regression.py \
     --config-file <PATH/TO/OUTPUT/DIR>/config.yaml \
     --pretrained-weights <PATH/TO/OUTPUT/DIR>/eval/training_24999/teacher_checkpoint.pth \
@@ -175,7 +184,7 @@ python dinov2/run/eval/log_regression.py \
 
 ### Linear classification with data augmentation on ImageNet-1k
 
-```
+```shell
 python dinov2/run/eval/linear.py \
     --config-file <PATH/TO/OUTPUT/DIR>/config.yaml \
     --pretrained-weights <PATH/TO/OUTPUT/DIR>/eval/training_24999/teacher_checkpoint.pth \
@@ -216,7 +225,7 @@ We release the weights from evaluating the different models:
 
 The performance of the provided pretrained model weights can be evaluated as follows on ImageNet-1k:
 
-```
+```shell
 python dinov2/run/eval/linear.py \
     --config-file dinov2/configs/eval/vitg14_pretrain.yaml \
     --pretrained-weights https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_pretrain.pth \
@@ -226,7 +235,7 @@ python dinov2/run/eval/linear.py \
 
 ## License
 
-This repository and the models are released under the CC-BY-NC as found in the [LICENSE](LICENSE) file.
+DINOv2 code and model weights are released under the CC-BY-NC 4.0 license. See [LICENSE](LICENSE) for additional details.
 
 ## Contributing
 
