@@ -5,8 +5,8 @@
 # LICENSE file in the root directory of this source tree.
 
 import itertools
-from typing import Any, Optional
 import warnings
+from typing import Any, Optional
 
 import numpy as np
 import torch
@@ -67,7 +67,7 @@ def _generate_randperm_indices(*, size: int, generator: torch.Generator):
     # This is actually matching PyTorch's CPU implementation, see: https://github.com/pytorch/pytorch/blob/master/aten/src/ATen/native/TensorFactories.cpp#L900-L921
     perm = torch.arange(size, dtype=dtype)
     for i in range(size):
-        j = torch.randint(i, size, size=(1,), generator=generator).item()
+        j: int = int(torch.randint(i, size, size=(1,), generator=generator).item())
 
         # Always swap even if no-op
         value = perm[j].item()
@@ -136,7 +136,7 @@ def _shuffle_tensor_slice(
     result = np.empty(count, dtype=dtype)
 
     for i in range(count):
-        j = torch.randint(0, i + 1, size=(1,), generator=generator).item() if i > 0 else 0
+        j = int(torch.randint(0, i + 1, size=(1,), generator=generator).item()) if i > 0 else 0
 
         result[i] = result[j]
         result[j] = tensor[start + i * step].item()

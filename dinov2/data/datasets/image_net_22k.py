@@ -4,20 +4,19 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
+import os
+import warnings
 from dataclasses import dataclass
 from enum import Enum
 from functools import lru_cache
 from gzip import GzipFile
 from io import BytesIO
 from mmap import ACCESS_READ, mmap
-import os
 from typing import Any, Callable, List, Optional, Set, Tuple
-import warnings
 
 import numpy as np
 
 from .extended import ExtendedVisionDataset
-
 
 _Labels = int
 
@@ -139,8 +138,8 @@ class ImageNet22k(ExtendedVisionDataset):
 
         return sorted(class_ids)
 
-    def _load_entries_class_ids(self, root: Optional[str] = None) -> Tuple[List[_Entry], List[str]]:
-        root = self.get_root(root)
+    def _load_entries_class_ids(self, root: str = "") -> Tuple[List[_Entry], List[str]]:
+        root = self.get_root(root)  # LG TODO Is get_root existed?
         entries: List[_Entry] = []
         class_ids = self._find_class_ids(root)
 

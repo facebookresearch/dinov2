@@ -4,12 +4,11 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
-from pathlib import Path
 import re
+from pathlib import Path
 from typing import List, Tuple
 
-from setuptools import setup, find_packages
-
+from setuptools import find_packages, setup  # type: ignore
 
 NAME = "dinov2"
 DESCRIPTION = "PyTorch code and models for the DINOv2 self-supervised learning method."
@@ -27,7 +26,7 @@ except FileNotFoundError:
     long_description = DESCRIPTION
 
 
-def get_requirements(path: str = HERE / "requirements.txt") -> Tuple[List[str], List[str]]:
+def get_requirements(path: Path = HERE / "requirements.txt") -> Tuple[List[str], List[str]]:
     requirements = []
     extra_indices = []
     with open(path) as f:

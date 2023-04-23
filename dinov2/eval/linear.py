@@ -5,28 +5,27 @@
 # LICENSE file in the root directory of this source tree.
 
 import argparse
-from functools import partial
 import json
 import logging
 import os
 import sys
+from functools import partial
 from typing import List, Optional
 
 import numpy as np
 import torch
 import torch.nn as nn
+from fvcore.common.checkpoint import Checkpointer, PeriodicCheckpointer  # type: ignore
 from torch.nn.parallel import DistributedDataParallel
-from fvcore.common.checkpoint import Checkpointer, PeriodicCheckpointer
 
+import dinov2.distributed as distributed
 from dinov2.data import SamplerType, make_data_loader, make_dataset
 from dinov2.data.transforms import make_classification_eval_transform, make_classification_train_transform
-import dinov2.distributed as distributed
 from dinov2.eval.metrics import MetricType, build_metric
 from dinov2.eval.setup import get_args_parser as get_setup_args_parser
 from dinov2.eval.setup import setup_and_build_model
 from dinov2.eval.utils import ModelWithIntermediateLayers, evaluate
 from dinov2.logging import MetricLogger
-
 
 logger = logging.getLogger("dinov2")
 
@@ -157,7 +156,8 @@ def has_ddp_wrapper(m: nn.Module) -> bool:
 
 
 def remove_ddp_wrapper(m: nn.Module) -> nn.Module:
-    return m.module if has_ddp_wrapper(m) else m
+    # LG TODO it returns now "Union[Tensor, Module]"
+    return m.module if has_ddp_wrapper(m) else m  # type: ignore
 
 
 def _pad_and_collate(batch):
