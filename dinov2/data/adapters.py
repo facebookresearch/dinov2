@@ -20,9 +20,6 @@ class DatasetWithEnumeratedTargets(Dataset):
         target = self._dataset.get_target(index)
         return (index, target)
 
-    def get_sample_decoder(self, index: int) -> Any:
-        return self._dataset.get_sample_decoder(index)
-
     def __getitem__(self, index: int) -> Tuple[Any, Tuple[Any, int]]:
         image, target = self._dataset[index]
         target = index if target is None else target

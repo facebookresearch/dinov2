@@ -22,7 +22,6 @@ from .extended import ExtendedVisionDataset
 _Labels = int
 
 _DEFAULT_MMAP_CACHE_SIZE = 16  # Warning: This can exhaust file descriptors
-_IMAGES_SUBDIR_IMAGENET_21KP = "062717"
 
 
 @dataclass

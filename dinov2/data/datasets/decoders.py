@@ -5,7 +5,7 @@
 # LICENSE file in the root directory of this source tree.
 
 from io import BytesIO
-from typing import Any, Tuple
+from typing import Any
 
 from PIL import Image
 
@@ -30,11 +30,3 @@ class TargetDecoder(Decoder):
 
     def decode(self) -> Any:
         return self._target
-
-
-class TupleDecoder(Decoder):
-    def __init__(self, *decoders: Decoder):
-        self._decoders: Tuple[Decoder, ...] = decoders
-
-    def decode(self) -> Any:
-        return (decoder.decode() for decoder in self._decoders)

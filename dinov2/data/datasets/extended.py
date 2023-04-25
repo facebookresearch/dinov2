@@ -8,7 +8,7 @@ from typing import Any, Tuple
 
 from torchvision.datasets import VisionDataset
 
-from .decoders import Decoder, TargetDecoder, ImageDataDecoder, TupleDecoder
+from .decoders import TargetDecoder, ImageDataDecoder
 
 
 class ExtendedVisionDataset(VisionDataset):
@@ -34,14 +34,6 @@ class ExtendedVisionDataset(VisionDataset):
             image, target = self.transforms(image, target)
 
         return image, target
-
-    def get_sample_decoder(self, index: int) -> Decoder:
-        image_data = self.get_image_data(index)
-        target = self.get_target(index)
-        return TupleDecoder(
-            ImageDataDecoder(image_data),
-            TargetDecoder(target),
-        )
 
     def __len__(self) -> int:
         raise NotImplementedError
