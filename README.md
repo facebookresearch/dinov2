@@ -113,7 +113,7 @@ The root directory of the dataset should hold the following contents:
 - `<ROOT>/val/n15075141/ILSVRC2012_val_00049174.JPEG`
 - `<ROOT>/labels.txt`
 
-The dataset implementation additional expects metadata in the extra directory:
+The provided dataset implementation expects a few additional metadata files to be present under the extra directory:
 
 - `<EXTRA>/class-ids-TRAIN.npy`
 - `<EXTRA>/class-ids-VAL.npy`
@@ -123,20 +123,17 @@ The dataset implementation additional expects metadata in the extra directory:
 - `<EXTRA>/entries-TRAIN.npy`
 - `<EXTRA>/entries-VAL.npy`
 
-This metadata should be generated (once) as follows:
+These metadata files can be generated (once) with the following lines of Python code:
 
 ```python
 from dinov2.data.datasets import ImageNet
 
-IMAGE_NET_ROOT = "<ROOT>"
-IMAGE_NET_EXTRA = "<EXTRA>"
-
 for split in ImageNet.Split:
-    dataset = ImageNet(split=split, root=IMAGE_NET_ROOT, extra=IMAGE_NET_EXTRA)
+    dataset = ImageNet(split=split, root="<ROOT>", extra="<EXTRA>")
     dataset.dump_extra()
 ```
 
-The root and extra directories can be the same one.
+Note that the root and extra directories do not have to be distinct directories.
 
 ### ImageNet-22k
 
