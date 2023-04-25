@@ -102,16 +102,41 @@ pip install -r requirements.txt
 
 The root directory of the dataset should hold the following contents:
 
-- `<root>/test/ILSVRC2012_test_00000001.JPEG`
-- `<root>/test/[..]`
-- `<root>/test/ILSVRC2012_test_00100000.JPEG`
-- `<root>/train/n01440764/n01440764_10026.JPEG`
-- `<root>/train/[...]`
-- `<root>/train/n15075141/n15075141_9993.JPEG`
-- `<root>/val/n01440764/ILSVRC2012_val_00000293.JPEG`
-- `<root>/val/[...]`
-- `<root>/val/n15075141/ILSVRC2012_val_00049174.JPEG`
-- `<root>/labels.txt`
+- `<ROOT>/test/ILSVRC2012_test_00000001.JPEG`
+- `<ROOT>/test/[..]`
+- `<ROOT>/test/ILSVRC2012_test_00100000.JPEG`
+- `<ROOT>/train/n01440764/n01440764_10026.JPEG`
+- `<ROOT>/train/[...]`
+- `<ROOT>/train/n15075141/n15075141_9993.JPEG`
+- `<ROOT>/val/n01440764/ILSVRC2012_val_00000293.JPEG`
+- `<ROOT>/val/[...]`
+- `<ROOT>/val/n15075141/ILSVRC2012_val_00049174.JPEG`
+- `<ROOT>/labels.txt`
+
+The dataset implementation additional expects metadata in the extra directory:
+
+- `<EXTRA>/class-ids-TRAIN.npy`
+- `<EXTRA>/class-ids-VAL.npy`
+- `<EXTRA>/class-names-TRAIN.npy`
+- `<EXTRA>/class-names-VAL.npy`
+- `<EXTRA>/entries-TEST.npy`
+- `<EXTRA>/entries-TRAIN.npy`
+- `<EXTRA>/entries-VAL.npy`
+
+This metadata should be generated (once) as follows:
+
+```python
+from dinov2.data.datasets import ImageNet
+
+IMAGE_NET_ROOT = "<ROOT>"
+IMAGE_NET_EXTRA = "<EXTRA>"
+
+for split in ImageNet.Split:
+    dataset = ImageNet(split=split, root=IMAGE_NET_ROOT, extra=IMAGE_NET_EXTRA)
+    dataset.dump_extra()
+```
+
+The root and extra directories can be the same one.
 
 ### ImageNet-22k
 
