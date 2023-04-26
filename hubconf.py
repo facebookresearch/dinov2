@@ -109,21 +109,21 @@ class _LinearClassifierWrapper(nn.Module):
     def forward(self, x):
         if self.layers == 1:
             x = self.backbone.forward_features(x)
-            cls_token = x["x_norm_clstoken"].squeeze(0)
-            patch_tokens = x["x_norm_patchtokens"].squeeze(0)
+            cls_token = x["x_norm_clstoken"]
+            patch_tokens = x["x_norm_patchtokens"]
             linear_input = torch.cat([
                 cls_token,
-                patch_tokens.mean(0)
-            ])
+                patch_tokens.mean(dim=1)
+            ], dim=1)
         elif self.layers == 4:
             x = self.backbone.get_intermediate_layers(x, n=4, return_class_token=True)
             linear_input = torch.cat([
-                x[0][1].squeeze(0),
-                x[1][1].squeeze(0),
-                x[2][1].squeeze(0),
-                x[3][1].squeeze(0),
-                x[3][0].squeeze(0).mean(0)
-            ])
+                x[0][1],
+                x[1][1],
+                x[2][1],
+                x[3][1],
+                x[3][0].mean(dim=1)
+            ], dim=1)
         else:
             assert False, f"Unsupported number of layers: {self.layers}"
         return self.linear_head(linear_input)
