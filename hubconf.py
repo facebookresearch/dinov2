@@ -111,19 +111,10 @@ class _LinearClassifierWrapper(nn.Module):
             x = self.backbone.forward_features(x)
             cls_token = x["x_norm_clstoken"]
             patch_tokens = x["x_norm_patchtokens"]
-            linear_input = torch.cat([
-                cls_token,
-                patch_tokens.mean(dim=1)
-            ], dim=1)
+            linear_input = torch.cat([cls_token, patch_tokens.mean(dim=1)], dim=1)
         elif self.layers == 4:
             x = self.backbone.get_intermediate_layers(x, n=4, return_class_token=True)
-            linear_input = torch.cat([
-                x[0][1],
-                x[1][1],
-                x[2][1],
-                x[3][1],
-                x[3][0].mean(dim=1)
-            ], dim=1)
+            linear_input = torch.cat([x[0][1], x[1][1], x[2][1], x[3][1], x[3][0].mean(dim=1)], dim=1)
         else:
             assert False, f"Unsupported number of layers: {self.layers}"
         return self.linear_head(linear_input)
@@ -141,7 +132,9 @@ def _make_dinov2_linear_classifier(
     embed_dim = backbone.embed_dim
     patch_size = backbone.patch_size
     model_name = _make_dinov2_model_name(arch_name, patch_size)
-    linear_head = _make_dinov2_linear_head(model_name=model_name, embed_dim=embed_dim, layers=layers, pretrained=pretrained)
+    linear_head = _make_dinov2_linear_head(
+        model_name=model_name, embed_dim=embed_dim, layers=layers, pretrained=pretrained
+    )
 
     return _LinearClassifierWrapper(backbone=backbone, linear_head=linear_head, layers=layers)
 
@@ -171,4 +164,6 @@ def dinov2_vitg14_lc(*, pretrained: bool = True, **kwargs):
     """
     Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-g/14 backbone (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
     """
-    return _make_dinov2_linear_classifier(arch_name="vit_giant2", ffn_layer="swiglufused", pretrained=pretrained, **kwargs)
+    return _make_dinov2_linear_classifier(
+        arch_name="vit_giant2", ffn_layer="swiglufused", pretrained=pretrained, **kwargs
+    )
