@@ -87,7 +87,7 @@ class iBOTPatchLoss(nn.Module):
             Q /= torch.sum(Q, dim=0, keepdim=True)
             Q /= B
 
-        Q *= B  # the colomns must sum to 1 so that Q is an assignment
+        Q *= B  # the columns must sum to 1 so that Q is an assignment
         return Q.t()
 
     def forward(self, student_patch_tokens, teacher_patch_tokens, student_masks_flat):
