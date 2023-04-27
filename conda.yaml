@@ -11,7 +11,7 @@ dependencies:
   - pytorch::pytorch-cuda=11.7.0
   - pytorch::torchvision=0.15.0
   - omegaconf
-  - torchmetrics=0.10.3
+  - torchmetrics=0.11.4
   - fvcore
   - iopath
   - xformers::xformers=0.0.18
