@@ -12,18 +12,22 @@ import logging
 
 from torch import Tensor
 from torch import nn
+from torch import cuda
+
+HAS_CUDA = cuda.is_available()
 
 
 logger = logging.getLogger("dinov2")
 
 
-try:
-    from xformers.ops import memory_efficient_attention, unbind, fmha
+XFORMERS_AVAILABLE = False
+if HAS_CUDA:
+    try:
+        from xformers.ops import memory_efficient_attention, unbind, fmha
 
-    XFORMERS_AVAILABLE = True
-except ImportError:
-    logger.warning("xFormers not available")
-    XFORMERS_AVAILABLE = False
+        XFORMERS_AVAILABLE = True
+    except ImportError:
+        logger.warning("xFormers not available")
 
 
 class Attention(nn.Module):
@@ -64,7 +68,7 @@ class Attention(nn.Module):
 
 class MemEffAttention(Attention):
     def forward(self, x: Tensor, attn_bias=None) -> Tensor:
-        if not XFORMERS_AVAILABLE:
+        if not XFORMERS_AVAILABLE or not x.is_cuda:
             assert attn_bias is None, "xFormers is required for nested tensors usage"
             return super().forward(x)
 
