@@ -7,7 +7,7 @@
 from typing import Sequence
 
 import torch
-from torchvision import transforms
+from torchvision import transforms  # type: ignore
 
 
 class GaussianBlur(transforms.RandomApply):

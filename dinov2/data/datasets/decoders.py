@@ -19,7 +19,7 @@ class ImageDataDecoder(Decoder):
     def __init__(self, image_data: bytes) -> None:
         self._image_data = image_data
 
-    def decode(self) -> Image:
+    def decode(self) -> Image:  # type: ignore
         f = BytesIO(self._image_data)
         return Image.open(f).convert(mode="RGB")
 

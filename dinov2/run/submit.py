@@ -12,22 +12,18 @@ from typing import List, Optional
 
 import submitit
 
-from dinov2.utils.cluster import (
-    get_slurm_executor_parameters,
-    get_slurm_partition,
-    get_user_checkpoint_path,
-)
-
+from dinov2.utils.cluster import get_slurm_executor_parameters, get_slurm_partition, get_user_checkpoint_path
 
 logger = logging.getLogger("dinov2")
 
 
 def get_args_parser(
     description: Optional[str] = None,
-    parents: Optional[List[argparse.ArgumentParser]] = [],
+    parents: Optional[List[argparse.ArgumentParser]] = None,
     add_help: bool = True,
 ) -> argparse.ArgumentParser:
     slurm_partition = get_slurm_partition()
+    parents = parents or []
     parser = argparse.ArgumentParser(
         description=description,
         parents=parents,
@@ -110,7 +106,10 @@ def submit_jobs(task_class, args, name: str):
         timeout_min=args.timeout,  # max is 60 * 72
         slurm_signal_delay_s=120,
         slurm_partition=args.partition,
-        **kwargs,
+        **kwargs,  # type: ignore
+        # LG TODO what we should do with the `cluster_type` kwarg?
+        # error: Argument 6 to "get_slurm_executor_parameters" has incompatible type
+        # "**Dict[str, str]"; expected "Optional[ClusterType]"
     )
     executor.update_parameters(name=name, **executor_params)
 

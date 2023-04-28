@@ -10,19 +10,19 @@ from typing import Any, List, Optional, Tuple
 import torch
 import torch.backends.cudnn as cudnn
 
+import dinov2.utils.utils as dinov2_utils
 from dinov2.models import build_model_from_cfg
 from dinov2.utils.config import setup
-import dinov2.utils.utils as dinov2_utils
 
 
 def get_args_parser(
     description: Optional[str] = None,
-    parents: Optional[List[argparse.ArgumentParser]] = [],
+    parents: Optional[List[argparse.ArgumentParser]] = None,
     add_help: bool = True,
 ):
     parser = argparse.ArgumentParser(
         description=description,
-        parents=parents,
+        parents=parents or [],
         add_help=add_help,
     )
     parser.add_argument(

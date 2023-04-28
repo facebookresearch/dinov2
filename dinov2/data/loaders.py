@@ -6,14 +6,14 @@
 
 import logging
 from enum import Enum
-from typing import Any, Callable, List, Optional, TypeVar
+from typing import Any, Callable, List, Optional, Type, TypeVar
 
 import torch
 from torch.utils.data import Sampler
 
 from .datasets import ImageNet, ImageNet22k
+from .datasets.extended import ExtendedVisionDataset
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler
-
 
 logger = logging.getLogger("dinov2")
 
@@ -54,9 +54,9 @@ def _parse_dataset_str(dataset_str: str):
         kwargs[key] = value
 
     if name == "ImageNet":
-        class_ = ImageNet
+        class_: Type[ExtendedVisionDataset] = ImageNet
         if "split" in kwargs:
-            kwargs["split"] = ImageNet.Split[kwargs["split"]]
+            kwargs["split"] = ImageNet.Split[kwargs["split"]]  # type: ignore
     elif name == "ImageNet22k":
         class_ = ImageNet22k
     else:

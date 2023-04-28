@@ -6,8 +6,8 @@
 
 from typing import Callable, Optional
 
-from torch import Tensor, nn
 import torch.nn.functional as F
+from torch import Tensor, nn
 
 
 class SwiGLUFFN(nn.Module):
@@ -16,7 +16,7 @@ class SwiGLUFFN(nn.Module):
         in_features: int,
         hidden_features: Optional[int] = None,
         out_features: Optional[int] = None,
-        act_layer: Callable[..., nn.Module] = None,
+        act_layer: Optional[Callable[..., nn.Module]] = None,
         drop: float = 0.0,
         bias: bool = True,
     ) -> None:
@@ -34,7 +34,7 @@ class SwiGLUFFN(nn.Module):
 
 
 try:
-    from xformers.ops import SwiGLU
+    from xformers.ops import SwiGLU  # type: ignore
 
     XFORMERS_AVAILABLE = True
 except ImportError:
@@ -48,7 +48,7 @@ class SwiGLUFFNFused(SwiGLU):
         in_features: int,
         hidden_features: Optional[int] = None,
         out_features: Optional[int] = None,
-        act_layer: Callable[..., nn.Module] = None,
+        act_layer: Optional[Callable[..., nn.Module]] = None,
         drop: float = 0.0,
         bias: bool = True,
     ) -> None:

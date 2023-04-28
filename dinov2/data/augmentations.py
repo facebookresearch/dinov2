@@ -6,13 +6,9 @@
 
 import logging
 
-from torchvision import transforms
+from torchvision import transforms  # type: ignore
 
-from .transforms import (
-    GaussianBlur,
-    make_normalize_transform,
-)
-
+from .transforms import GaussianBlur, make_normalize_transform
 
 logger = logging.getLogger("dinov2")
 

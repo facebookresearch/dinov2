@@ -9,23 +9,22 @@
 #   https://github.com/rwightman/pytorch-image-models/tree/master/timm/layers/patch_embed.py
 
 import logging
-from typing import Callable, List, Any, Tuple, Dict
+from typing import Any, Callable, Dict, List, Tuple
 
 import torch
-from torch import nn, Tensor
+from torch import Tensor, nn
 
 from .attention import Attention, MemEffAttention
 from .drop_path import DropPath
 from .layer_scale import LayerScale
 from .mlp import Mlp
 
-
 logger = logging.getLogger("dinov2")
 
 
 try:
-    from xformers.ops import fmha
-    from xformers.ops import scaled_index_add, index_select_cat
+    from xformers.ops import fmha  # type: ignore
+    from xformers.ops import index_select_cat, scaled_index_add
 
     XFORMERS_AVAILABLE = True
 except ImportError:
@@ -183,7 +182,7 @@ def drop_add_residual_stochastic_depth_list(
     residual_func: Callable[[Tensor, Any], Tensor],
     sample_drop_ratio: float = 0.0,
     scaling_vector=None,
-) -> Tensor:
+) -> List[Tensor]:
     # 1) generate random set of indices for dropping samples in the batch
     branges_scales = [get_branges_scales(x, sample_drop_ratio=sample_drop_ratio) for x in x_list]
     branges = [s[0] for s in branges_scales]
@@ -195,7 +194,7 @@ def drop_add_residual_stochastic_depth_list(
     # 3) apply residual_func to get residual, and split the result
     residual_list = attn_bias.split(residual_func(x_cat, attn_bias=attn_bias))  # type: ignore
 
-    outputs = []
+    outputs: List[Tensor] = []
     for x, brange, residual, residual_scale_factor in zip(x_list, branges, residual_list, residual_scale_factors):
         outputs.append(add_residual(x, brange, residual, residual_scale_factor, scaling_vector).view_as(x))
     return outputs

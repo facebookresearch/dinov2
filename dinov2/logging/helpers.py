@@ -4,16 +4,15 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
-from collections import defaultdict, deque
 import datetime
 import json
 import logging
 import time
+from collections import defaultdict, deque
 
 import torch
 
 import dinov2.distributed as distributed
-
 
 logger = logging.getLogger("dinov2")
 

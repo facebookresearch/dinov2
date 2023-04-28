@@ -12,7 +12,6 @@ from dinov2.eval.log_regression import get_args_parser as get_log_regression_arg
 from dinov2.logging import setup_logging
 from dinov2.run.submit import get_args_parser, submit_jobs
 
-
 logger = logging.getLogger("dinov2")
 
 

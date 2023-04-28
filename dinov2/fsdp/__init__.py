@@ -5,19 +5,18 @@
 # LICENSE file in the root directory of this source tree.
 
 import os
+from functools import partial
 from typing import Any
 
 import torch
-import dinov2.distributed as distributed
-from functools import partial
-from fvcore.common.checkpoint import Checkpointer
+from fvcore.common.checkpoint import Checkpointer  # type: ignore
 from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
-from torch.distributed.fsdp import ShardingStrategy
-from torch.distributed.fsdp import MixedPrecision
-from torch.distributed.fsdp import StateDictType
+from torch.distributed.fsdp import MixedPrecision, ShardingStrategy, StateDictType
+from torch.distributed.fsdp._runtime_utils import _reshard
 from torch.distributed.fsdp.sharded_grad_scaler import ShardedGradScaler
 from torch.distributed.fsdp.wrap import ModuleWrapPolicy
-from torch.distributed.fsdp._runtime_utils import _reshard
+
+import dinov2.distributed as distributed
 
 
 def get_fsdp_wrapper(model_cfg, modules_to_wrap=set()):

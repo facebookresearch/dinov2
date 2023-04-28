@@ -14,7 +14,6 @@ import numpy as np
 import torch
 from torch import nn
 
-
 logger = logging.getLogger("dinov2")
 
 

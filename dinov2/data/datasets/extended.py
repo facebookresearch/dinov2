@@ -6,9 +6,9 @@
 
 from typing import Any, Tuple
 
-from torchvision.datasets import VisionDataset
+from torchvision.datasets import VisionDataset  # type: ignore
 
-from .decoders import TargetDecoder, ImageDataDecoder
+from .decoders import Decoder, ImageDataDecoder, TargetDecoder
 
 
 class ExtendedVisionDataset(VisionDataset):
