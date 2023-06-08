@@ -87,6 +87,8 @@ teacher:
   teacher_temp: 0.07
   warmup_teacher_temp_epochs: 30
 optim:
+  grad_acc_steps: 1
+  teacher_ema_in_grad_acc: False
   epochs: 100
   weight_decay: 0.04
   weight_decay_end: 0.4

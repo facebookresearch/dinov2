@@ -155,6 +155,9 @@ def do_train(cfg, model, resume=False):
 
     OFFICIAL_EPOCH_LENGTH = cfg.train.OFFICIAL_EPOCH_LENGTH
     max_iter = cfg.optim.epochs * OFFICIAL_EPOCH_LENGTH
+    grad_acc_steps = cfg.optim.grad_acc_steps
+    assert grad_acc_steps > 0, "invalid grad_acc_steps"
+    teacher_ema_in_grad_acc = cfg.optim.teacher_ema_in_grad_acc
 
     periodic_checkpointer = PeriodicCheckpointer(
         checkpointer,
@@ -245,24 +248,29 @@ def do_train(cfg, model, resume=False):
         optimizer.zero_grad(set_to_none=True)
         loss_dict = model.forward_backward(data, teacher_temp=teacher_temp)
 
+        # grad acc here
         # clip gradients
 
-        if fp16_scaler is not None:
-            if cfg.optim.clip_grad:
-                fp16_scaler.unscale_(optimizer)
-                for v in model.student.values():
-                    v.clip_grad_norm_(cfg.optim.clip_grad)
-            fp16_scaler.step(optimizer)
-            fp16_scaler.update()
-        else:
-            if cfg.optim.clip_grad:
-                for v in model.student.values():
-                    v.clip_grad_norm_(cfg.optim.clip_grad)
-            optimizer.step()
+        if grad_acc_steps > 1 and (iteration + 1) % grad_acc_steps == 0:
+            if fp16_scaler is not None:
+                if cfg.optim.clip_grad:
+                    fp16_scaler.unscale_(optimizer)
+                    for v in model.student.values():
+                        v.clip_grad_norm_(cfg.optim.clip_grad)
+                fp16_scaler.step(optimizer)
+                fp16_scaler.update()
+            else:
+                if cfg.optim.clip_grad:
+                    for v in model.student.values():
+                        v.clip_grad_norm_(cfg.optim.clip_grad)
+                optimizer.step()
 
         # perform teacher EMA update
 
-        model.update_teacher(mom)
+        if not teacher_ema_in_grad_acc or grad_acc_steps < 2:
+            model.update_teacher(mom)
+        elif (iteration + 1) % grad_acc_steps == 0:
+            model.update_teacher(mom)
 
         # logging
 

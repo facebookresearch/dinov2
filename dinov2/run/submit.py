@@ -44,13 +44,13 @@ def get_args_parser(
     parser.add_argument(
         "--nodes",
         "--nnodes",
-        default=2,
+        default=1,
         type=int,
         help="Number of nodes to request",
     )
     parser.add_argument(
         "--timeout",
-        default=2800,
+        default=40000,
         type=int,
         help="Duration of the job",
     )
@@ -73,7 +73,7 @@ def get_args_parser(
     )
     parser.add_argument(
         "--exclude",
-        default="",
+        default="gn-0017",
         type=str,
         help="Nodes to exclude",
     )
@@ -98,7 +98,8 @@ def submit_jobs(task_class, args, name: str):
 
     kwargs = {}
     if args.use_volta32:
-        kwargs["slurm_constraint"] = "volta32gb"
+        pass # never use volta32 on OL/UV -- we don't have those
+        #kwargs["slurm_constraint"] = "volta32gb"
     if args.comment:
         kwargs["slurm_comment"] = args.comment
     if args.exclude:

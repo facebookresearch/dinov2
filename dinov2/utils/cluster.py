@@ -11,22 +11,17 @@ from typing import Any, Dict, Optional
 
 
 class ClusterType(Enum):
-    AWS = "aws"
-    FAIR = "fair"
-    RSC = "rsc"
+    OL = "olab"
+    UV = "ultraviolet"
 
 
 def _guess_cluster_type() -> ClusterType:
     uname = os.uname()
-    if uname.sysname == "Linux":
-        if uname.release.endswith("-aws"):
-            # Linux kernel versions on AWS instances are of the form "5.4.0-1051-aws"
-            return ClusterType.AWS
-        elif uname.nodename.startswith("rsc"):
+    if uname.nodename.startswith("a100-40") or uname.nodename.startswith("gpu"):
             # Linux kernel versions on RSC instances are standard ones but hostnames start with "rsc"
-            return ClusterType.RSC
+            return ClusterType.UV
 
-    return ClusterType.FAIR
+    return ClusterType.OL
 
 
 def get_cluster_type(cluster_type: Optional[ClusterType] = None) -> Optional[ClusterType]:
@@ -42,9 +37,8 @@ def get_checkpoint_path(cluster_type: Optional[ClusterType] = None) -> Optional[
         return None
 
     CHECKPOINT_DIRNAMES = {
-        ClusterType.AWS: "checkpoints",
-        ClusterType.FAIR: "checkpoint",
-        ClusterType.RSC: "checkpoint/dino",
+        ClusterType.OL: "checkpoints",
+        ClusterType.UV: "checkpoint",
     }
     return Path("/") / CHECKPOINT_DIRNAMES[cluster_type]
 
@@ -65,9 +59,8 @@ def get_slurm_partition(cluster_type: Optional[ClusterType] = None) -> Optional[
         return None
 
     SLURM_PARTITIONS = {
-        ClusterType.AWS: "learnlab",
-        ClusterType.FAIR: "learnlab",
-        ClusterType.RSC: "learn",
+        ClusterType.OL: "oermannlab",
+        ClusterType.UV: "a100_long",
     }
     return SLURM_PARTITIONS[cluster_type]
 
@@ -80,17 +73,16 @@ def get_slurm_executor_parameters(
         "mem_gb": 0,  # Requests all memory on a node, see https://slurm.schedmd.com/sbatch.html
         "gpus_per_node": num_gpus_per_node,
         "tasks_per_node": num_gpus_per_node,  # one task per GPU
-        "cpus_per_task": 10,
+        "cpus_per_task": 8,
         "nodes": nodes,
         "slurm_partition": get_slurm_partition(cluster_type),
     }
     # apply cluster-specific adjustments
     cluster_type = get_cluster_type(cluster_type)
-    if cluster_type == ClusterType.AWS:
-        params["cpus_per_task"] = 12
-        del params["mem_gb"]
-    elif cluster_type == ClusterType.RSC:
-        params["cpus_per_task"] = 12
+    if cluster_type == ClusterType.UV:
+        params["cpus_per_task"] = 10
+    elif cluster_type == ClusterType.OL:
+        params["cpus_per_task"] = 8
     # set additional parameters / apply overrides
     params.update(kwargs)
     return params
