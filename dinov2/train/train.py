@@ -248,6 +248,10 @@ def do_train(cfg, model, resume=False):
         optimizer.zero_grad(set_to_none=True)
         loss_dict = model.forward_backward(data, teacher_temp=teacher_temp)
 
+        # divide loss by grad_acc_steps
+        for k, v in loss_dict.items():
+            loss_dict[k] = v / grad_acc_steps
+
         # grad acc here
         # clip gradients
 

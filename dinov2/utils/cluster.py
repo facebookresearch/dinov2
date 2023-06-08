@@ -70,7 +70,7 @@ def get_slurm_executor_parameters(
 ) -> Dict[str, Any]:
     # create default parameters
     params = {
-        "mem_gb": 0,  # Requests all memory on a node, see https://slurm.schedmd.com/sbatch.html
+        "mem_gb": 256,  # Requests all memory on a node, see https://slurm.schedmd.com/sbatch.html
         "gpus_per_node": num_gpus_per_node,
         "tasks_per_node": num_gpus_per_node,  # one task per GPU
         "cpus_per_task": 8,
@@ -80,7 +80,8 @@ def get_slurm_executor_parameters(
     # apply cluster-specific adjustments
     cluster_type = get_cluster_type(cluster_type)
     if cluster_type == ClusterType.UV:
-        params["cpus_per_task"] = 10
+        params["cpus_per_task"] = 8
+        params["mem_gb"] = 192
     elif cluster_type == ClusterType.OL:
         params["cpus_per_task"] = 8
     # set additional parameters / apply overrides
