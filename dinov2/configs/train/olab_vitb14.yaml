@@ -1,0 +1,26 @@
+train:
+  dataset_path: ImageNet:split=TRAIN
+  batch_size_per_gpu: 64
+  num_workers: 8
+  OFFICIAL_EPOCH_LENGTH: 5000
+  centering: sinkhorn_knopp
+student:
+  arch: vit_base
+  patch_size: 14
+  block_chunks: 4
+  drop_path_rate: 0.4
+  ffn_layer: swiglufused
+crops:
+  local_crops_size: 98
+ibot:
+  separate_head: true
+teacher:
+  momentum_teacher: 0.994
+optim:
+  epochs: 110
+  grad_acc_steps: 4
+  teacher_ema_in_grad_acc: True
+  weight_decay_end: 0.2
+  base_lr: 0.2e-03  # learning rate for a batch size of 1024
+  warmup_epochs: 20
+  layerwise_decay: 1.0
