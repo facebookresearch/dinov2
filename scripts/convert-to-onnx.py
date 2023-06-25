@@ -3,18 +3,11 @@ import torch
 import argparse
 import os
 import sys
-sys.path.append("..")
+from pathlib import Path
+current_path = Path(__file__).resolve()
+parent_path = current_path.parent.parent.as_posix()
+sys.path.insert(0, parent_path)
 import hubconf
-
-
-class Wrapper(torch.nn.Module):
-    def __init__(self, model):
-        super().__init__()
-        self.model = model
-
-    def forward(self, tensor):
-        ff = self.model(tensor)
-        return ff
 
 
 parser = argparse.ArgumentParser()
@@ -36,13 +29,11 @@ if __name__ == "__main__":
     assert args.image_height % args.patch_size == 0, f"image height must be multiple of {args.patch_size}, but got {args.image_height}"
     assert args.image_width % args.patch_size == 0, f"image width must be multiple of {args.patch_size}, but got {args.image_height}"
 
-    model = hubconf.dinov2_vits14(for_onnx=True)
-    model = Wrapper(model).to('cpu')
+    model = hubconf.dinov2_vits14(for_onnx=True).to("cpu")
     model.eval()
 
-    dummy_input = torch.rand([1, 3, args.image_height, args.image_width]).to('cpu')
+    dummy_input = torch.rand([1, 3, args.image_height, args.image_width]).to("cpu")
     dummy_output = model(dummy_input)
-
 
     torch.onnx.export(
         model,
