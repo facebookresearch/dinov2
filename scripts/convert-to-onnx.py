@@ -1,4 +1,4 @@
-"""DINOV2 model converter to jit."""
+"""DINOV2 model converter to onnx."""
 import torch
 import argparse
 import os
