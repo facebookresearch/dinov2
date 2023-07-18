@@ -11,7 +11,7 @@ from typing import Any, Callable, List, Optional, TypeVar
 import torch
 from torch.utils.data import Sampler
 
-from .datasets import ImageNet, ImageNet22k, MockDataset
+from .datasets import ImageNet, ImageNet22k, MockDataset, GeoWebDS
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler
 
 
@@ -61,6 +61,8 @@ def _parse_dataset_str(dataset_str: str):
         class_ = ImageNet22k
     elif name == "Mock":
         class_ = MockDataset
+    elif name == "GeoWebDS":
+        class_ = GeoWebDS
     else:
         raise ValueError(f'Unsupported dataset "{name}"')
 

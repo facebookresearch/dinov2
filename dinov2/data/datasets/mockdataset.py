@@ -1,5 +1,4 @@
 import torch
-import numpy as np
 from .extended import ExtendedVisionDataset
 from typing import Any, Callable, List, Optional, Set, Tuple
 
