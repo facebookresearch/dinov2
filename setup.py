@@ -80,14 +80,14 @@ setup(
         "dev": dev_requirements,
     },
     install_package_data=True,
-    license="CC-BY-NC",
+    license="Apache",
     license_files=("LICENSE",),
     classifiers=[
         # Trove classifiers: https://github.com/pypa/trove-classifiers/blob/main/src/trove_classifiers/__init__.py
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
-        "License :: Other/Proprietary License",
+        "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3.9",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "Topic :: Software Development :: Libraries :: Python Modules",
