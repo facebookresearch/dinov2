@@ -1,8 +1,0 @@
-# this corresponds to the default config
-train:
-  dataset_path: Mock
-  batch_size_per_gpu: 64
-student:
-  block_chunks: 4
-  arch: vit_base
-  patch_size: 16

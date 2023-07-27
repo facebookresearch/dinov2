@@ -1,5 +1,8 @@
 build/
 dist/
+logs/
+output/
+.idea/
 *.egg-info/
 **/__pycache__/
 

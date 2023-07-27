@@ -37,9 +37,11 @@ class GeoWebDS(IterableDataset):
         imgs_per_shard = 256
         num_nodes = 1
         num_workers = 4
-        self.num_patches = num_shards * imgs_per_shard * (2240 // self.cropsize)**2
+        # self.num_patches = num_shards * imgs_per_shard * (2240 // self.cropsize)**2
+        self.num_patches = 1000000000000  # set it to sth really high for now, so that the generator doesnt get exhausted during trainng
         self.dataset = wds.DataPipeline(
-                                        wds.SimpleShardList(root),
+                                        # wds.SimpleShardList(root),
+                                        wds.ResampledShards(root),
                                         wds.shuffle(8),
                                         wds.split_by_node,
                                         wds.split_by_worker,
@@ -50,7 +52,7 @@ class GeoWebDS(IterableDataset):
                                         wds.shuffle(256),
                                         wds.map(self.transform),    
                                         wds.map(GeoWebDS.fake_target)
-                                    )
+                                    ).with_length(self.num_patches)
 
     @staticmethod
     def read_geotif_from_bytestream(data: bytes) -> np.ndarray:
