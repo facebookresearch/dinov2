@@ -24,9 +24,10 @@ logger = logging.getLogger("dinov2")
 
 def get_args_parser(
     description: Optional[str] = None,
-    parents: Optional[List[argparse.ArgumentParser]] = [],
+    parents: Optional[List[argparse.ArgumentParser]] = None,
     add_help: bool = True,
 ) -> argparse.ArgumentParser:
+    parents = parents or []
     slurm_partition = get_slurm_partition()
     parser = argparse.ArgumentParser(
         description=description,
