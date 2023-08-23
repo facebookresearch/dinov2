@@ -9,19 +9,23 @@ import math
 import os
 from functools import partial
 
-from fvcore.common.checkpoint import PeriodicCheckpointer
 import torch
+from fvcore.common.checkpoint import PeriodicCheckpointer
 
-from dinov2.data import SamplerType, make_data_loader, make_dataset
-from dinov2.data import collate_data_and_cast, DataAugmentationDINO, MaskingGenerator
 import dinov2.distributed as distributed
+from dinov2.data import (
+    DataAugmentationDINO,
+    MaskingGenerator,
+    SamplerType,
+    collate_data_and_cast,
+    make_data_loader,
+    make_dataset,
+)
 from dinov2.fsdp import FSDPCheckpointer
 from dinov2.logging import MetricLogger
+from dinov2.train.ssl_meta_arch import SSLMetaArch
 from dinov2.utils.config import setup
 from dinov2.utils.utils import CosineScheduler
-
-from dinov2.train.ssl_meta_arch import SSLMetaArch
-
 
 torch.backends.cuda.matmul.allow_tf32 = True  # PyTorch 1.12 sets this to False by default
 logger = logging.getLogger("dinov2")

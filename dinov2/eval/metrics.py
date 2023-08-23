@@ -3,8 +3,8 @@
 # This source code is licensed under the Apache License, Version 2.0
 # found in the LICENSE file in the root directory of this source tree.
 
-from enum import Enum
 import logging
+from enum import Enum
 from typing import Any, Dict, Optional
 
 import torch
@@ -12,7 +12,6 @@ from torch import Tensor
 from torchmetrics import Metric, MetricCollection
 from torchmetrics.classification import MulticlassAccuracy
 from torchmetrics.utilities.data import dim_zero_cat, select_topk
-
 
 logger = logging.getLogger("dinov2")
 

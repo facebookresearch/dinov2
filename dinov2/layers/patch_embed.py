@@ -9,8 +9,8 @@
 
 from typing import Callable, Optional, Tuple, Union
 
-from torch import Tensor
 import torch.nn as nn
+from torch import Tensor
 
 
 def make_2tuple(x):

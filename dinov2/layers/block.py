@@ -8,18 +8,18 @@
 #   https://github.com/rwightman/pytorch-image-models/tree/master/timm/layers/patch_embed.py
 
 import logging
+from typing import Any, Callable, Dict, List, Tuple
 import os
 from typing import Callable, List, Any, Tuple, Dict
 import warnings
 
 import torch
-from torch import nn, Tensor
+from torch import Tensor, nn
 
 from .attention import Attention, MemEffAttention
 from .drop_path import DropPath
 from .layer_scale import LayerScale
 from .mlp import Mlp
-
 
 logger = logging.getLogger("dinov2")
 
