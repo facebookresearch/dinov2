@@ -17,12 +17,12 @@ import dinov2.utils.utils as dinov2_utils
 
 def get_args_parser(
     description: Optional[str] = None,
-    parents: Optional[List[argparse.ArgumentParser]] = [],
+    parents: Optional[List[argparse.ArgumentParser]] = None,
     add_help: bool = True,
 ):
     parser = argparse.ArgumentParser(
         description=description,
-        parents=parents,
+        parents=parents or [],
         add_help=add_help,
     )
     parser.add_argument(

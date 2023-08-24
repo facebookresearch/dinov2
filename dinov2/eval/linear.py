@@ -33,9 +33,10 @@ logger = logging.getLogger("dinov2")
 
 def get_args_parser(
     description: Optional[str] = None,
-    parents: Optional[List[argparse.ArgumentParser]] = [],
+    parents: Optional[List[argparse.ArgumentParser]] = None,
     add_help: bool = True,
 ):
+    parents = parents or []
     setup_args_parser = get_setup_args_parser(parents=parents, add_help=False)
     parents = [setup_args_parser]
     parser = argparse.ArgumentParser(
