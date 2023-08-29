@@ -96,6 +96,19 @@ conda activate dinov2
 pip install -r requirements.txt
 ```
 
+For dense tasks (depth estimation and semantic segmentation), there are additional dependencies (specific versions of `mmcv` and `mmsegmentation`) which are captured in the `extras` dependency specifications:
+
+*[conda](https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html)* **(Recommended)**:
+
+```shell
+conda env create -f conda-extras.yaml
+conda activate dinov2-extras
+```
+
+*[pip](https://pip.pypa.io/en/stable/getting-started/)*:
+
+pip install -r requirements.txt -r requirements-extras.txt
+
 ## Data preparation
 
 ### ImageNet-1k
