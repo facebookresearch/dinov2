@@ -159,24 +159,24 @@ def dinov2_vits14_lc(*, layers: int = 4, pretrained: bool = True, **kwargs):
     return _make_dinov2_linear_classifier(arch_name="vit_small", layers=layers, pretrained=pretrained, **kwargs)
 
 
-def dinov2_vitb14_lc(*, pretrained: bool = True, **kwargs):
+def dinov2_vitb14_lc(*, layers: int = 4, pretrained: bool = True, **kwargs):
     """
     Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-B/14 backbone (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
     """
-    return _make_dinov2_linear_classifier(arch_name="vit_base", pretrained=pretrained, **kwargs)
+    return _make_dinov2_linear_classifier(arch_name="vit_base", layers=layers, pretrained=pretrained, **kwargs)
 
 
-def dinov2_vitl14_lc(*, pretrained: bool = True, **kwargs):
+def dinov2_vitl14_lc(*, layers: int = 4, pretrained: bool = True, **kwargs):
     """
     Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-L/14 backbone (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
     """
-    return _make_dinov2_linear_classifier(arch_name="vit_large", pretrained=pretrained, **kwargs)
+    return _make_dinov2_linear_classifier(arch_name="vit_large", layers=layers, pretrained=pretrained, **kwargs)
 
 
-def dinov2_vitg14_lc(*, pretrained: bool = True, **kwargs):
+def dinov2_vitg14_lc(*, layers: int = 4, pretrained: bool = True, **kwargs):
     """
     Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-g/14 backbone (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
     """
     return _make_dinov2_linear_classifier(
-        arch_name="vit_giant2", ffn_layer="swiglufused", pretrained=pretrained, **kwargs
+        arch_name="vit_giant2", layers=layers, ffn_layer="swiglufused", pretrained=pretrained, **kwargs
     )
