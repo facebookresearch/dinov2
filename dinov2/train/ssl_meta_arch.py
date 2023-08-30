@@ -19,13 +19,11 @@ from dinov2.fsdp import get_fsdp_wrapper, ShardedGradScaler, get_fsdp_modules, r
 
 from dinov2.models.vision_transformer import BlockChunk
 
+
 try:
     from xformers.ops import fmha
-
-    XFORMERS_AVAILABLE = True
 except ImportError:
-    XFORMERS_AVAILABLE = False
-assert XFORMERS_AVAILABLE, "xFormers is required for DINOv2 training"
+    raise AssertionError("xFormers is required for training")
 
 
 logger = logging.getLogger("dinov2")
