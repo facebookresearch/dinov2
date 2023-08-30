@@ -1,3 +1,8 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the Apache License, Version 2.0
+# found in the LICENSE file in the root directory of this source tree.
+
 import torch
 import torch.nn as nn
 
@@ -8,8 +13,7 @@ from mmseg.ops import resize
 
 @HEADS.register_module()
 class BNHead(BaseDecodeHead):
-    """Just a batchnorm.
-    """
+    """Just a batchnorm."""
 
     def __init__(self, resize_factors=None, **kwargs):
         super().__init__(**kwargs)
@@ -43,7 +47,7 @@ class BNHead(BaseDecodeHead):
             Tensor: The transformed inputs
         """
 
-        if self.input_transform == 'resize_concat':
+        if self.input_transform == "resize_concat":
             # accept lists (for cls token)
             input_list = []
             for x in inputs:
@@ -63,22 +67,16 @@ class BNHead(BaseDecodeHead):
             if self.resize_factors is not None:
                 assert len(self.resize_factors) == len(inputs), (len(self.resize_factors), len(inputs))
                 inputs = [
-                    resize(
-                        input=x,
-                        scale_factor=f,
-                        mode='bilinear' if f >= 1 else "area")
+                    resize(input=x, scale_factor=f, mode="bilinear" if f >= 1 else "area")
                     for x, f in zip(inputs, self.resize_factors)
                 ]
                 # print("after", *(x.shape for x in inputs))
             upsampled_inputs = [
-                resize(
-                    input=x,
-                    size=inputs[0].shape[2:],
-                    mode='bilinear',
-                    align_corners=self.align_corners) for x in inputs
+                resize(input=x, size=inputs[0].shape[2:], mode="bilinear", align_corners=self.align_corners)
+                for x in inputs
             ]
             inputs = torch.cat(upsampled_inputs, dim=1)
-        elif self.input_transform == 'multiple_select':
+        elif self.input_transform == "multiple_select":
             inputs = [inputs[i] for i in self.in_index]
         else:
             inputs = inputs[self.in_index]

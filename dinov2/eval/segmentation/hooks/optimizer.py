@@ -1,7 +1,12 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the Apache License, Version 2.0
+# found in the LICENSE file in the root directory of this source tree.
+
 try:
     import apex
-except:
-    print('apex is not installed')
+except ImportError:
+    print("apex is not installed")
 
 from mmcv.runner import OptimizerHook, HOOKS
 
@@ -21,13 +26,13 @@ class DistOptimizerHook(OptimizerHook):
         runner.optimizer.zero_grad()
 
     def after_train_iter(self, runner):
-        runner.outputs['loss'] /= self.update_interval
+        runner.outputs["loss"] /= self.update_interval
         if self.use_fp16:
             # runner.outputs['loss'].backward()
-            with apex.amp.scale_loss(runner.outputs['loss'], runner.optimizer) as scaled_loss:
+            with apex.amp.scale_loss(runner.outputs["loss"], runner.optimizer) as scaled_loss:
                 scaled_loss.backward()
         else:
-            runner.outputs['loss'].backward()
+            runner.outputs["loss"].backward()
         if self.every_n_iters(runner, self.update_interval):
             if self.grad_clip is not None:
                 self.clip_grads(runner.model.parameters())
