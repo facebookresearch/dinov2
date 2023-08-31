@@ -5,7 +5,7 @@
 
 import torch
 import torch.nn as nn
-
+from dinov2.layers.attention import Attention
 
 dependencies = ["torch"]
 
@@ -50,32 +50,45 @@ def _make_dinov2_model(
     return model
 
 
-def dinov2_vits14(*, pretrained: bool = True, **kwargs):
+def dinov2_vits14(*, pretrained: bool = True, for_onnx: bool = False, **kwargs):
     """
     DINOv2 ViT-S/14 model (optionally) pretrained on the LVD-142M dataset.
     """
-    return _make_dinov2_model(arch_name="vit_small", pretrained=pretrained, **kwargs)
+    if not for_onnx:
+        return _make_dinov2_model(arch_name="vit_small", pretrained=pretrained, **kwargs)
+    else:
+        return _make_dinov2_model(arch_name="vit_small", pretrained=pretrained, attn_class=Attention, **kwargs)
 
 
-def dinov2_vitb14(*, pretrained: bool = True, **kwargs):
+def dinov2_vitb14(*, pretrained: bool = True, for_onnx: bool = False, **kwargs):
     """
     DINOv2 ViT-B/14 model pretrained on the LVD-142M dataset.
     """
-    return _make_dinov2_model(arch_name="vit_base", pretrained=pretrained, **kwargs)
+    if not for_onnx:
+        return _make_dinov2_model(arch_name="vit_base", pretrained=pretrained, **kwargs)
+    else:
+        return _make_dinov2_model(arch_name="vit_base", pretrained=pretrained, attn_class=Attention, **kwargs)
 
 
-def dinov2_vitl14(*, pretrained: bool = True, **kwargs):
+
+def dinov2_vitl14(*, pretrained: bool = True, for_onnx: bool = False, **kwargs):
     """
     DINOv2 ViT-L/14 model (optionally) pretrained on the LVD-142M dataset.
     """
-    return _make_dinov2_model(arch_name="vit_large", pretrained=pretrained, **kwargs)
+    if not for_onnx:
+        return _make_dinov2_model(arch_name="vit_large", pretrained=pretrained, **kwargs)
+    else:
+        return _make_dinov2_model(arch_name="vit_large", pretrained=pretrained, attn_class=Attention, **kwargs)
 
 
-def dinov2_vitg14(*, pretrained: bool = True, **kwargs):
+def dinov2_vitg14(*, pretrained: bool = True, for_onnx: bool = False, **kwargs):
     """
     DINOv2 ViT-g/14 model (optionally) pretrained on the LVD-142M dataset.
     """
-    return _make_dinov2_model(arch_name="vit_giant2", ffn_layer="swiglufused", pretrained=pretrained, **kwargs)
+    if not for_onnx:
+        return _make_dinov2_model(arch_name="vit_giant2", ffn_layer="swiglufused", pretrained=pretrained, **kwargs)
+    else:
+        return _make_dinov2_model(arch_name="vit_giant2", ffn_layer="swiglufused", pretrained=pretrained, attn_class=Attention, **kwargs)
 
 
 def _make_dinov2_linear_head(

@@ -179,7 +179,7 @@ class DinoVisionTransformer(nn.Module):
 
         patch_pos_embed = nn.functional.interpolate(
             patch_pos_embed.reshape(1, int(math.sqrt(N)), int(math.sqrt(N)), dim).permute(0, 3, 1, 2),
-            scale_factor=(w0 / math.sqrt(N), h0 / math.sqrt(N)),
+            scale_factor=(float(w0 / math.sqrt(N)), float(h0 / math.sqrt(N))),
             mode="bicubic",
         )
 
@@ -302,46 +302,62 @@ def init_weights_vit_timm(module: nn.Module, name: str = ""):
             nn.init.zeros_(module.bias)
 
 
-def vit_small(patch_size=16, **kwargs):
+def vit_small(
+    patch_size: int = 16,
+    attn_class: nn.Module = MemEffAttention,
+    **kwargs
+):
     model = DinoVisionTransformer(
         patch_size=patch_size,
         embed_dim=384,
         depth=12,
         num_heads=6,
         mlp_ratio=4,
-        block_fn=partial(Block, attn_class=MemEffAttention),
+        block_fn=partial(Block, attn_class=attn_class),
         **kwargs,
     )
     return model
 
 
-def vit_base(patch_size=16, **kwargs):
+def vit_base(
+    patch_size: int = 16,
+    attn_class: nn.Module = MemEffAttention,
+    **kwargs
+):
     model = DinoVisionTransformer(
         patch_size=patch_size,
         embed_dim=768,
         depth=12,
         num_heads=12,
         mlp_ratio=4,
-        block_fn=partial(Block, attn_class=MemEffAttention),
+        block_fn=partial(Block, attn_class=attn_class),
         **kwargs,
     )
     return model
 
 
-def vit_large(patch_size=16, **kwargs):
+def vit_large(
+    patch_size: int = 16,
+    attn_class: nn.Module = MemEffAttention,
+    **kwargs
+):
     model = DinoVisionTransformer(
         patch_size=patch_size,
         embed_dim=1024,
         depth=24,
         num_heads=16,
         mlp_ratio=4,
-        block_fn=partial(Block, attn_class=MemEffAttention),
+        block_fn=partial(Block, attn_class=attn_class),
         **kwargs,
     )
     return model
 
 
-def vit_giant2(patch_size=16, **kwargs):
+def vit_giant2(
+    patch_size: int = 16,
+    attn_class: nn.Module = MemEffAttention,
+    **kwargs
+):
     """
     Close to ViT-giant, with embed-dim 1536 and 24 heads => embed-dim per head 64
     """
