@@ -50,6 +50,7 @@ def get_package_version() -> str:
 requirements, extra_indices = get_requirements()
 version = get_package_version()
 dev_requirements, _ = get_requirements(HERE / "requirements-dev.txt")
+extras_requirements, _ = get_requirements(HERE / "requirements-extras.txt")
 
 
 setup(
@@ -66,10 +67,11 @@ setup(
         "": ["*.yaml"],
     },
     install_requires=requirements,
-    dependency_links=extra_indices,
     extras_require={
         "dev": dev_requirements,
+        "extras": extras_requirements,
     },
+    dependency_links=extra_indices,
     install_package_data=True,
     license="Apache",
     license_files=("LICENSE",),
