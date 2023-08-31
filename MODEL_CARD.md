@@ -25,7 +25,7 @@ If this condition is not verified, the model will crop to the closest smaller mu
 
 - **Developed by:** Meta AI
 - **Model type:** Vision Transformer
-- **License:** CC-BY-NC
+- **License:** Apache License 2.0
 
 - **Repository:** https://github.com/facebookresearch/dinov2
 - **Paper:** https://arxiv.org/abs/2304.07193

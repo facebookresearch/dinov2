@@ -257,7 +257,7 @@ python dinov2/run/eval/linear.py \
 
 ## License
 
-DINOv2 code and model weights are released under the CC-BY-NC 4.0 license. See [LICENSE](LICENSE) for additional details.
+DINOv2 code and model weights are released under the Apache License 2.0. See [LICENSE](LICENSE) for additional details.
 
 ## Contributing
 
