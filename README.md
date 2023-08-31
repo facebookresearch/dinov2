@@ -27,44 +27,48 @@ https://github.com/facebookresearch/dinov2/assets/60359573/f168823e-7922-415a-b4
 ## Pretrained models
 
 <table style="margin: auto">
-  <tr>
-    <th>model</th>
-    <th># of<br />params</th>
-    <th>ImageNet<br />k-NN</th>
-    <th>ImageNet<br />linear</th>
-    <th>download</th>
-  </tr>
-  <tr>
-    <td>ViT-S/14 distilled</td>
-    <td align="right">21 M</td>
-    <td align="right">79.0%</td>
-    <td align="right">81.1%</td>
-    <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_pretrain.pth">backbone only</a></td>
-  </tr>
-  <tr>
-    <td>ViT-B/14 distilled</td>
-    <td align="right">86 M</td>
-    <td align="right">82.1%</td>
-    <td align="right">84.5%</td>
-    <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_pretrain.pth">backbone only</a></td>
-  </tr>
-  <tr>
-    <td>ViT-L/14 distilled</td>
-    <td align="right">300 M</td>
-    <td align="right">83.5%</td>
-    <td align="right">86.3%</td>
-    <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_pretrain.pth">backbone only</a></td>
-  </tr>
-  <tr>
-    <td>ViT-g/14</td>
-    <td align="right">1,100 M</td>
-    <td align="right">83.5%</td>
-    <td align="right">86.5%</td>
-    <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_pretrain.pth">backbone only</a></td>
-  </tr>
+  <thead>
+    <tr>
+      <th>model</th>
+      <th># of<br />params</th>
+      <th>ImageNet<br />k-NN</th>
+      <th>ImageNet<br />linear</th>
+      <th>download</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ViT-S/14 distilled</td>
+      <td align="right">21 M</td>
+      <td align="right">79.0%</td>
+      <td align="right">81.1%</td>
+      <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_pretrain.pth">backbone only</a></td>
+    </tr>
+    <tr>
+      <td>ViT-B/14 distilled</td>
+      <td align="right">86 M</td>
+      <td align="right">82.1%</td>
+      <td align="right">84.5%</td>
+      <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_pretrain.pth">backbone only</a></td>
+    </tr>
+    <tr>
+      <td>ViT-L/14 distilled</td>
+      <td align="right">300 M</td>
+      <td align="right">83.5%</td>
+      <td align="right">86.3%</td>
+      <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_pretrain.pth">backbone only</a></td>
+    </tr>
+    <tr>
+      <td>ViT-g/14</td>
+      <td align="right">1,100 M</td>
+      <td align="right">83.5%</td>
+      <td align="right">86.5%</td>
+      <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_pretrain.pth">backbone only</a></td>
+    </tr>
+  </tbody>
 </table>
 
-### Pretrained models via PyTorch Hub
+### Pretrained backbones (via PyTorch Hub)
 
 Please follow the instructions [here](https://pytorch.org/get-started/locally/) to install PyTorch (the only required dependency for loading the model). Installing PyTorch with CUDA support is strongly recommended.
 
@@ -78,6 +82,196 @@ dinov2_vitb14 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitb14')
 dinov2_vitl14 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
 dinov2_vitg14 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14')
 ```
+
+### Pretrained heads - Image classification
+
+<table style="margin: auto">
+  <thead>
+    <tr>
+      <th rowspan="2">backbone</th>
+      <th>download</th>
+    </tr>
+    <tr>
+      <th>ImageNet</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ViT-S/14 distilled</td>
+      <td>
+        linear head (<a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_linear_head.pth">1 layer</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_linear4_head.pth">4 layers</a>)
+      </td>
+    </tr>
+    <tr>
+      <td>ViT-B/14 distilled</td>
+      <td>
+        linear head (<a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_linear_head.pth">1 layer</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_linear4_head.pth">4 layers</a>)
+    </tr>
+    <tr>
+      <td>ViT-L/14 distilled</td>
+      <td>
+        linear head (<a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_linear_head.pth">1 layer</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_linear4_head.pth">4 layers</a>)
+    </tr>
+    <tr>
+      <td>ViT-g/14</td>
+      <td>
+        linear head (<a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_linear_head.pth">1 layer</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_linear4_head.pth">4 layers</a>)
+    </tr>
+  </tbody>
+</table>
+
+The (full) classifier models can be loaded via PyTorch Hub:
+
+```python
+import torch
+
+dinov2_vits14_lc = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14_lc')
+dinov2_vitb14_lc = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitb14_lc')
+dinov2_vitl14_lc = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14_lc')
+dinov2_vitg14_lc = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14_lc')
+```
+
+### Pretrained heads - Depth estimation
+
+<table style="margin: auto">
+  <thead>
+    <tr>
+      <th rowspan="2">backbone</th>
+      <th colspan="2">download head</th>
+    </tr>
+    <tr>
+      <th>NYUd</th>
+      <th>KITTI</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ViT-S/14 distilled</td>
+      <td>
+        linear (<a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_nyu_linear_head.pth">1 layer</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_nyu_linear4_head.pth">4 layers</a>),
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_nyu_dpt_head.pth">DPT</a>
+      </td>
+      <td>
+        linear (<a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_kitti_linear_head.pth">1 layer</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_kitti_linear4_head.pth">4 layers</a>),
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_kitti_dpt_head.pth">DPT</a>
+      </td>
+    </tr>
+    <tr>
+      <td>ViT-B/14 distilled</td>
+      <td>
+        linear (<a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_linear_head.pth">1 layer</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_nyu_linear4_head.pth">4 layers</a>),
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_nyu_dpt_head.pth">DPT</a>
+      </td>
+      <td>
+        linear (<a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_kitti_linear_head.pth">1 layer</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_kitti_linear4_head.pth">4 layers</a>),
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_kitti_dpt_head.pth">DPT</a>
+      </td>
+    </tr>
+    <tr>
+      <td>ViT-L/14 distilled</td>
+      <td>
+        linear (<a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_linear_head.pth">1 layer</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_nyu_linear4_head.pth">4 layers</a>),
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_nyu_dpt_head.pth">DPT</a>
+      </td>
+      <td>
+        linear (<a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_kitti_linear_head.pth">1 layer</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_kitti_linear4_head.pth">4 layers</a>),
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_kitti_dpt_head.pth">DPT</a>
+      </td>
+    </tr>
+    <tr>
+      <td>ViT-g/14</td>
+      <td>
+        linear (<a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_linear_head.pth">1 layer</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_nyu_linear4_head.pth">4 layers</a>),
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_nyu_dpt_head.pth">DPT</a>
+      </td>
+      <td>
+        linear (<a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_kitti_linear_head.pth">1 layer</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_kitti_linear4_head.pth">4 layers</a>),
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_kitti_dpt_head.pth">DPT</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### Pretrained heads - Semantic segmentation
+
+<table style="margin: auto">
+  <thead>
+    <tr>
+      <th rowspan="2">backbone</th>
+      <th>download model</th>
+      <th colspan="2">download head</th>
+    </tr>
+    <tr>
+      <th>ADE20K</th>
+      <th>ADE20K</th>
+      <th>VOC2012</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ViT-S/14 distilled</td>
+      <td></td>
+      <td>
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_ade20k_linear_head.pth">linear</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_ade20k_ms_head.pth">multi-scale</a>
+      </td>
+      <td>
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_voc2012_linear_head.pth">linear</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_voc2012_ms_head.pth">multi-scale</a>
+      </td>
+    </tr>
+    <tr>
+      <td>ViT-B/14 distilled</td>
+      <td></td>
+      <td>
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_ade20k_linear_head.pth">linear</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_ade20k_ms_head.pth">multi-scale</a>
+      </td>
+      <td>
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_voc2012_linear_head.pth">linear</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_voc2012_ms_head.pth">multi-scale</a>
+      </td>
+    </tr>
+    <tr>
+      <td>ViT-L/14 distilled</td>
+      <td></td>
+      <td>
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_ade20k_linear_head.pth">linear</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_ade20k_ms_head.pth">multi-scale</a>
+      </td>
+      <td>
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_voc2012_linear_head.pth">linear</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_voc2012_ms_head.pth">multi-scale</a>
+      </td>
+    </tr>
+    <tr>
+      <td>ViT-g/14</td>
+      <td>
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_ade20k_m2f.pth">Mask2Former</a>
+      </td>
+      <td>
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_ade20k_linear_head.pth">linear</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_ade20k_ms_head.pth">multi-scale</a>
+      </td>
+      <td>
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_voc2012_linear_head.pth">linear</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_voc2012_ms_head.pth">multi-scale</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ## Installation
 
@@ -107,7 +301,9 @@ conda activate dinov2-extras
 
 *[pip](https://pip.pypa.io/en/stable/getting-started/)*:
 
+```shell
 pip install -r requirements.txt -r requirements-extras.txt
+```
 
 ## Data preparation
 
@@ -267,6 +463,15 @@ python dinov2/run/eval/linear.py \
     --train-dataset ImageNet:split=TRAIN:root=<PATH/TO/DATASET>:extra=<PATH/TO/DATASET> \
     --val-dataset ImageNet:split=VAL:root=<PATH/TO/DATASET>:extra=<PATH/TO/DATASET>
 ```
+
+## Notebooks
+
+A few notebooks are provided to help the community leverage the models and code:
+
+<ul>
+  <li><a href="https://github.com/facebookresearch/dinov2/blob/main/notebooks/depth_estimation.ipynb">Depth estimation</a> - How to load and use the depth heads in combination with a matching backbone via mmcv</li>
+  <li><a href="https://github.com/facebookresearch/dinov2/blob/main/notebooks/semantic_segmentation.ipynb">Semantic segmentation</a> - How to load and use the segmentation heads in combination with a matching backbone via mmcv, and also how to load and use the Mask2Former-based segmentation model trained on ADE20K</li>
+</ul>
 
 ## License
 
