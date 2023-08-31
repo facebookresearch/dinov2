@@ -6,8 +6,6 @@ dist/
 **/.ipynb_checkpoints
 **/.ipynb_checkpoints/**
 
-**/notebooks
-
 *.swp
 
 .vscode/
