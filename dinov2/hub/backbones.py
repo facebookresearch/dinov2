@@ -4,6 +4,7 @@
 # found in the LICENSE file in the root directory of this source tree.
 
 from enum import Enum
+from typing import Union
 
 import torch
 
@@ -23,13 +24,16 @@ def _make_dinov2_model(
     ffn_layer: str = "mlp",
     block_chunks: int = 0,
     pretrained: bool = True,
-    weights: str = Weights.LVD142M.value,
+    weights: Union[Weights, str] = Weights.LVD142M,
     **kwargs,
 ):
     from ..models import vision_transformer as vits
 
-    if weights not in (weights.value for weights in Weights):
-        raise AssertionError(f"Unsupported weights: {weights}")
+    if isinstance(weights, str):
+        try:
+            weights = Weights[weights]
+        except KeyError:
+            raise AssertionError(f"Unsupported weights: {weights}")
 
     model_name = _make_dinov2_model_name(arch_name, patch_size)
     vit_kwargs = dict(
@@ -52,7 +56,7 @@ def _make_dinov2_model(
 
 def dinov2_vits14(*,
                   pretrained: bool = True,
-                  weights: str = Weights.LVD142M.value,
+                  weights: Union[Weights, str] = Weights.LVD142M,
                   **kwargs):
     """
     DINOv2 ViT-S/14 model (optionally) pretrained on the LVD-142M dataset.
@@ -65,7 +69,7 @@ def dinov2_vits14(*,
 
 def dinov2_vitb14(*,
                   pretrained: bool = True,
-                  weights: str = Weights.LVD142M.value,
+                  weights: Union[Weights, str] = Weights.LVD142M,
                   **kwargs):
     """
     DINOv2 ViT-B/14 model (optionally) pretrained on the LVD-142M dataset.
@@ -78,7 +82,7 @@ def dinov2_vitb14(*,
 
 def dinov2_vitl14(*,
                   pretrained: bool = True,
-                  weights: str = Weights.LVD142M.value,
+                  weights: Union[Weights, str] = Weights.LVD142M,
                   **kwargs):
     """
     DINOv2 ViT-L/14 model (optionally) pretrained on the LVD-142M dataset.
@@ -91,7 +95,7 @@ def dinov2_vitl14(*,
 
 def dinov2_vitg14(*,
                   pretrained: bool = True,
-                  weights: str = Weights.LVD142M.value,
+                  weights: Union[Weights, str] = Weights.LVD142M,
                   **kwargs):
     """
     DINOv2 ViT-g/14 model (optionally) pretrained on the LVD-142M dataset.

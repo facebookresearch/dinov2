@@ -4,6 +4,7 @@
 # found in the LICENSE file in the root directory of this source tree.
 
 from enum import Enum
+from typing import Union
 
 import torch
 import torch.nn as nn
@@ -22,13 +23,16 @@ def _make_dinov2_linear_classification_head(
     embed_dim: int = 1024,
     layers: int = 4,
     pretrained: bool = True,
-    weights: str = Weights.IMAGENET1K.value,
+    weights: Union[Weights, str] = Weights.IMAGENET1K,
     **kwargs,
 ):
     if layers not in (1, 4):
         raise AssertionError(f"Unsupported number of layers: {layers}")
-    if weights not in (weights.value for weights in Weights):
-        raise AssertionError(f"Unsupported weights: {weights}")
+    if isinstance(weights, str):
+        try:
+            weights = Weights[weights]
+        except KeyError:
+            raise AssertionError(f"Unsupported weights: {weights}")
 
     linear_head = nn.Linear((1 + layers) * embed_dim, 1_000)
 
@@ -80,7 +84,7 @@ def _make_dinov2_linear_classifier(
     arch_name: str = "vit_large",
     layers: int = 4,
     pretrained: bool = True,
-    weights: str = Weights.IMAGENET1K.value,
+    weights: Union[Weights, str] = Weights.IMAGENET1K,
     **kwargs,
 ):
     backbone = _make_dinov2_model(arch_name=arch_name, pretrained=pretrained, **kwargs)
@@ -93,6 +97,7 @@ def _make_dinov2_linear_classifier(
         embed_dim=embed_dim,
         layers=layers,
         pretrained=pretrained,
+        weights=weights,
     )
 
     return _LinearClassifierWrapper(backbone=backbone, linear_head=linear_head, layers=layers)
@@ -101,7 +106,7 @@ def _make_dinov2_linear_classifier(
 def dinov2_vits14_lc(*,
                      layers: int = 4,
                      pretrained: bool = True,
-                     weights: str = Weights.IMAGENET1K.value,
+                     weights: Union[Weights, str] = Weights.IMAGENET1K,
                      **kwargs):
     """
     Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-S/14 backbone (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
@@ -116,7 +121,7 @@ def dinov2_vits14_lc(*,
 def dinov2_vitb14_lc(*,
                      layers: int = 4,
                      pretrained: bool = True,
-                     weights: str = Weights.IMAGENET1K.value,
+                     weights: Union[Weights, str] = Weights.IMAGENET1K,
                      **kwargs):
     """
     Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-B/14 backbone (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
@@ -131,7 +136,7 @@ def dinov2_vitb14_lc(*,
 def dinov2_vitl14_lc(*,
                      layers: int = 4,
                      pretrained: bool = True,
-                     weights: str = Weights.IMAGENET1K.value,
+                     weights: Union[Weights, str] = Weights.IMAGENET1K,
                      **kwargs):
     """
     Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-L/14 backbone (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
@@ -146,7 +151,7 @@ def dinov2_vitl14_lc(*,
 def dinov2_vitg14_lc(*,
                      layers: int = 4,
                      pretrained: bool = True,
-                     weights: str = Weights.IMAGENET1K.value,
+                     weights: Union[Weights, str] = Weights.IMAGENET1K,
                      **kwargs):
     """
     Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-g/14 backbone (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
