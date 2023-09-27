@@ -3,10 +3,24 @@
 # This source code is licensed under the Apache License, Version 2.0
 # found in the LICENSE file in the root directory of this source tree.
 
+import copy
+
 import torch
 import torch.nn as nn
 
 from .ops import resize
+
+
+# XXX: (Untested) replacement for mmcv.imdenormalize()
+def _imdenormalize(img, mean, std, to_bgr=True):
+    import numpy as np
+
+    mean = mean.reshape(1, -1).astype(np.float64)
+    std = std.reshape(1, -1).astype(np.float64)
+    img = (img * std) + mean
+    if to_bgr:
+        img = img[::-1]
+    return img
 
 
 class DepthBaseDecodeHead(nn.Module):
@@ -59,12 +73,7 @@ class DepthBaseDecodeHead(nn.Module):
 
         self.in_channels = in_channels
         self.channels = channels
-        if isinstance(loss_decode, dict):
-            self.loss_decode = build_loss(loss_decode)
-        elif isinstance(loss_decode, (list, tuple)):
-            self.loss_decode = nn.ModuleList()
-            for loss in loss_decode:
-                self.loss_decode.append(build_loss(loss))
+        self.loss_decode = loss_decode
         self.align_corners = align_corners
         self.min_depth = min_depth
         self.max_depth = max_depth
@@ -177,9 +186,11 @@ class DepthBaseDecodeHead(nn.Module):
         return loss
 
     def log_images(self, img_path, depth_pred, depth_gt, img_meta):
+        import numpy as np
+
         show_img = copy.deepcopy(img_path.detach().cpu().permute(1, 2, 0))
         show_img = show_img.numpy().astype(np.float32)
-        show_img = mmcv.imdenormalize(
+        show_img = _imdenormalize(
             show_img,
             img_meta["img_norm_cfg"]["mean"],
             img_meta["img_norm_cfg"]["std"],
@@ -203,11 +214,7 @@ class DepthBaseDecodeHead(nn.Module):
 class BNHead(DepthBaseDecodeHead):
     """Just a batchnorm."""
 
-    def __init__(self,
-                 input_transform="resize_concat",
-                 in_index=(0, 1, 2, 3),
-                 upsample=1,
-                 **kwargs):
+    def __init__(self, input_transform="resize_concat", in_index=(0, 1, 2, 3), upsample=1, **kwargs):
         super().__init__(**kwargs)
         self.input_transform = input_transform
         self.in_index = in_index

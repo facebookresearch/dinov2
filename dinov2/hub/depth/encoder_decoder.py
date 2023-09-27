@@ -3,10 +3,32 @@
 # This source code is licensed under the Apache License, Version 2.0
 # found in the LICENSE file in the root directory of this source tree.
 
+from collections import OrderedDict
+
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 from .ops import resize
+
+
+def add_prefix(inputs, prefix):
+    """Add prefix for dict.
+
+    Args:
+        inputs (dict): The input dict with str keys.
+        prefix (str): The prefix to add.
+
+    Returns:
+
+        dict: The dict with keys updated with ``prefix``.
+    """
+
+    outputs = dict()
+    for name, value in inputs.items():
+        outputs[f"{prefix}.{name}"] = value
+
+    return outputs
 
 
 class DepthEncoderDecoder(nn.Module):
@@ -294,6 +316,8 @@ class DepthEncoderDecoder(nn.Module):
 
     @staticmethod
     def _parse_losses(losses):
+        import torch.distributed as dist
+
         """Parse the raw outputs (losses) of the network.
 
         Args:
