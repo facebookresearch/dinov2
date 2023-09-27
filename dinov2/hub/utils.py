@@ -33,8 +33,6 @@ class CenterPadding(nn.Module):
 
     @torch.inference_mode()
     def forward(self, x):
-        pads = list(itertools.chain.from_iterable(
-            self._get_pad(m) for m in x.shape[:1:-1])
-        )
+        pads = list(itertools.chain.from_iterable(self._get_pad(m) for m in x.shape[:1:-1]))
         output = F.pad(x, pads)
         return output

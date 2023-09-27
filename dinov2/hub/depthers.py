@@ -5,10 +5,11 @@
 
 from enum import Enum
 from functools import partial
+from typing import Union
 
 import torch
 
-from .backbones import  _make_dinov2_model
+from .backbones import _make_dinov2_model
 from .depth import BNHead, DepthEncoderDecoder
 from .utils import _DINOV2_BASE_URL, _make_dinov2_model_name, CenterPadding
 
@@ -55,17 +56,18 @@ def _make_dinov2_linear_depther(
     arch_name: str = "vit_large",
     layers: int = 4,
     pretrained: bool = True,
-    weights: str = Weights.NYU.value,
+    weights: Union[Weights, str] = Weights.NYU,
     **kwargs,
 ):
     if layers not in (1, 4):
         raise AssertionError(f"Unsupported number of layers: {layers}")
-    if weights not in (weights.value for weights in Weights):
-        raise AssertionError(f"Unsupported weights: {weights}")
+    if isinstance(weights, str):
+        try:
+            weights = Weights[weights]
+        except KeyError:
+            raise AssertionError(f"Unsupported weights: {weights}")
 
-    backbone = _make_dinov2_model(arch_name=arch_name,
-                                  pretrained=pretrained,
-                                  **kwargs)
+    backbone = _make_dinov2_model(arch_name=arch_name, pretrained=pretrained, **kwargs)
 
     embed_dim = backbone.embed_dim
     patch_size = backbone.patch_size
@@ -76,23 +78,20 @@ def _make_dinov2_linear_depther(
         layers=layers,
     )
 
-    layer_counts = {
+    layer_count = {
         "vit_small": 12,
         "vit_base": 12,
         "vit_large": 24,
         "vit_giant2": 40,
-    }
-    layer_count = layer_counts[arch_name]
-
-    out_indices = {
-        "vit_small": [2, 5, 8, 11],
-        "vit_base": [2, 5, 8, 11],
-        "vit_large": [4, 11, 17, 23],
-        "vit_giant2": [9, 19, 29, 39],
-    }
+    }[arch_name]
 
     if layers == 4:
-        out_index = out_indices[arch_name]
+        out_index = {
+            "vit_small": [2, 5, 8, 11],
+            "vit_base": [2, 5, 8, 11],
+            "vit_large": [4, 11, 17, 23],
+            "vit_giant2": [9, 19, 29, 39],
+        }[arch_name]
     else:
         assert layers == 1
         out_index = [layer_count - 1]
@@ -105,15 +104,12 @@ def _make_dinov2_linear_depther(
         return_class_token=True,
         norm=False,
     )
-    model.backbone.register_forward_pre_hook(
-        lambda _, x: CenterPadding(patch_size)(x[0])
-    )
+    model.backbone.register_forward_pre_hook(lambda _, x: CenterPadding(patch_size)(x[0]))
 
     if pretrained:
         layers_str = str(layers) if layers == 4 else ""
-        weights_str = weights.lower()
+        weights_str = weights.value.lower()
         url = _DINOV2_BASE_URL + f"/{model_name}/{model_name}_{weights_str}_linear{layers_str}_head.pth"
-        print(url)
         checkpoint = torch.hub.load_state_dict_from_url(url, map_location="cpu")
         if "state_dict" in checkpoint:
             state_dict = checkpoint["state_dict"]
@@ -122,49 +118,25 @@ def _make_dinov2_linear_depther(
     return model
 
 
-def dinov2_vits14_ld(*,
-                     layers: int = 4,
-                     pretrained: bool = True,
-                     weights: str = Weights.NYU.value,
-                     **kwargs):
-    return _make_dinov2_linear_depther(arch_name="vit_small",
-                                       layers=layers,
-                                       pretrained=pretrained,
-                                       weights=weights,
-                                       **kwargs)
+def dinov2_vits14_ld(*, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.NYU, **kwargs):
+    return _make_dinov2_linear_depther(
+        arch_name="vit_small", layers=layers, pretrained=pretrained, weights=weights, **kwargs
+    )
 
 
-def dinov2_vitb14_ld(*,
-                     layers: int = 4,
-                     pretrained: bool = True,
-                     weights: str = Weights.NYU.value,
-                     **kwargs):
-    return _make_dinov2_linear_depther(arch_name="vit_base",
-                                       layers=layers,
-                                       pretrained=pretrained,
-                                       weights=weights,
-                                       **kwargs)
+def dinov2_vitb14_ld(*, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.NYU, **kwargs):
+    return _make_dinov2_linear_depther(
+        arch_name="vit_base", layers=layers, pretrained=pretrained, weights=weights, **kwargs
+    )
 
 
-def dinov2_vitl14_ld(*,
-                     layers: int = 4,
-                     pretrained: bool = True,
-                     weights: str = Weights.NYU.value,
-                     **kwargs):
-    return _make_dinov2_linear_depther(arch_name="vit_large",
-                                       layers=layers,
-                                       pretrained=pretrained,
-                                       weights=weights,
-                                       **kwargs)
+def dinov2_vitl14_ld(*, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.NYU, **kwargs):
+    return _make_dinov2_linear_depther(
+        arch_name="vit_large", layers=layers, pretrained=pretrained, weights=weights, **kwargs
+    )
 
 
-def dinov2_vitg14_ld(*,
-                     layers: int = 4,
-                     pretrained: bool = True,
-                     weights: str = Weights.NYU.value,
-                     **kwargs):
-    return _make_dinov2_linear_depther(arch_name="vit_giant2",
-                                       layers=layers,
-                                       pretrained=pretrained,
-                                       weights=weights,
-                                       **kwargs)
+def dinov2_vitg14_ld(*, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.NYU, **kwargs):
+    return _make_dinov2_linear_depther(
+        arch_name="vit_giant2", layers=layers, ffn_layer="swiglufused", pretrained=pretrained, weights=weights, **kwargs
+    )
