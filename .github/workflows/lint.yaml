@@ -6,8 +6,7 @@ on:
       - main
   pull_request:
     branches:
-      - master
-      - 'gh/**'
+      - main
 
 jobs:
   run-linters:
