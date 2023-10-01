@@ -3,10 +3,31 @@
 # This source code is licensed under the Apache License, Version 2.0
 # found in the LICENSE file in the root directory of this source tree.
 
-from typing import Sequence
+from typing import Any, Sequence
 
 import torch
+import numpy as np
 from torchvision import transforms
+
+
+class RandomRotate90():
+    # because arbitrary rotations are too expensive
+    def __init__(self, p) -> None:
+        self.p = p
+
+    def __call__(self, img: torch.Tensor) -> torch.Tensor:
+        if np.random.rand() < self.p:
+            num_rotations = np.random.randint(0,3)
+            if num_rotations == 0:
+                return img
+            elif num_rotations == 1:
+                return img.transpose(-2,-1).flip(-1)
+            elif num_rotations == 2:
+                return img.flip((-2,-1))
+            elif num_rotations == 3:
+                return img.transpose(-2,-1).flip(-2)
+        else:
+            return img
 
 
 class GaussianBlur(transforms.RandomApply):

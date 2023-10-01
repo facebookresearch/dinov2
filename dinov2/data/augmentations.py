@@ -8,6 +8,7 @@ import logging
 from torchvision import transforms
 
 from .transforms import (
+    RandomRotate90,
     GaussianBlur,
     make_normalize_transform,
 )
@@ -43,19 +44,17 @@ class DataAugmentationDINO(object):
         # random resized crop and flip
         self.geometric_augmentation_global = transforms.Compose(
             [
-                transforms.RandomResizedCrop(
-                    global_crops_size, scale=global_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC
-                ),
+                transforms.RandomCrop(global_crops_size),
                 transforms.RandomHorizontalFlip(p=0.5),
+                RandomRotate90(p=1),
             ]
         )
 
         self.geometric_augmentation_local = transforms.Compose(
             [
-                transforms.RandomResizedCrop(
-                    local_crops_size, scale=local_crops_scale, interpolation=transforms.InterpolationMode.BICUBIC
-                ),
+                transforms.RandomCrop(local_crops_size),
                 transforms.RandomHorizontalFlip(p=0.5),
+                RandomRotate90(p=1),
             ]
         )
 
@@ -75,7 +74,7 @@ class DataAugmentationDINO(object):
         global_transfo2_extra = transforms.Compose(
             [
                 GaussianBlur(p=0.1),
-                transforms.RandomSolarize(threshold=128, p=0.2),
+                # transforms.RandomSolarize(threshold=128, p=0.2),
             ]
         )
 
@@ -84,14 +83,17 @@ class DataAugmentationDINO(object):
         # normalization
         self.normalize = transforms.Compose(
             [
-                transforms.ToTensor(),
+                # transforms.ToTensor(),
                 make_normalize_transform(),
             ]
         )
 
-        self.global_transfo1 = transforms.Compose([color_jittering, global_transfo1_extra, self.normalize])
-        self.global_transfo2 = transforms.Compose([color_jittering, global_transfo2_extra, self.normalize])
-        self.local_transfo = transforms.Compose([color_jittering, local_transfo_extra, self.normalize])
+        # self.global_transfo1 = transforms.Compose([color_jittering, global_transfo1_extra, self.normalize])
+        # self.global_transfo2 = transforms.Compose([color_jittering, global_transfo2_extra, self.normalize])
+        # self.local_transfo   = transforms.Compose([color_jittering, local_transfo_extra, self.normalize])
+        self.global_transfo1 = transforms.Compose([global_transfo1_extra])
+        self.global_transfo2 = transforms.Compose([global_transfo2_extra])
+        self.local_transfo   = transforms.Compose([local_transfo_extra])
 
     def __call__(self, image):
         output = {}

@@ -80,6 +80,7 @@ student:
   qkv_bias: true
   proj_bias: true
   ffn_bias: true
+  in_chans: 3
 teacher:
   momentum_teacher: 0.992
   final_momentum_teacher: 1
