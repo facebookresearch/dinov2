@@ -14,7 +14,7 @@ from dinov2.models import build_model_from_cfg
 from dinov2.layers import DINOHead
 from dinov2.utils.utils import has_batchnorms
 from dinov2.utils.param_groups import get_params_groups_with_decay, fuse_params_groups
-from dinov2.fsdp import parse_fsdp_config, ShardedGradScaler, get_fsdp_modules, reshard_fsdp_model
+from dinov2.fsdp import parse_fsdp_config, ShardedGradScaler, reshard_fsdp_model
 
 from torch.distributed.fsdp.wrap import wrap
 
@@ -356,16 +356,15 @@ class SSLMetaArch(nn.Module):
             ) = self.student.backbone._streams = self.teacher.backbone._streams
             self.need_to_synchronize_fsdp_streams = False
 
-    def update_teacher(self, m):
+    @torch.no_grad()
+    def update_teacher(self, m: float) -> None:
         student_param_list = []
         teacher_param_list = []
-        with torch.no_grad():
-            for k in self.student.keys():
-                for ms, mt in zip(get_fsdp_modules(self.student[k]), get_fsdp_modules(self.teacher[k])):
-                    student_param_list += ms.params
-                    teacher_param_list += mt.params
-            torch._foreach_mul_(teacher_param_list, m)
-            torch._foreach_add_(teacher_param_list, student_param_list, alpha=1 - m)
+        for k in self.student.keys():
+            student_param_list.extend(self.student[k].parameters())
+            teacher_param_list.extend(self.teacher[k].parameters())
+        torch._foreach_mul_(teacher_param_list, m)
+        torch._foreach_add_(teacher_param_list, student_param_list, alpha=1.0 - m)
 
     def train(self):
         super().train()
