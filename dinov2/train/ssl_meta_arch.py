@@ -368,24 +368,20 @@ class SSLMetaArch(nn.Module):
         super().train()
         self.teacher.eval()
 
-    def get_maybe_fused_params_for_submodel(self, m):
-        params_groups = get_params_groups_with_decay(
-            model=m,
-            lr_decay_rate=self.cfg.optim.layerwise_decay,
-            patch_embed_lr_mult=self.cfg.optim.patch_embed_lr_mult,
-        )
-        fused_params_groups = fuse_params_groups(params_groups)
-        logger.info("fusing param groups")
-
-        for g in fused_params_groups:
-            g["foreach"] = True
-        return fused_params_groups
-
     def get_params_groups(self):
         all_params_groups = []
         for m in self.student.values():
-            all_params_groups += self.get_maybe_fused_params_for_submodel(m)
-        return all_params_groups
+            all_params_groups.extend(
+                get_params_groups_with_decay(
+                    model=m,
+                    lr_decay_rate=self.cfg.optim.layerwise_decay,
+                    patch_embed_lr_mult=self.cfg.optim.patch_embed_lr_mult,
+                )
+            )
+        fused_params_groups = fuse_params_groups(all_params_groups)
+        # sort param groups by their *sorted* param names to ensure deterministic ordering
+        fused_params_groups = sorted(fused_params_groups, key=lambda g: sorted(g["param_names"]))
+        return fused_params_groups
 
     def prepare_for_distributed_training(self):
         logger.info("DISTRIBUTED FSDP -- preparing model for distributed training")
