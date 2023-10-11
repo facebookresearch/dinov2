@@ -43,7 +43,7 @@ class iBOTPatchLoss(nn.Module):
         self.async_batch_center = None
 
     @torch.no_grad()
-    def softmax_center_teacher(self, teacher_patch_tokens, teacher_temp):
+    def softmax_center_teacher(self, teacher_patch_tokens: torch.Tensor, teacher_temp):
         self.apply_center_update()
         # teacher centering and sharpening
         #
@@ -53,6 +53,7 @@ class iBOTPatchLoss(nn.Module):
         # teacher_patch_tokens = teacher_patch_tokens.float()
         # return F.softmax((teacher_patch_tokens.sub_(self.center.to(teacher_patch_tokens.dtype))).mul_(1 / teacher_temp), dim=-1)
 
+        self.center = self.center.to(device=teacher_patch_tokens.device)
         return F.softmax((teacher_patch_tokens - self.center) / teacher_temp, dim=-1)
 
         # this is experimental, keep everything in float16 and let's see what happens:
