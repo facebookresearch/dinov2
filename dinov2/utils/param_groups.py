@@ -5,6 +5,7 @@
 
 from collections import defaultdict
 import logging
+from torch.distributed.fsdp._common_utils import clean_tensor_name
 
 
 logger = logging.getLogger("dinov2")
@@ -56,7 +57,7 @@ def get_params_groups_with_decay(model, lr_decay_rate=1.0, patch_embed_lr_mult=1
     all_param_groups = []
 
     for name, param in model.named_parameters():
-        name = name.replace("_fsdp_wrapped_module.", "")
+        name = clean_tensor_name(name)
         if not param.requires_grad:
             continue
         decay_rate = get_vit_lr_decay_rate(
