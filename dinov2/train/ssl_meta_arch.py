@@ -14,10 +14,9 @@ from dinov2.models import build_model_from_cfg
 from dinov2.layers import DINOHead
 from dinov2.utils.utils import has_batchnorms
 from dinov2.utils.param_groups import get_params_groups_with_decay, fuse_params_groups
-from dinov2.fsdp import get_fsdp_wrapper, ShardedGradScaler, get_fsdp_modules, reshard_fsdp_model
+from dinov2.fsdp import parse_fsdp_config, ShardedGradScaler, get_fsdp_modules, reshard_fsdp_model
 
-from dinov2.models.vision_transformer import BlockChunk
-
+from torch.distributed.fsdp.wrap import wrap
 
 try:
     from xformers.ops import fmha
@@ -119,6 +118,10 @@ class SSLMetaArch(nn.Module):
         for p in self.teacher.parameters():
             p.requires_grad = False
         logger.info(f"Student and Teacher are built: they are both {cfg.student.arch} network.")
+
+        for k, v in self.student.items():
+            logger.info(f"Syncing student and teacher submodule: {k}")
+            self.teacher[k].load_state_dict(v.state_dict())
 
     def forward(self, inputs):
         raise NotImplementedError
@@ -391,10 +394,8 @@ class SSLMetaArch(nn.Module):
         logger.info("DISTRIBUTED FSDP -- preparing model for distributed training")
         if has_batchnorms(self.student):
             raise NotImplementedError
-        # below will synchronize all student subnetworks across gpus:
         for k, v in self.student.items():
-            self.teacher[k].load_state_dict(self.student[k].state_dict())
             student_model_cfg = self.cfg.compute_precision.student[k]
-            self.student[k] = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k])
+            self.student[k] = wrap(v, **parse_fsdp_config(student_model_cfg))
             teacher_model_cfg = self.cfg.compute_precision.teacher[k]
-            self.teacher[k] = get_fsdp_wrapper(teacher_model_cfg, modules_to_wrap={BlockChunk})(self.teacher[k])
+            self.student[k] = wrap(self.teacher[k], **parse_fsdp_config(teacher_model_cfg))
