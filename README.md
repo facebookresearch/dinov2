@@ -473,6 +473,16 @@ A few notebooks are provided to help the community leverage the models and code:
   <li><a href="https://github.com/facebookresearch/dinov2/blob/main/notebooks/semantic_segmentation.ipynb">Semantic segmentation</a> - How to load and use the segmentation heads in combination with a matching backbone via mmcv, and also how to load and use the Mask2Former-based segmentation model trained on ADE20K</li>
 </ul>
 
+### Community Guides
+
+Community members have made guides that show how to use DINOv2 in applications.
+
+<ul>
+  <li><a href="https://blog.roboflow.com/how-to-classify-images-with-dinov2/">How to classify images with DINOv2</a>: Learn how to build an image classifier with DINOv2.</li>
+  <li><a href="https://colab.research.google.com/github/roboflow-ai/notebooks/blob/main/notebooks/dinov2-classification.ipynb">How to classify images with DINOv2 (Notebook)</a>: An interactive notebook that walks through building an image classifier.</li>
+  <li><a href="https://github.com/roboflow-ai/notebooks/blob/main/notebooks/dinov2-image-retrieval.ipynb">Build an image-to-image retrieval system with DINOv2</a>: Use DINOv2 and FAISS to build an image-to-image search engine.</li>
+</ul>
+
 ## License
 
 DINOv2 code and model weights are released under the Apache License 2.0. See [LICENSE](LICENSE) for additional details.
