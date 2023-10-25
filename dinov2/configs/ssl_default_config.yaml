@@ -80,6 +80,9 @@ student:
   qkv_bias: true
   proj_bias: true
   ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
 teacher:
   momentum_teacher: 0.992
   final_momentum_teacher: 1

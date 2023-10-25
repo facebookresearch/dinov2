@@ -1,12 +1,16 @@
 # Model Card for DINOv2-S/B/L/g
 
-These are Vision Transformer models trained following the method described in the paper:
+These are Vision Transformer models trained following the method described in the papers:
 "DINOv2: Learning Robust Visual Features without Supervision"
+and
+"Vision Transformers Need Registers".
 
-We provide 4 models: 1 ViT-g trained from scratch, and 3 ViT-S/B/L models distilled from the ViT-g.
+We provide 8 models: 
+- 1 ViT-g trained from scratch with 3 ViT-S/B/L models distilled from the ViT-g, without registers.
+- 1 ViT-g trained from scratch with 3 ViT-S/B/L models distilled from the ViT-g, with registers.
 
 ## Model Details
-The model takes an image as input and returns a class token and patch tokens.
+The model takes an image as input and returns a class token and patch tokens, and optionally 4 register tokens.
 
 The embedding dimension is: 
 - 384 for ViT-S.
@@ -14,9 +18,9 @@ The embedding dimension is:
 - 1024 for ViT-L.
 - 1536 for ViT-g.
 
-The models follow a Transformer architecture, with a patch size of 14.
+The models follow a Transformer architecture, with a patch size of 14. In the case of registers, we add 4 register tokens, learned during training, to the input sequence after the patch embedding.
 
-For a 224x224 image, this results in 1 class token + 256 patch tokens.
+For a 224x224 image, this results in 1 class token + 256 patch tokens, and optionally 4 register tokens.
 
 The models can accept larger images provided the image shapes are multiples of the patch size (14). 
 If this condition is not verified, the model will crop to the closest smaller multiple of the patch size.
@@ -63,10 +67,18 @@ Use the code below to get started with the model.
 
 ```python
 import torch
+
+# DINOv2
 dinov2_vits14 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14')
 dinov2_vitb14 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitb14')
 dinov2_vitl14 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
 dinov2_vitg14 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14')
+
+# DINOv2 with registers
+dinov2_vits14_reg = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14_reg')
+dinov2_vitb14_reg = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitb14_reg')
+dinov2_vitl14_reg = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14_reg')
+dinov2_vitg14_reg = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14_reg')
 ```
 
 ## Training Details
@@ -92,11 +104,11 @@ dinov2_vitg14 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14')
 
 ## Evaluation
 
-We refer users to the associated paper for the evaluation protocols.
+We refer users to the associated papers for the evaluation protocols.
 
 <table>
   <tr>
-    <th>model</th>
+    <th colspan="2"></th>
     <th colspan="3">ImageNet-1k</th>
     <th>NYU-Depth v2</th>
     <th>SUN-RGBD</th>
@@ -105,7 +117,8 @@ We refer users to the associated paper for the evaluation protocols.
     <th>Oxford-H</th>
   </tr>
   <tr>
-    <th rowspan="2">task</th>
+    <th rowspan="2">model</th>
+    <th rowspan="2">with <br /> registers</th>
     <th>classif. (acc)</th>
     <th>classif. (acc)</th>
     <th>classif. V2 (acc)</th>
@@ -128,6 +141,7 @@ We refer users to the associated paper for the evaluation protocols.
   </tr>
   <tr>
     <td>ViT-S/14</td>
+    <td align="center">:x:</td>
     <td align="right">79.0%</td>
     <td align="right">81.1%</td>
     <td align="right">70.8%</td> 
@@ -138,7 +152,20 @@ We refer users to the associated paper for the evaluation protocols.
     <td align="right">43.2</td> 
   </tr>
   <tr>
+    <td>ViT-S/14</td>
+    <td align="center">:white_check_mark:</td>
+    <td align="right">79.1%</td>
+    <td align="right">80.9%</td>
+    <td align="right">71.0%</td> 
+    <td align="right">N/A</td> 
+    <td align="right">N/A</td> 
+    <td align="right">N/A</td> 
+    <td align="right">67.6%</td> 
+    <td align="right">39.5</td> 
+  </tr>
+  <tr>
     <td>ViT-B/14</td>
+    <td align="center">:x:</td>
     <td align="right">82.1%</td>
     <td align="right">84.5%</td>
     <td align="right">74.9%</td>
@@ -148,8 +175,20 @@ We refer users to the associated paper for the evaluation protocols.
     <td align="right">76.3%</td> 
     <td align="right">49.5</td> 
   </tr>
+    <td>ViT-B/14</td>
+    <td align="center">:white_check_mark:</td>
+    <td align="right">82.0%</td>
+    <td align="right">84.6%</td>
+    <td align="right">75.6%</td>
+    <td align="right">N/A</td> 
+    <td align="right">N/A</td> 
+    <td align="right">N/A</td> 
+    <td align="right">73.8%</td> 
+    <td align="right">51.0</td> 
+  </tr>
   <tr>
     <td>ViT-L/14</td>
+    <td align="center">:x:</td>
     <td align="right">83.5%</td>
     <td align="right">86.3%</td>
     <td align="right">77.6%</td>
@@ -160,7 +199,20 @@ We refer users to the associated paper for the evaluation protocols.
     <td align="right">54.0</td> 
   </tr>
   <tr>
+    <td>ViT-L/14</td>
+    <td align="center">:white_check_mark:</td>
+    <td align="right">83.8%</td>
+    <td align="right">86.7%</td>
+    <td align="right">78.5%</td>
+    <td align="right">N/A</td> 
+    <td align="right">N/A</td> 
+    <td align="right">N/A</td> 
+    <td align="right">80.9%</td> 
+    <td align="right">55.7</td> 
+  </tr>
+  <tr>
     <td>ViT-g/14</td>
+    <td align="center">:x:</td>
     <td align="right">83.5%</td>
     <td align="right">86.5%</td>
     <td align="right">78.4%</td>
@@ -169,6 +221,19 @@ We refer users to the associated paper for the evaluation protocols.
     <td align="right">53.0</td> 
     <td align="right">81.6%</td> 
     <td align="right">52.3</td> 
+  </tr>
+  <tr>
+  <tr>
+    <td>ViT-g/14</td>
+    <td align="center">:white_check_mark:</td>
+    <td align="right">83.7%</td>
+    <td align="right">87.1%</td>
+    <td align="right">78.8%</td>
+    <td align="right">N/A</td> 
+    <td align="right">N/A</td> 
+    <td align="right">N/A</td> 
+    <td align="right">81.5%</td> 
+    <td align="right">58.2</td> 
   </tr>
 </table>
 
@@ -196,6 +261,12 @@ xFormers 0.0.18
   title={DINOv2: Learning Robust Visual Features without Supervision},
   author={Oquab, Maxime and Darcet, Timothée and Moutakanni, Theo and Vo, Huy and Szafraniec, Marc and Khalidov, Vasil and Fernandez, Pierre and Haziza, Daniel and Massa, Francisco and El-Nouby, Alaaeldin and Howes, Russell and Huang, Po-Yao and Xu, Hu and Sharma, Vasu and Li, Shang-Wen and Galuba, Wojciech and Rabbat, Mike and Assran, Mido and Ballas, Nicolas and Synnaeve, Gabriel and Misra, Ishan and Jegou, Herve and Mairal, Julien and Labatut, Patrick and Joulin, Armand and Bojanowski, Piotr},
   journal={arXiv:2304.07193},
+  year={2023}
+}
+@misc{darcet2023vitneedreg,
+  title={Vision Transformers Need Registers},
+  author={Darcet, Timothée and Oquab, Maxime and Mairal, Julien and Bojanowski, Piotr},
+  journal={arXiv:2309.16588},
   year={2023}
 }
 ```
