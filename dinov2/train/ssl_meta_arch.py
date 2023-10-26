@@ -37,9 +37,16 @@ class SSLMetaArch(nn.Module):
         student_model_dict = dict()
         teacher_model_dict = dict()
 
-        student_backbone, teacher_backbone, embed_dim = build_model_from_cfg(cfg)
-        student_model_dict["backbone"] = student_backbone
-        teacher_model_dict["backbone"] = teacher_backbone
+        if cfg.start_with_hipt_weights:
+            from dinov2.hub.backbones import dinov2_vits16_hipt
+            img_size = cfg.crops.global_crops_size
+            student_backbone = dinov2_vits16_hipt(img_size=img_size, use_teacher_weights=False)
+            teacher_backbone = dinov2_vits16_hipt(img_size=img_size, use_teacher_weights=True)
+            embed_dim = student_backbone.embed_dim
+        else:
+            student_backbone, teacher_backbone, embed_dim = build_model_from_cfg(cfg)
+            student_model_dict["backbone"] = student_backbone
+            teacher_model_dict["backbone"] = teacher_backbone
         logger.info(f"OPTIONS -- architecture : embed_dim: {embed_dim}")
 
         if cfg.student.pretrained_weights:
