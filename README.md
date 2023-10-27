@@ -1,4 +1,4 @@
-:new: [2023-10-26] *Added DINOv2 backbones with registers.*
+:new: [2023-10-26] *Added DINOv2 backbones with registers, following [Vision Transformers Need Registers](https://arxiv.org/abs/2309.16588).*
 
 # DINOv2: Learning Robust Visual Features without Supervision
 
