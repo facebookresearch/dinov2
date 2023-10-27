@@ -4,7 +4,6 @@
 # found in the LICENSE file in the root directory of this source tree.
 
 from enum import Enum
-import re
 from typing import Union
 
 import torch
