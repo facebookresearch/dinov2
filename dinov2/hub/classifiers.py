@@ -19,11 +19,13 @@ class Weights(Enum):
 
 def _make_dinov2_linear_classification_head(
     *,
-    model_name: str = "dinov2_vitl14",
+    arch_name: str = "vit_large",
+    patch_size: int = 14,
     embed_dim: int = 1024,
     layers: int = 4,
     pretrained: bool = True,
     weights: Union[Weights, str] = Weights.IMAGENET1K,
+    num_register_tokens: int = 0,
     **kwargs,
 ):
     if layers not in (1, 4):
@@ -37,10 +39,12 @@ def _make_dinov2_linear_classification_head(
     linear_head = nn.Linear((1 + layers) * embed_dim, 1_000)
 
     if pretrained:
+        model_base_name = _make_dinov2_model_name(arch_name, patch_size)
+        model_full_name = _make_dinov2_model_name(arch_name, patch_size, num_register_tokens)
         layers_str = str(layers) if layers == 4 else ""
-        url = _DINOV2_BASE_URL + f"/{model_name}/{model_name}_linear{layers_str}_head.pth"
+        url = _DINOV2_BASE_URL + f"/{model_base_name}/{model_full_name}_linear{layers_str}_head.pth"
         state_dict = torch.hub.load_state_dict_from_url(url, map_location="cpu")
-        linear_head.load_state_dict(state_dict, strict=False)
+        linear_head.load_state_dict(state_dict, strict=True)
 
     return linear_head
 
@@ -85,63 +89,180 @@ def _make_dinov2_linear_classifier(
     layers: int = 4,
     pretrained: bool = True,
     weights: Union[Weights, str] = Weights.IMAGENET1K,
+    num_register_tokens: int = 0,
+    interpolate_antialias: bool = False,
+    interpolate_offset: float = 0.1,
     **kwargs,
 ):
-    backbone = _make_dinov2_model(arch_name=arch_name, pretrained=pretrained, **kwargs)
+    backbone = _make_dinov2_model(
+        arch_name=arch_name,
+        pretrained=pretrained,
+        num_register_tokens=num_register_tokens,
+        interpolate_antialias=interpolate_antialias,
+        interpolate_offset=interpolate_offset,
+        **kwargs,
+    )
 
     embed_dim = backbone.embed_dim
     patch_size = backbone.patch_size
-    model_name = _make_dinov2_model_name(arch_name, patch_size)
     linear_head = _make_dinov2_linear_classification_head(
-        model_name=model_name,
+        arch_name=arch_name,
+        patch_size=patch_size,
         embed_dim=embed_dim,
         layers=layers,
         pretrained=pretrained,
         weights=weights,
+        num_register_tokens=num_register_tokens,
     )
 
     return _LinearClassifierWrapper(backbone=backbone, linear_head=linear_head, layers=layers)
 
 
 def dinov2_vits14_lc(
-    *, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.IMAGENET1K, **kwargs
+    *,
+    layers: int = 4,
+    pretrained: bool = True,
+    weights: Union[Weights, str] = Weights.IMAGENET1K,
+    **kwargs,
 ):
     """
     Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-S/14 backbone (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
     """
     return _make_dinov2_linear_classifier(
-        arch_name="vit_small", layers=layers, pretrained=pretrained, weights=weights, **kwargs
+        arch_name="vit_small",
+        layers=layers,
+        pretrained=pretrained,
+        weights=weights,
+        **kwargs,
     )
 
 
 def dinov2_vitb14_lc(
-    *, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.IMAGENET1K, **kwargs
+    *,
+    layers: int = 4,
+    pretrained: bool = True,
+    weights: Union[Weights, str] = Weights.IMAGENET1K,
+    **kwargs,
 ):
     """
     Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-B/14 backbone (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
     """
     return _make_dinov2_linear_classifier(
-        arch_name="vit_base", layers=layers, pretrained=pretrained, weights=weights, **kwargs
+        arch_name="vit_base",
+        layers=layers,
+        pretrained=pretrained,
+        weights=weights,
+        **kwargs,
     )
 
 
 def dinov2_vitl14_lc(
-    *, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.IMAGENET1K, **kwargs
+    *,
+    layers: int = 4,
+    pretrained: bool = True,
+    weights: Union[Weights, str] = Weights.IMAGENET1K,
+    **kwargs,
 ):
     """
     Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-L/14 backbone (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
     """
     return _make_dinov2_linear_classifier(
-        arch_name="vit_large", layers=layers, pretrained=pretrained, weights=weights, **kwargs
+        arch_name="vit_large",
+        layers=layers,
+        pretrained=pretrained,
+        weights=weights,
+        **kwargs,
     )
 
 
 def dinov2_vitg14_lc(
-    *, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.IMAGENET1K, **kwargs
+    *,
+    layers: int = 4,
+    pretrained: bool = True,
+    weights: Union[Weights, str] = Weights.IMAGENET1K,
+    **kwargs,
 ):
     """
     Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-g/14 backbone (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
     """
     return _make_dinov2_linear_classifier(
-        arch_name="vit_giant2", layers=layers, ffn_layer="swiglufused", pretrained=pretrained, weights=weights, **kwargs
+        arch_name="vit_giant2",
+        layers=layers,
+        ffn_layer="swiglufused",
+        pretrained=pretrained,
+        weights=weights,
+        **kwargs,
+    )
+
+
+def dinov2_vits14_reg_lc(
+    *, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.IMAGENET1K, **kwargs
+):
+    """
+    Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-S/14 backbone with registers (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
+    """
+    return _make_dinov2_linear_classifier(
+        arch_name="vit_small",
+        layers=layers,
+        pretrained=pretrained,
+        weights=weights,
+        num_register_tokens=4,
+        interpolate_antialias=True,
+        interpolate_offset=0.0,
+        **kwargs,
+    )
+
+
+def dinov2_vitb14_reg_lc(
+    *, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.IMAGENET1K, **kwargs
+):
+    """
+    Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-B/14 backbone with registers (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
+    """
+    return _make_dinov2_linear_classifier(
+        arch_name="vit_base",
+        layers=layers,
+        pretrained=pretrained,
+        weights=weights,
+        num_register_tokens=4,
+        interpolate_antialias=True,
+        interpolate_offset=0.0,
+        **kwargs,
+    )
+
+
+def dinov2_vitl14_reg_lc(
+    *, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.IMAGENET1K, **kwargs
+):
+    """
+    Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-L/14 backbone with registers (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
+    """
+    return _make_dinov2_linear_classifier(
+        arch_name="vit_large",
+        layers=layers,
+        pretrained=pretrained,
+        weights=weights,
+        num_register_tokens=4,
+        interpolate_antialias=True,
+        interpolate_offset=0.0,
+        **kwargs,
+    )
+
+
+def dinov2_vitg14_reg_lc(
+    *, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.IMAGENET1K, **kwargs
+):
+    """
+    Linear classifier (1 or 4 layers) on top of a DINOv2 ViT-g/14 backbone with registers (optionally) pretrained on the LVD-142M dataset and trained on ImageNet-1k.
+    """
+    return _make_dinov2_linear_classifier(
+        arch_name="vit_giant2",
+        layers=layers,
+        ffn_layer="swiglufused",
+        pretrained=pretrained,
+        weights=weights,
+        num_register_tokens=4,
+        interpolate_antialias=True,
+        interpolate_offset=0.0,
+        **kwargs,
     )
