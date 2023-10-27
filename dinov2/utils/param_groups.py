@@ -25,7 +25,7 @@ def get_vit_lr_decay_rate(name, lr_decay_rate=1.0, num_layers=12, force_is_backb
         if ".pos_embed" in name or ".patch_embed" in name or ".mask_token" in name or ".cls_token" in name or ".register_tokens" in name:
             layer_id = 0
         elif force_is_backbone and (
-            "pos_embed" in name or "patch_embed" in name or "mask_token" in name or "cls_token" in name  or "register_tokens" in name
+            "pos_embed" in name or "patch_embed" in name or "mask_token" in name or "cls_token" in name or "register_tokens" in name
         ):
             layer_id = 0
         elif ".blocks." in name and ".residual." not in name:
