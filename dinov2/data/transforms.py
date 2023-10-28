@@ -5,6 +5,7 @@
 
 from typing import Sequence
 
+import numpy as np
 import torch
 from torchvision import transforms
 
@@ -20,8 +21,23 @@ class GaussianBlur(transforms.RandomApply):
         transform = transforms.GaussianBlur(kernel_size=9, sigma=(radius_min, radius_max))
         super().__init__(transforms=[transform], p=keep_p)
 
+class RescaleImage:
+    def __call__(self, image):
+        if isinstance(image, np.ndarray):
+            # Convert to tensor
+            image = torch.from_numpy(image)
+        elif torch.is_tensor(image):
+            pass
+        else:
+            raise TypeError("Input should be of type numpy.ndarray or torch.Tensor")
 
-class MaybeToTensor(transforms.ToTensor):
+        # Rescale the tensor to [0, 1]
+        min_val = image.reshape(image.shape[0], -1).min(dim=1)[0].reshape(-1, 1, 1)
+        max_val = image.reshape(image.shape[0], -1).max(dim=1)[0].reshape(-1, 1, 1)
+        return (image - min_val) / (max_val - min_val)
+
+
+class MaybeToTensor(transforms.PILToTensor):
     """
     Convert a ``PIL Image`` or ``numpy.ndarray`` to tensor, or keep as is if already a tensor.
     """
@@ -35,8 +51,10 @@ class MaybeToTensor(transforms.ToTensor):
         """
         if isinstance(pic, torch.Tensor):
             return pic
+        if isinstance(pic, np.ndarray):
+            pic = torch.from_numpy(pic)
+            return pic.permute(2, 0, 1) 
         return super().__call__(pic)
-
 
 # Use timm's names
 IMAGENET_DEFAULT_MEAN = (0.485, 0.456, 0.406)
@@ -66,6 +84,7 @@ def make_classification_train_transform(
     transforms_list.extend(
         [
             MaybeToTensor(),
+            RescaleImage(),
             make_normalize_transform(mean=mean, std=std),
         ]
     )
@@ -86,6 +105,7 @@ def make_classification_eval_transform(
         transforms.Resize(resize_size, interpolation=interpolation),
         transforms.CenterCrop(crop_size),
         MaybeToTensor(),
+        RescaleImage(),
         make_normalize_transform(mean=mean, std=std),
     ]
     return transforms.Compose(transforms_list)
