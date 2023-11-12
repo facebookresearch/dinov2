@@ -317,6 +317,19 @@ class DinoVisionTransformer(nn.Module):
             return tuple(zip(outputs, class_tokens))
         return tuple(outputs)
 
+    def get_last_self_attention(self, x, masks=None):
+        if isinstance(x, list):
+            return self.forward_features_list(x, masks)
+            
+        x = self.prepare_tokens_with_masks(x, masks)
+        
+        # Run through model, at the last block just return the attention.
+        for i, blk in enumerate(self.blocks):
+            if i < len(self.blocks) - 1:
+                x = blk(x)
+            else: 
+                return blk(x, return_attention=True)
+
     def forward(self, *args, is_training=False, **kwargs):
         ret = self.forward_features(*args, **kwargs)
         if is_training:
