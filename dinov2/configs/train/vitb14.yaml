@@ -6,7 +6,7 @@ ibot:
   head_n_prototypes: 131072
 train:
   batch_size_per_gpu: 32
-  dataset_path: ImageNet22k
+  dataset_path: /valohai/inputs/data/final_images/
   centering: sinkhorn_knopp
 student:
   arch: vit_base
