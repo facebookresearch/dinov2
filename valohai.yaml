@@ -6,7 +6,7 @@
       - mkdir /valohai/inputs/model/
       - mkdir /valohai/outputs/models/
       - python untar_archives.py --input_path /valohai/inputs/data
-      - python dinov2/run/train/train.py {parameters}
+      - PYTHONPATH=. python dinov2/run/train/train.py {parameters}
     
     inputs:
       - name: data
