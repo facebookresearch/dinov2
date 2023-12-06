@@ -309,6 +309,8 @@ def main(args):
             + 1
         )
         return do_test(cfg, model, f"manual_{iteration}")
+    
+    print(cfg)
 
     do_train(cfg, model, resume=not args.no_resume)
 
