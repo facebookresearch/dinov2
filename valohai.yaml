@@ -6,72 +6,29 @@
       - mkdir /valohai/inputs/model/
       - mkdir /valohai/outputs/models/
       - python untar_archives.py --input_path /valohai/inputs/data
-      - python -m torch.distributed.launch --nproc_per_node={parameter-value:num_gpus} main_dino.py {parameters}
+      - python dinov2/run/train/train.py {parameters}
     
     inputs:
       - name: data
         default: gs://valohai-datasets/syn/3dmodels/fruits-and-friends-revised.tar.gz
     parameters:
-      - name: epochs
+      - name: nodes
         type: integer
-        pass-as: --epochs={v}
-        default: 100
-        description: Number of epochs of training
-      - name: warmup-epochs
+        pass-as: --nodes={v}
+        default: 1
+        description: Number of nodes for distributed training
+      - name: gpus_per_node
         type: integer
-        pass-as: --warmup_epochs={v}
-        default: 10
-        description: Number of epochs of training
-      - name: lr
-        type: float
-        pass-as: --lr={v}
-        default: 0.0005
-        description: learning rate at the end of the linear warmup.
-      - name: min-lr
-        type: float
-        pass-as: --min_lr={v}
-        default: 0.000001
-        description: Target LR at the end of optimization. We use a cosine LR schedule with linear warmup    
-      - name: optimizer
+        pass-as: --ngpus={v}
+        default: 1
+        description: Number of gpus per node for distributed training
+      - name: config_file
         type: string
-        pass-as: --optimizer={v}
-        default: adamw
-        description: Type of optimizer. We recommend using adamw with ViTs. Choices [adamw, sgd, lars].
-      - name: data-path
-        type: string
-        pass-as: --data_path={v}
-        description: path to input data.
-        default: /valohai/inputs/data/dataset/train
+        pass-as: --config-file={v}
+        description: path to config file
+        default: dinov2/configs/train/vitb14.yaml
       - name: output-dir
         type: string
         pass-as: --output_dir={v}
         description: path to output directory.
         default: /valohai/outputs/
-      - name: architecture
-        type: string
-        pass-as: --arch={v}
-        default: vit_small
-        description: model architecture used for training.
-      - name: patch-size
-        type: integer
-        pass-as: --patch_size={v}
-        default: 16
-        description: Size in pixels of input square patches - default 16 (for 16x16 patches)
-      - name: output-dim
-        type: integer
-        pass-as: --out_dim={v}
-        default: 65536
-        description: Dimensionality of the DINO head output.
-      - name: batch_size_per_gpus
-        type: integer
-        pass-as: --batch_size_per_gpu={v}
-        description: Batch size per GPU.
-      - name: num_gpus
-        type: integer
-        default: 1
-        description: number of gpus for distributed training
-      - name: num_workers
-        type: integer
-        pass-as: --num_workers={v}
-        default: 12
-        description: Number of data loading workers per GPU.
