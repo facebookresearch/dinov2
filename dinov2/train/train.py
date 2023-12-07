@@ -7,6 +7,7 @@ import argparse
 import logging
 import math
 import os
+import json
 from functools import partial
 
 from fvcore.common.checkpoint import PeriodicCheckpointer
@@ -282,6 +283,9 @@ def do_train(cfg, model, resume=False):
         metric_logger.update(last_layer_lr=last_layer_lr)
         metric_logger.update(current_batch_size=current_batch_size)
         metric_logger.update(total_loss=losses_reduced, **loss_dict_reduced)
+
+        print(json.dumps({"iteration": iteration,
+                          "total_loss": losses_reduced}))
 
         # checkpointing and testing
 
