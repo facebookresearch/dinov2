@@ -297,6 +297,8 @@ def do_train(cfg, model, resume=False):
 def main(args):
     cfg = setup(args)
 
+    logger.info("Cfg:\n{}".format(cfg))
+
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()
 
@@ -310,7 +312,7 @@ def main(args):
         )
         return do_test(cfg, model, f"manual_{iteration}")
     
-    print(cfg)
+    logger.info("Cfg:\n{}".format(cfg))
 
     do_train(cfg, model, resume=not args.no_resume)
 
