@@ -5,3 +5,5 @@ train:
 student:
   arch: vit_base
   block_chunks: 4
+optim:
+  epochs: 1
