@@ -27,6 +27,7 @@ class NLBDataset(ExtendedVisionDataset):
     def get_image_data(self, index: int) -> bytes:  # should return an image as an array
         
         img = self.load_image(index)
+        img = img.tobytes()
 
         return img
 
