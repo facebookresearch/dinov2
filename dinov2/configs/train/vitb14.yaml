@@ -17,7 +17,7 @@ student:
 teacher:
   momentum_teacher: 0.994
 optim:
-  epochs: 1
+  epochs: 100
   weight_decay_end: 0.2
   base_lr: 2.0e-04  # learning rate for a batch size of 1024
   warmup_epochs: 80
