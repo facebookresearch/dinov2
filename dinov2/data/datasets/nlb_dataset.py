@@ -3,7 +3,7 @@ from typing import Optional, Callable
 
 from PIL import Image
 
-from dinov2.dinov2.data.datasets.extended import ExtendedVisionDataset
+from dinov2.data.datasets.extended import ExtendedVisionDataset
 
 
 class NLBDataset(ExtendedVisionDataset):
