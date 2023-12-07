@@ -12,16 +12,6 @@
       - name: data
         default: gs://valohai-datasets/syn/3dmodels/fruits-and-friends-revised.tar.gz
     parameters:
-      - name: nodes
-        type: integer
-        pass-as: --nodes={v}
-        default: 1
-        description: Number of nodes for distributed training
-      - name: gpus_per_node
-        type: integer
-        pass-as: --ngpus={v}
-        default: 1
-        description: Number of gpus per node for distributed training
       - name: config_file
         type: string
         pass-as: --config-file={v}
