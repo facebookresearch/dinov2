@@ -5,7 +5,7 @@ ibot:
   separate_head: true
   head_n_prototypes: 131072
 train:
-  batch_size_per_gpu: 200
+  batch_size_per_gpu: 256
   dataset_path: NLBDataset:root=/valohai/inputs/data/object/
   centering: sinkhorn_knopp
 student:
