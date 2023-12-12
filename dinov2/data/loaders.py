@@ -11,8 +11,8 @@ import torch
 from torch.utils.data import Sampler
 
 from .datasets import ImageNet, ImageNet22k
+from .datasets.npz_dataset import NPZDataset
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler
-
 
 logger = logging.getLogger("dinov2")
 
@@ -58,6 +58,10 @@ def _parse_dataset_str(dataset_str: str):
             kwargs["split"] = ImageNet.Split[kwargs["split"]]
     elif name == "ImageNet22k":
         class_ = ImageNet22k
+    elif name == "NPZDataset":
+        class_ = NPZDataset
+        if "split" in kwargs:
+            kwargs["split"] = NPZDataset.Split[kwargs["split"]]
     else:
         raise ValueError(f'Unsupported dataset "{name}"')
 
