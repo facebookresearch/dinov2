@@ -9,4 +9,4 @@ optim:
   epochs: 50
   scaling_rule: sqrt_wrt_800
 evaluation:
-  eval_period_iterations: 10000
+  eval_period_iterations: 5000
