@@ -9,8 +9,11 @@ import os
 import sys
 from typing import Optional
 
+import wandb
+
 import dinov2.distributed as distributed
 from .helpers import MetricLogger, SmoothedValue
+import torch.distributed as tdist
 
 
 # So that calling _configure_logger multiple times won't add many handlers
@@ -66,8 +69,7 @@ def _configure_logger(
             filename = os.path.join(output, "logs", "log.txt")
 
         if not distributed.is_main_process():
-            global_rank = distributed.get_global_rank()
-            filename = filename + ".rank{}".format(global_rank)
+            filename = filename + ".rank{}".format(distributed.get_global_rank())
 
         os.makedirs(os.path.dirname(filename), exist_ok=True)
 
@@ -85,6 +87,7 @@ def setup_logging(
     name: Optional[str] = None,
     level: int = logging.DEBUG,
     capture_warnings: bool = True,
+    args: Optional[dict] = None,
 ) -> None:
     """
     Setup logging.
@@ -98,5 +101,12 @@ def setup_logging(
         level: The logging level to use.
         capture_warnings: Whether warnings should be captured as logs.
     """
-    logging.captureWarnings(capture_warnings)
-    _configure_logger(name, level=level, output=output)
+    if distributed.is_main_process():
+        logging.captureWarnings(capture_warnings)
+        _configure_logger(name, level=level, output=output)
+        print('AAaaaaaaaaa', args)
+        if args is not None:
+            run_name = args.run_name
+        else:
+            run_name = None
+        wandb.init(name=run_name, project='dinov2_plankton', config=args)

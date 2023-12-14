@@ -11,6 +11,7 @@ import os
 import sys
 from typing import List, Optional
 
+from datetime import datetime
 import numpy as np
 import torch
 import torch.nn as nn
@@ -336,7 +337,7 @@ def eval_linear(
     periodic_checkpointer = PeriodicCheckpointer(checkpointer, checkpoint_period, max_iter=max_iter)
     iteration = start_iter
     logger.info("Starting training from iteration {}".format(start_iter))
-    metric_logger = MetricLogger(delimiter="  ")
+    metric_logger = MetricLogger(delimiter="  ", verbose=distributed.is_main_process())
     header = "Training"
 
     for data, labels in metric_logger.log_every(

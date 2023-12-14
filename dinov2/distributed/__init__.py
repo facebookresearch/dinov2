@@ -12,9 +12,7 @@ from typing import Dict, List
 import torch
 import torch.distributed as dist
 
-_LOCAL_RANK = -1
-_LOCAL_WORLD_SIZE = -1
-
+global RANK, WORLD_SIZE, LOCAL_RANK, LOCAL_WORLD_SIZE
 
 def is_enabled() -> bool:
     """
@@ -29,7 +27,7 @@ def get_global_size() -> int:
     Returns:
         The number of processes in the process group
     """
-    return dist.get_world_size() if is_enabled() else 1
+    return WORLD_SIZE if is_enabled() else 1
 
 
 def get_global_rank() -> int:
@@ -37,7 +35,8 @@ def get_global_rank() -> int:
     Returns:
         The rank of the current process within the global process group.
     """
-    return dist.get_rank() if is_enabled() else 0
+    #print('get_global_rank', RANK, dist.is_available() , dist.is_initialized())
+    return RANK if is_enabled() else 0
 
 
 def get_local_rank() -> int:
@@ -45,11 +44,8 @@ def get_local_rank() -> int:
     Returns:
         The rank of the current process within the local (per-machine) process group.
     """
-    if not is_enabled():
-        return 0
-    assert 0 <= _LOCAL_RANK < _LOCAL_WORLD_SIZE
-    return _LOCAL_RANK
-
+    return LOCAL_RANK if is_enabled() else 0
+    
 
 def get_local_size() -> int:
     """
@@ -57,10 +53,7 @@ def get_local_size() -> int:
         The size of the per-machine process group,
         i.e. the number of processes per machine.
     """
-    if not is_enabled():
-        return 1
-    assert 0 <= _LOCAL_RANK < _LOCAL_WORLD_SIZE
-    return _LOCAL_WORLD_SIZE
+    return LOCAL_WORLD_SIZE if is_enabled() else 1
 
 
 def is_main_process() -> bool:
@@ -90,7 +83,7 @@ def _restrict_print_to_main_process() -> None:
 def _get_master_port(seed: int = 0) -> int:
     MIN_MASTER_PORT, MAX_MASTER_PORT = (20_000, 60_000)
 
-    master_port_str = os.environ.get("MASTER_PORT")
+    master_port_str = os.environ.get("MASTER_PORT") or os.environ.get("SGE_QMASTER_PORT") # For slurm or grid engine
     if master_port_str is None:
         rng = random.Random(seed)
         return rng.randint(MIN_MASTER_PORT, MAX_MASTER_PORT)
@@ -115,14 +108,6 @@ _TORCH_DISTRIBUTED_ENV_VARS = (
     "LOCAL_RANK",
     "LOCAL_WORLD_SIZE",
 )
-
-
-def _collect_env_vars() -> Dict[str, str]:
-    return {env_var: os.environ[env_var] for env_var in _TORCH_DISTRIBUTED_ENV_VARS if env_var in os.environ}
-
-
-def _is_slurm_job_process() -> bool:
-    return "SLURM_JOB_ID" in os.environ
 
 
 def _parse_slurm_node_list(s: str) -> List[str]:
@@ -150,61 +135,44 @@ def _check_env_variable(key: str, new_value: str):
 
 class _TorchDistributedEnvironment:
     def __init__(self):
+
+        dist.init_process_group(backend="nccl")
+        dist.barrier()
+
+        global RANK, WORLD_SIZE, LOCAL_RANK, LOCAL_WORLD_SIZE
+        print('torch.cuda.device_count()', torch.cuda.device_count())
+        print('torch.distributed.get_rank(group=None)', dist.get_rank(group=None))
+        print('torch.distributed.get_world_size(group=None)', dist.get_world_size(group=None))
+        RANK = dist.get_rank(group=None)
+        WORLD_SIZE = dist.get_world_size(group=None)
+        LOCAL_WORLD_SIZE = torch.cuda.device_count()
+        LOCAL_RANK = RANK % LOCAL_WORLD_SIZE
+        # or if num nodes in env vars
+        # LOCAL_WORLD_SIZE = WORLD_SIZE // node_count
+
         self.master_addr = "127.0.0.1"
         self.master_port = 0
-        self.rank = -1
-        self.world_size = -1
-        self.local_rank = -1
-        self.local_world_size = -1
+        self.rank = RANK
+        self.world_size = WORLD_SIZE
+        self.local_rank = LOCAL_RANK
+        self.local_world_size = LOCAL_WORLD_SIZE
 
-        if _is_slurm_job_process():
-            return self._set_from_slurm_env()
-
-        env_vars = _collect_env_vars()
-        if not env_vars:
-            # Environment is not set
-            pass
-        elif len(env_vars) == len(_TORCH_DISTRIBUTED_ENV_VARS):
-            # Environment is fully set
-            return self._set_from_preset_env()
-        else:
-            # Environment is partially set
-            collected_env_vars = ", ".join(env_vars.keys())
-            raise RuntimeError(f"Partially set environment: {collected_env_vars}")
-
-        if torch.cuda.device_count() > 0:
-            return self._set_from_local()
-
-        raise RuntimeError("Can't initialize PyTorch distributed environment")
 
     # Slurm job created with sbatch, submitit, etc...
     def _set_from_slurm_env(self):
         # logger.info("Initialization from Slurm environment")
         job_id = int(os.environ["SLURM_JOB_ID"])
-        node_count = int(os.environ["SLURM_JOB_NUM_NODES"])
         nodes = _parse_slurm_node_list(os.environ["SLURM_JOB_NODELIST"])
-        assert len(nodes) == node_count
 
         self.master_addr = nodes[0]
         self.master_port = _get_master_port(seed=job_id)
-        self.rank = int(os.environ["SLURM_PROCID"])
-        self.world_size = int(os.environ["SLURM_NTASKS"])
-        assert self.rank < self.world_size
-        self.local_rank = int(os.environ["SLURM_LOCALID"])
-        self.local_world_size = self.world_size // node_count
-        assert self.local_rank < self.local_world_size
+
 
     # Single node job with preset environment (i.e. torchrun)
     def _set_from_preset_env(self):
         # logger.info("Initialization from preset environment")
         self.master_addr = os.environ["MASTER_ADDR"]
         self.master_port = os.environ["MASTER_PORT"]
-        self.rank = int(os.environ["RANK"])
-        self.world_size = int(os.environ["WORLD_SIZE"])
-        assert self.rank < self.world_size
-        self.local_rank = int(os.environ["LOCAL_RANK"])
-        self.local_world_size = int(os.environ["LOCAL_WORLD_SIZE"])
-        assert self.local_rank < self.local_world_size
 
     # Single node and GPU job (i.e. local script run)
     def _set_from_local(self):
@@ -245,9 +213,6 @@ def enable(*, set_cuda_current_device: bool = True, overwrite: bool = False, all
         overwrite: If True, overwrites already set variables. Else fails.
     """
 
-    global _LOCAL_RANK, _LOCAL_WORLD_SIZE
-    if _LOCAL_RANK >= 0 or _LOCAL_WORLD_SIZE >= 0:
-        raise RuntimeError("Distributed mode has already been enabled")
     torch_env = _TorchDistributedEnvironment()
     torch_env.export(overwrite=overwrite)
 
@@ -261,10 +226,11 @@ def enable(*, set_cuda_current_device: bool = True, overwrite: bool = False, all
             _check_env_variable(key, value)
         os.environ[key] = value
 
-    dist.init_process_group(backend="nccl")
-    dist.barrier()
+    print('torch_is_enabled', is_enabled())
+    print('get_local_rank', get_local_rank())
+    print('get_global_rank', get_global_rank())
+    print('get_global_size', get_global_size())
+    print('get_local_size', get_local_size())
 
     # Finalize setup
-    _LOCAL_RANK = torch_env.local_rank
-    _LOCAL_WORLD_SIZE = torch_env.local_world_size
     _restrict_print_to_main_process()

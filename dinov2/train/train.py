@@ -8,15 +8,18 @@ import logging
 import math
 import os
 from functools import partial
+import wandb
 
 from fvcore.common.checkpoint import PeriodicCheckpointer
 import torch
+
+from datetime import datetime
 
 from dinov2.data import SamplerType, make_data_loader, make_dataset
 from dinov2.data import collate_data_and_cast, DataAugmentationDINO, MaskingGenerator
 import dinov2.distributed as distributed
 from dinov2.fsdp import FSDPCheckpointer
-from dinov2.logging import MetricLogger
+from dinov2.logging import MetricLogger, setup_logging
 from dinov2.utils.config import setup
 from dinov2.utils.utils import CosineScheduler
 
@@ -53,6 +56,12 @@ For python-based LazyConfig, use "path.key=value".
         default="",
         type=str,
         help="Output directory to save logs and checkpoints",
+    )
+    parser.add_argument(
+        "--run_name",
+        type=str,
+        help="Name for the wandb log",
+        default=f"run_{datetime.now()}"
     )
 
     return parser
@@ -216,7 +225,7 @@ def do_train(cfg, model, resume=False):
 
     logger.info("Starting training from iteration {}".format(start_iter))
     metrics_file = os.path.join(cfg.train.output_dir, "training_metrics.json")
-    metric_logger = MetricLogger(delimiter="  ", output_file=metrics_file)
+    metric_logger = MetricLogger(delimiter="  ", output_file=metrics_file, verbose=distributed.get_local_rank() == 0)
     header = "Training"
 
     for data in metric_logger.log_every(
@@ -282,6 +291,9 @@ def do_train(cfg, model, resume=False):
         metric_logger.update(current_batch_size=current_batch_size)
         metric_logger.update(total_loss=losses_reduced, **loss_dict_reduced)
 
+        if distributed.is_main_process():
+            wandb.log({'lr': lr, 'wd': wd, 'mom': mom, 'last_layer_lr': last_layer_lr, 'current_batch_size':current_batch_size, 'total_loss': losses_reduced, **loss_dict_reduced})
+
         # checkpointing and testing
 
         if cfg.evaluation.eval_period_iterations > 0 and (iteration + 1) % cfg.evaluation.eval_period_iterations == 0:
@@ -300,7 +312,8 @@ def main(args):
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()
 
-    logger.info("Model:\n{}".format(model))
+    if distributed.get_local_rank() == 0:
+        logger.info("Model:\n{}".format(model))
     if args.eval_only:
         iteration = (
             FSDPCheckpointer(model, save_dir=cfg.train.output_dir)

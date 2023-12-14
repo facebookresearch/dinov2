@@ -52,7 +52,10 @@ def default_setup(args):
     rank = distributed.get_global_rank()
 
     global logger
-    setup_logging(output=args.output_dir, level=logging.INFO)
+
+    if distributed.is_main_process():
+        setup_logging(args=args, output=args.output_dir, level=logging.INFO)
+
     logger = logging.getLogger("dinov2")
 
     utils.fix_random_seeds(seed + rank)
