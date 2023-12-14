@@ -225,7 +225,7 @@ def do_train(cfg, model, resume=False):
 
     logger.info("Starting training from iteration {}".format(start_iter))
     metrics_file = os.path.join(cfg.train.output_dir, "training_metrics.json")
-    metric_logger = MetricLogger(delimiter="  ", output_file=metrics_file, verbose=distributed.get_local_rank() == 0)
+    metric_logger = MetricLogger(delimiter="  ", output_file=metrics_file, verbose=distributed.is_main_process())
     header = "Training"
 
     for data in metric_logger.log_every(
@@ -312,7 +312,7 @@ def main(args):
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()
 
-    if distributed.get_local_rank() == 0:
+    if distributed.is_main_process():
         logger.info("Model:\n{}".format(model))
     if args.eval_only:
         iteration = (

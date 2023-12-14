@@ -83,7 +83,7 @@ def _restrict_print_to_main_process() -> None:
 def _get_master_port(seed: int = 0) -> int:
     MIN_MASTER_PORT, MAX_MASTER_PORT = (20_000, 60_000)
 
-    master_port_str = os.environ.get("MASTER_PORT") or os.environ.get("SGE_QMASTER_PORT") # For slurm or grid engine
+    master_port_str = os.environ.get("MASTER_PORT")
     if master_port_str is None:
         rng = random.Random(seed)
         return rng.randint(MIN_MASTER_PORT, MAX_MASTER_PORT)

@@ -104,7 +104,6 @@ def setup_logging(
     if distributed.is_main_process():
         logging.captureWarnings(capture_warnings)
         _configure_logger(name, level=level, output=output)
-        print('AAaaaaaaaaa', args)
         if args is not None:
             run_name = args.run_name
         else:
