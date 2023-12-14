@@ -60,7 +60,7 @@ ibot:
   head_hidden_dim: 2048
 train:
   batch_size_per_gpu: 64
-  dataset_path: NPZDataset:split=TRAIN:root=/fast/AG_Kainmueller/plankton/data/WHOI/preprocessed/:extra=*
+  dataset_path: HDF5Dataset:split=TRAIN:root=/fast/AG_Kainmueller/plankton/data/WHOI/preprocessed_hdf5:extra=*
   output_dir: .
   saveckp_freq: 20
   seed: 0
