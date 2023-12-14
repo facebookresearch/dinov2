@@ -65,7 +65,7 @@ train:
   saveckp_freq: 20
   seed: 0
   num_workers: 10
-  OFFICIAL_EPOCH_LENGTH: 1250
+  OFFICIAL_EPOCH_LENGTH: 600
   cache_dataset: true
   centering: "centering" # or "sinkhorn_knopp"
 student:
