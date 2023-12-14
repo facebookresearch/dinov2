@@ -108,4 +108,4 @@ def setup_logging(
             run_name = args.run_name
         else:
             run_name = None
-        wandb.init(name=run_name, project='dinov2_plankton', config=args)
+        wandb.init(name=run_name, project='dinov2_plankton', config=args, dir=output)
