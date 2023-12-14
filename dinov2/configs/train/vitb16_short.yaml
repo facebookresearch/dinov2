@@ -5,3 +5,8 @@ train:
 student:
   arch: vit_base
   block_chunks: 4
+optim:
+  epochs: 50
+  scaling_rule: sqrt_wrt_800
+evaluation:
+  eval_period_iterations: 10000

@@ -24,6 +24,11 @@ def apply_scaling_rules_to_cfg(cfg):  # to fix
         cfg.optim.lr = base_lr
         cfg.optim.lr *= math.sqrt(cfg.train.batch_size_per_gpu * distributed.get_global_size() / 1024.0)
         logger.info(f"sqrt scaling learning rate; base: {base_lr}, new: {cfg.optim.lr}")
+    elif cfg.optim.scaling_rule == "sqrt_wrt_800":
+        base_lr = cfg.optim.base_lr
+        cfg.optim.lr = base_lr
+        cfg.optim.lr *= math.sqrt(cfg.train.batch_size_per_gpu * distributed.get_global_size() / 800.0)
+        logger.info(f"sqrt scaling learning rate; base: {base_lr}, new: {cfg.optim.lr}")
     else:
         raise NotImplementedError
     return cfg
