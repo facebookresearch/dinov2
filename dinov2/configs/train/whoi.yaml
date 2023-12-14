@@ -42,7 +42,7 @@ compute_precision:
         buffer_dtype: fp32
 dino:
   loss_weight: 1.0
-  head_n_prototypes: 65536
+  head_n_prototypes: 1024 #65536
   head_bottleneck_dim: 256
   head_nlayers: 3
   head_hidden_dim: 2048
@@ -54,27 +54,27 @@ ibot:
   - 0.1
   - 0.5
   separate_head: false
-  head_n_prototypes: 65536
+  head_n_prototypes: 1024 #65536
   head_bottleneck_dim: 256
   head_nlayers: 3
   head_hidden_dim: 2048
 train:
   batch_size_per_gpu: 64
   dataset_path: HDF5Dataset:split=TRAIN:root=/fast/AG_Kainmueller/plankton/data/WHOI/preprocessed_hdf5:extra=*
-  output_dir: .
+  output_dir: 'home/nkoreub/output_dir'
   saveckp_freq: 20
   seed: 0
-  num_workers: 10
+  num_workers: 4
   OFFICIAL_EPOCH_LENGTH: 1250
   cache_dataset: true
-  centering: "centering" # or "sinkhorn_knopp"
+  centering: "sinkhorn_knopp" # or "centering"
 student:
-  arch: vit_large
-  patch_size: 16
+  arch: vit_small
+  patch_size: 14
   drop_path_rate: 0.3
   layerscale: 1.0e-05
   drop_path_uniform: true
-  pretrained_weights: ''
+  pretrained_weights: '/fast/AG_Kainmueller/plankton/checkpoints/dino_vits14_pretrain.pth'
   ffn_layer: "mlp"
   block_chunks: 0
   qkv_bias: true
