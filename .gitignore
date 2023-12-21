@@ -10,6 +10,6 @@ dist/
 
 .vscode/
 wandb/
-dinov2/.DS_Store
+dinov2/
 *.sh~
 .DS_Store
