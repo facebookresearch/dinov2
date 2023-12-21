@@ -88,6 +88,7 @@ def setup_logging(
     level: int = logging.DEBUG,
     capture_warnings: bool = True,
     args: Optional[dict] = None,
+    do_eval: bool = False,
 ) -> None:
     """
     Setup logging.
@@ -101,11 +102,23 @@ def setup_logging(
         level: The logging level to use.
         capture_warnings: Whether warnings should be captured as logs.
     """
+    print('distributed.is_main_process():', distributed.is_main_process())
+    print('get_global_rank', distributed.get_global_rank())
+    print('distributed.is_enabled()', distributed.is_enabled())
     if distributed.is_main_process():
         logging.captureWarnings(capture_warnings)
         _configure_logger(name, level=level, output=output)
         if args is not None:
             run_name = args.run_name
         else:
-            run_name = None
-        wandb.init(name=run_name, project='dinov2_plankton', config=args, dir=output)
+            run_name = ''
+
+        args.output_dir = os.path.join(args.output_dir, run_name)
+        os.makedirs(args.output_dir, exist_ok=True)
+        print('Output dir: ', args.output_dir)
+
+        if do_eval:
+            project='dinov2_plankton_eval'
+        else:
+            project='dinov2_plankton'
+        wandb.init(name=run_name, entity='kainmueller-lab', project=project, config=args, dir=output)

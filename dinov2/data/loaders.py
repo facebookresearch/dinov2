@@ -49,7 +49,7 @@ def _parse_dataset_str(dataset_str: str):
 
     for token in tokens[1:]:
         key, value = token.split("=")
-        assert key in ("root", "extra", "split")
+        assert key in ("root", "extra", "split", "do_short_run")
         kwargs[key] = value
 
     if name == "ImageNet":
@@ -59,6 +59,10 @@ def _parse_dataset_str(dataset_str: str):
     elif name == "ImageNet22k":
         class_ = ImageNet22k
     elif name == "HDF5Dataset":
+        if 'do_short_run' in kwargs.keys():
+            kwargs['do_short_run']=True
+        else:
+            kwargs['do_short_run']=False
         class_ = HDF5Dataset
         if "split" in kwargs:
             kwargs["split"] = HDF5Dataset.Split[kwargs["split"]]
@@ -88,6 +92,7 @@ def make_dataset(
     logger.info(f'using dataset: "{dataset_str}"')
 
     class_, kwargs = _parse_dataset_str(dataset_str)
+    print('Dataset kwargs', kwargs)
     dataset = class_(transform=transform, target_transform=target_transform, **kwargs)
 
     logger.info(f"# of dataset samples: {len(dataset):,d}")

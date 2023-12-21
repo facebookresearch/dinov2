@@ -8,7 +8,7 @@ import os
 import sys
 
 from dinov2.train import get_args_parser as get_train_args_parser
-from dinov2.run.submit import get_args_parser, submit_jobs
+from dinov2.run.submit import get_args_parser
 from dinov2.train import main as train_main
 
 

@@ -10,6 +10,7 @@ import torch
 from torch import nn
 from torchmetrics import MetricCollection
 
+import wandb
 from dinov2.data import DatasetWithEnumeratedTargets, SamplerType, make_data_loader
 import dinov2.distributed as distributed
 from dinov2.logging import MetricLogger
@@ -80,6 +81,7 @@ def evaluate(
 
     stats = {k: metric.compute() for k, metric in metrics.items()}
     metric_logger_stats = {k: meter.global_avg for k, meter in metric_logger.meters.items()}
+    wandb.log(metric_logger_stats)
     return metric_logger_stats, stats
 
 
@@ -105,6 +107,7 @@ def extract_features(model, dataset, batch_size, num_workers, gather_on_cpu=Fals
         sampler_type=SamplerType.DISTRIBUTED,
         drop_last=False,
         shuffle=False,
+        persistent_workers=True,
     )
     return extract_features_with_dataloader(model, data_loader, sample_count, gather_on_cpu)
 
