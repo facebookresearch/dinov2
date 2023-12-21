@@ -59,22 +59,22 @@ ibot:
   head_nlayers: 3
   head_hidden_dim: 2048
 train:
-  batch_size_per_gpu: 256
+  batch_size_per_gpu: 64
   dataset_path: HDF5Dataset:split=TRAIN:root=/fast/AG_Kainmueller/plankton/data/WHOI/preprocessed_hdf5:extra=*
-  output_dir: 'home/jluesch/output_dir'
-  saveckp_freq: 15
+  output_dir: 'home/nkoreub/output_dir'
+  saveckp_freq: 20
   seed: 0
   num_workers: 4
   OFFICIAL_EPOCH_LENGTH: 1250
   cache_dataset: true
   centering: "sinkhorn_knopp" # or "centering"
 student:
-  arch: vit_small
+  arch: vit_large
   patch_size: 14
   drop_path_rate: 0
   layerscale: 1.0e-05
   drop_path_uniform: true
-  pretrained_weights: ''
+  pretrained_weights: '/fast/AG_Kainmueller/plankton/checkpoints/dinov2_vitl14_pretrain.pth'
   ffn_layer: "mlp"
   block_chunks: 0
   qkv_bias: true
@@ -84,7 +84,7 @@ student:
   interpolate_antialias: false
   interpolate_offset: 0.1
 teacher:
-  momentum_teacher: 0.992
+  momentum_teacher: 0.994
   final_momentum_teacher: 1
   warmup_teacher_temp: 0.04
   teacher_temp: 0.07
@@ -93,8 +93,7 @@ optim:
   epochs: 100
   weight_decay: 0.04
   weight_decay_end: 0.4
-  base_lr: 0.001
-  # base_lr: 0.004  # learning rate for a batch size of 1024
+  base_lr: 2.0e-04  # learning rate for a batch size of 1024
   lr: 0.  # will be set after applying scaling rule
   warmup_epochs: 10
   min_lr: 1.0e-06
@@ -113,7 +112,7 @@ crops:
   local_crops_scale:
   - 0.05
   - 0.32
-  global_crops_size: 224
+  global_crops_size: 518
   local_crops_size: 98
 evaluation:
   eval_period_iterations: 12500
