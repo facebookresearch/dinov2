@@ -9,3 +9,4 @@ dist/
 *.swp
 
 .vscode/
+wandb/
