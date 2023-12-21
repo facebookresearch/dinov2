@@ -9,3 +9,6 @@ dist/
 *.swp
 
 .vscode/
+wandb/
+.DS_Store
+*.sh~
