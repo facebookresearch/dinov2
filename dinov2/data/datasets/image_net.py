@@ -65,6 +65,7 @@ class ImageNet(ExtendedVisionDataset):
         transforms: Optional[Callable] = None,
         transform: Optional[Callable] = None,
         target_transform: Optional[Callable] = None,
+        do_short_run: bool = False,
     ) -> None:
         super().__init__(root, transforms, transform, target_transform)
         self._extra_root = extra
@@ -73,6 +74,8 @@ class ImageNet(ExtendedVisionDataset):
         self._entries = None
         self._class_ids = None
         self._class_names = None
+
+        self.do_short_run = do_short_run
 
     @property
     def split(self) -> "ImageNet.Split":

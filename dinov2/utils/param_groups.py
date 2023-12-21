@@ -84,8 +84,8 @@ def get_params_groups_with_decay(model, lr_decay_rate=1.0, patch_embed_lr_mult=1
             d.update({"lr_multiplier": d["lr_multiplier"] * patch_embed_lr_mult})
 
         all_param_groups.append(d)
-        # if distributed.is_main_process():
-            # logger.info(f"""{name}: lr_multiplier: {d["lr_multiplier"]}, wd_multiplier: {d["wd_multiplier"]}""")
+        if distributed.is_main_process():
+            logger.info(f"""{name}: lr_multiplier: {d["lr_multiplier"]}, wd_multiplier: {d["wd_multiplier"]}""")
 
     return all_param_groups
 

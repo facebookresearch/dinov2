@@ -19,7 +19,7 @@ from dinov2.data import SamplerType, make_data_loader, make_dataset
 from dinov2.data import collate_data_and_cast, DataAugmentationDINO, MaskingGenerator
 import dinov2.distributed as distributed
 from dinov2.fsdp import FSDPCheckpointer
-from dinov2.logging import MetricLogger, setup_logging
+from dinov2.logging import MetricLogger
 from dinov2.utils.config import setup
 from dinov2.utils.utils import CosineScheduler
 
@@ -52,7 +52,6 @@ For python-based LazyConfig, use "path.key=value".
     )
     parser.add_argument(
         "--output-dir",
-        "--output_dir",
         default="",
         type=str,
         help="Output directory to save logs and checkpoints",
@@ -61,7 +60,7 @@ For python-based LazyConfig, use "path.key=value".
         "--run_name",
         type=str,
         help="Name for the wandb log",
-        default=f"run_{datetime.now()}"
+        default=f"run_{datetime.now().strftime('%d%m%Y_%H%M%S')}"
     )
 
     return parser
@@ -159,7 +158,11 @@ def do_train(cfg, model, resume=False):
     # checkpointer
     checkpointer = FSDPCheckpointer(model, cfg.train.output_dir, optimizer=optimizer, save_to_disk=True)
 
-    start_iter = checkpointer.resume_or_load(cfg.MODEL.WEIGHTS, resume=resume).get("iteration", -1) + 1
+    print('cfg.MODEL.WEIGHTS', cfg.MODEL.WEIGHTS, 'resume', resume)
+    if os.path.isfile(cfg.MODEL.WEIGHTS):
+        start_iter = checkpointer.resume_or_load(cfg.MODEL.WEIGHTS, resume=resume).get("iteration", -1) + 1
+    else:
+        start_iter = 0
 
     OFFICIAL_EPOCH_LENGTH = cfg.train.OFFICIAL_EPOCH_LENGTH
     max_iter = cfg.optim.epochs * OFFICIAL_EPOCH_LENGTH

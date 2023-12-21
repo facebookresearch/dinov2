@@ -14,6 +14,7 @@ from typing import List, Optional
 import torch
 from torch.nn.functional import one_hot, softmax
 
+from datetime import datetime
 import dinov2.distributed as distributed
 from dinov2.data import SamplerType, make_data_loader, make_dataset
 from dinov2.data.transforms import make_classification_eval_transform
@@ -83,6 +84,12 @@ def get_args_parser(
         "--n-tries",
         type=int,
         help="Number of tries",
+    )
+    parser.add_argument(
+        "--run_name",
+        type=str,
+        help="Name for the wandb log",
+        default=f"knn_run_{datetime.now().strftime('%d%m%Y_%H%M%S')}"
     )
     parser.set_defaults(
         train_dataset_str="ImageNet:split=TRAIN",
@@ -273,6 +280,7 @@ def eval_knn(
         persistent_workers=True,
     )
     num_classes = train_labels.max() + 1
+    print('num_classes', num_classes)
     metric_collection = build_topk_accuracy_metric(accuracy_averaging, num_classes=num_classes)
 
     device = torch.cuda.current_device()

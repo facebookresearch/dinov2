@@ -46,7 +46,10 @@ class HDF5Dataset(ImageNet):
 
     @property
     def _entries_path(self) -> str:
-        return f"-{self._split.value.upper()}.hdf5"
+        if self._split.value.endswith('.hdf5'):
+            return self._split.value
+        else:
+            return f"-{self._split.value.upper()}.hdf5"
 
     def _get_extra_full_path(self, extra_path: str) -> str:
         return os.path.join(self.root, self._extra_root + extra_path)
@@ -65,6 +68,8 @@ class HDF5Dataset(ImageNet):
         class_ids = []
         class_names = []
 
+        if self.do_short_run:
+            file_list = file_list[:1]
         for hdf5_file in file_list:
             file = h5py.File(hdf5_file, 'r')
             self.hdf5_handles[hdf5_file] = file
@@ -73,7 +78,7 @@ class HDF5Dataset(ImageNet):
             file_index = json.loads(file_index_json)
 
             # Add the HDF5 file name to each entry and accumulate the file entries
-            for entry in file_index['files']:
+            for i, entry in enumerate(file_index['files']):
                 entry['hdf5_file'] = hdf5_file  # Add the HDF5 file name to the entry
                 accumulated.append(entry)
                 class_id = entry['class_id']
@@ -81,6 +86,18 @@ class HDF5Dataset(ImageNet):
                 if class_id not in class_ids:
                     class_ids.append(class_id)
                     class_names.append(class_str)
+
+                if self.do_short_run and len(class_ids) == 5:
+                    break
+
+        unique_class_ids = list(np.unique(class_ids))
+        unique_class_names = list(np.unique(class_names))
+
+        print('unique_class_ids', len(unique_class_ids))
+        print('unique_class_names', unique_class_names[:10], len(unique_class_names))
+        for dict1 in accumulated:
+            dict1['class_id'] = unique_class_ids.index(dict1['class_id'])
+            dict1['class_str'] = str(unique_class_names.index(dict1['class_str']))
 
         self._entries = accumulated
         self._class_ids = class_ids

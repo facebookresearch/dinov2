@@ -18,6 +18,7 @@ def is_enabled() -> bool:
     """
     Returns:
         True if distributed training is enabled
+        
     """
     return dist.is_available() and dist.is_initialized()
 
@@ -35,7 +36,6 @@ def get_global_rank() -> int:
     Returns:
         The rank of the current process within the global process group.
     """
-    #print('get_global_rank', RANK, dist.is_available() , dist.is_initialized())
     return RANK if is_enabled() else 0
 
 
@@ -145,7 +145,8 @@ class _TorchDistributedEnvironment:
         print('torch.distributed.get_world_size(group=None)', dist.get_world_size(group=None))
         RANK = dist.get_rank(group=None)
         WORLD_SIZE = dist.get_world_size(group=None)
-        LOCAL_WORLD_SIZE = torch.cuda.device_count()
+        # LOCAL_WORLD_SIZE = torch.cuda.device_count() # does not work bc detects all gpus on node
+        LOCAL_WORLD_SIZE = dist.get_world_size() # TODO test thios for multi node
         LOCAL_RANK = RANK % LOCAL_WORLD_SIZE
         # or if num nodes in env vars
         # LOCAL_WORLD_SIZE = WORLD_SIZE // node_count
@@ -231,6 +232,7 @@ def enable(*, set_cuda_current_device: bool = True, overwrite: bool = False, all
     print('get_global_rank', get_global_rank())
     print('get_global_size', get_global_size())
     print('get_local_size', get_local_size())
+    print('torch.distributed.get_world_size()', dist.get_world_size())
 
     # Finalize setup
     _restrict_print_to_main_process()
