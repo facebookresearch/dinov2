@@ -46,10 +46,7 @@ class HDF5Dataset(ImageNet):
 
     @property
     def _entries_path(self) -> str:
-        if self._split.value.endswith('.hdf5'):
-            return self._split.value
-        else:
-            return f"-{self._split.value.upper()}.hdf5"
+        f"-{self._split.value.upper()}.hdf5"
 
     def _get_extra_full_path(self, extra_path: str) -> str:
         return os.path.join(self.root, self._extra_root + extra_path)
@@ -78,7 +75,7 @@ class HDF5Dataset(ImageNet):
             file_index = json.loads(file_index_json)
 
             # Add the HDF5 file name to each entry and accumulate the file entries
-            for i, entry in enumerate(file_index['files']):
+            for entry in file_index['files']:
                 entry['hdf5_file'] = hdf5_file  # Add the HDF5 file name to the entry
                 accumulated.append(entry)
                 class_id = entry['class_id']
@@ -90,14 +87,17 @@ class HDF5Dataset(ImageNet):
                 if self.do_short_run and len(class_ids) == 5:
                     break
 
-        unique_class_ids = list(np.unique(class_ids))
-        unique_class_names = list(np.unique(class_names))
-
+        if self.do_short_run: # we need to rename the classes in the test case
+            unique_class_ids = list(np.unique(class_ids))
+            unique_class_names = list(np.unique(class_names))
+            for dict1 in accumulated:
+                dict1['class_id'] = unique_class_ids.index(dict1['class_id'])
+                dict1['class_str'] = str(unique_class_names.index(dict1['class_str']))
+        
+        unique_class_ids = np.unique([el['class_id'] for el in accumulated])
+        unique_class_names = np.unique([el['class_str'] for el in accumulated])
         print('unique_class_ids', len(unique_class_ids))
         print('unique_class_names', unique_class_names[:10], len(unique_class_names))
-        for dict1 in accumulated:
-            dict1['class_id'] = unique_class_ids.index(dict1['class_id'])
-            dict1['class_str'] = str(unique_class_names.index(dict1['class_str']))
 
         self._entries = accumulated
         self._class_ids = class_ids

@@ -50,12 +50,6 @@ class SSLMetaArch(nn.Module):
             else:
                 model_params = chkpt
 
-            print('MODEL PARAMS')
-            for key1 in chkpt.keys():
-                if 384 in chkpt[key1].shape:
-                    print(key1, chkpt[key1].shape)
-            # print('student_backbone', student_backbone)
-
             student_backbone.load_state_dict(model_params, strict=False)
 
         self.embed_dim = embed_dim
