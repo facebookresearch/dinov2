@@ -102,9 +102,6 @@ def setup_logging(
         level: The logging level to use.
         capture_warnings: Whether warnings should be captured as logs.
     """
-    print('distributed.is_main_process():', distributed.is_main_process())
-    print('get_global_rank', distributed.get_global_rank())
-    print('distributed.is_enabled()', distributed.is_enabled())
     if distributed.is_main_process():
         logging.captureWarnings(capture_warnings)
         _configure_logger(name, level=level, output=output)
