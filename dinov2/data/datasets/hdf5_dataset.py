@@ -6,6 +6,7 @@ from typing import Union, Optional, Tuple
 
 import h5py
 import numpy as np
+import pandas as pd
 
 from dinov2.data.datasets import ImageNet
 
@@ -73,19 +74,13 @@ class HDF5Dataset(ImageNet):
             # Read the JSON string from the 'file_index' dataset
             file_index_json = file['file_index'][()]
             file_index = json.loads(file_index_json)
+            df = pd.DataFrame(file_index['files'])
+            df["hdf5_file"] = hdf5_file
+            entries = df.to_dict(orient='records')
+            accumulated += entries
 
-            # Add the HDF5 file name to each entry and accumulate the file entries
-            for entry in file_index['files']:
-                entry['hdf5_file'] = hdf5_file  # Add the HDF5 file name to the entry
-                accumulated.append(entry)
-                class_id = entry['class_id']
-                class_str = entry['class_str']
-                if class_id not in class_ids:
-                    class_ids.append(class_id)
-                    class_names.append(class_str)
-
-                if self.do_short_run and len(class_ids) == 5:
-                    break
+        class_ids = df["class_id"].values
+        class_names = df["class_str"].values
 
         if self.do_short_run: # we need to rename the classes in the test case
             unique_class_ids = list(np.unique(class_ids))
@@ -105,7 +100,9 @@ class HDF5Dataset(ImageNet):
 
     def __len__(self) -> int:
         entries = self._get_entries()
-        return len(entries)
+        length_ = len(entries)
+        print("Number of images in dataset: ", length_)
+        return length_
 
     def close(self):
         for handle in self.hdf5_handles.values():
