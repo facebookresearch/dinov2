@@ -37,7 +37,7 @@ def get_args_parser(
         "--ngpus",
         "--gpus",
         "--gpus-per-node",
-        default=8,
+        default=1,
         type=int,
         help="Number of GPUs to request on each node",
     )
