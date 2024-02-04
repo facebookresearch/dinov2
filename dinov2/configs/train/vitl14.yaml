@@ -5,11 +5,11 @@ ibot:
   separate_head: true
   head_n_prototypes: 131072
 train:
-  batch_size_per_gpu: 32
-  dataset_path: ImageNet22k
+  batch_size_per_gpu: 4
+  dataset_path: eyepacs:root=/home/colin/Downloads/diabetic-retinopathy-detection
   centering: sinkhorn_knopp
 student:
-  arch: vit_large
+  arch: vit_base
   patch_size: 14
   drop_path_rate: 0.4
   ffn_layer: swiglufused
