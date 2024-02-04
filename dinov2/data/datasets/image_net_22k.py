@@ -14,6 +14,7 @@ from typing import Any, Callable, List, Optional, Set, Tuple
 import warnings
 
 import numpy as np
+import pandas as pd
 
 from .extended import ExtendedVisionDataset
 
@@ -300,3 +301,49 @@ class ImageNet22k(ExtendedVisionDataset):
 
     def dump_extra(self, root: Optional[str] = None) -> None:
         return self._dump_extra(root)
+    
+class EyePACSDataset(ExtendedVisionDataset):
+
+    def __init__(
+            self,
+            *,
+            root: str,
+            transforms: Optional[Callable] = None,
+            transform: Optional[Callable] = None,
+            target_transform: Optional[Callable] = None,
+            mmap_cache_size: int = _DEFAULT_MMAP_CACHE_SIZE,
+        ) -> None:
+            super().__init__(root, transforms, transform, target_transform)
+
+            self.root = root
+
+            train_val_df = pd.read_csv(os.path.join(root, 'filtered_trainLabels.csv'))
+            test_df = pd.read_csv(os.path.join(root, 'filtered_testLabels.csv'))
+
+            train_val_df.rename(columns={'image':'image_name', 'level':'class_label'}, inplace=True)
+            test_df.rename(columns={'image':'image_name', 'level':'class_label'}, inplace=True)
+
+            # Create relative image paths in new column
+            train_val_df['image_path'] = 'train/' + train_val_df['image_name'] + '.jpeg'
+            test_df['image_path'] = 'test/' + test_df['image_name'] + '.jpeg'
+            
+            self.dataframe = pd.concat([train_val_df, test_df], ignore_index=True)
+
+            # Create image paths
+            self.image_paths = [os.path.join(self.root, image_path) for image_path in self.dataframe['image_path']]
+            self.image_paths_rel = self.dataframe['image_path'].tolist()
+
+            return
+
+    
+    def get_image_data(self, index: int) -> bytes:
+        image_path = self.image_paths[index]
+        with open(image_path, 'rb') as f:
+            return f.read()
+        
+
+    def get_target(self, index: int) -> Any:
+        return self.dataframe['class_label'][index]
+
+    def __len__(self) -> int:
+        return len(self.dataframe)    
