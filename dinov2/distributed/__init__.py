@@ -11,6 +11,7 @@ from typing import Dict, List
 
 import torch
 import torch.distributed as dist
+from datetime import timedelta
 
 _LOCAL_RANK = -1
 _LOCAL_WORLD_SIZE = -1
@@ -265,7 +266,8 @@ def enable(*, set_cuda_current_device: bool = True, overwrite: bool = False, all
     dist.init_process_group(backend='nccl',
                        init_method="tcp://%s:%s" % (os.environ['MASTER_ADDR'], os.environ['MASTER_PORT']),
                        world_size=1, 
-                       rank=int(os.environ['SLURM_PROCID']))
+                       rank=int(os.environ['LOCAL_RANK']),
+                       timeout = timedelta(seconds=10))
 
     dist.barrier()
 
