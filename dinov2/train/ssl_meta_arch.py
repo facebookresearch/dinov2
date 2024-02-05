@@ -27,6 +27,30 @@ except ImportError:
 
 logger = logging.getLogger("dinov2")
 
+# TODO: Currently hard-coded embedding size
+def get_downloaded_dino_vit_s(model_name, embed_dim):
+    model=torch.hub.load('facebookresearch/dinov2', model_name)
+    input_tensor = model.pos_embed
+    class_token = input_tensor[:, 0:1, :]
+    rest = input_tensor[:, 1:, :]
+
+    reshaped_tensor = rest.view(1, 37, 37, embed_dim)
+
+    middle = 18
+    middle_start = middle - 8
+    middle_end = middle + 8
+    middle_part = reshaped_tensor[:, middle_start:middle_end, middle_start:middle_end, :]
+    flattened_tensor = middle_part.reshape(1, 256, embed_dim)
+
+    tensor_corr_shape = torch.cat((class_token, flattened_tensor), dim=1)
+
+    pos_embed = nn.Parameter(torch.zeros(1, 257))
+    pos_embed.data = tensor_corr_shape
+
+    model.pos_embed = pos_embed
+
+    return model
+
 
 class SSLMetaArch(nn.Module):
     def __init__(self, cfg):
@@ -37,7 +61,16 @@ class SSLMetaArch(nn.Module):
         student_model_dict = dict()
         teacher_model_dict = dict()
 
-        student_backbone, teacher_backbone, embed_dim = build_model_from_cfg(cfg)
+        # TODO: Hard-coded embedding size
+        if cfg.student.arch == "dinov2_vits14":
+            embed_dim = 384
+        elif cfg.student.arch == "dinov2_vitb14":
+            embed_dim = 768
+        student_backbone = get_downloaded_dino_vit_s(cfg.student.arch, embed_dim)
+        teacher_backbone = get_downloaded_dino_vit_s(cfg.student.arch, embed_dim)
+
+        # student_backbone, teacher_backbone, embed_dim = build_model_from_cfg(cfg)
+
         student_model_dict["backbone"] = student_backbone
         teacher_model_dict["backbone"] = teacher_backbone
         logger.info(f"OPTIONS -- architecture : embed_dim: {embed_dim}")
