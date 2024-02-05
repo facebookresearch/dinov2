@@ -9,3 +9,8 @@ dist/
 *.swp
 
 .vscode/
+
+
+.env
+*.err
+*.out
