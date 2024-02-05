@@ -46,7 +46,7 @@ dino:
   head_bottleneck_dim: 256
   head_nlayers: 3
   head_hidden_dim: 2048
-  koleo_loss_weight: 0.1
+  koleo_loss_weight: 0
 ibot:
   loss_weight: 1.0
   mask_sample_probability: 0.5
@@ -69,7 +69,7 @@ train:
   cache_dataset: true
   centering: "sinkhorn_knopp" # or "sinkhorn_knopp" or "centering"
 student:
-  arch: dinov2_vitb14 # was vit_base, changed because loading function was modified
+  arch: dinov2_vits14 # was vit_base, changed because loading function was modified
   patch_size: 14
   drop_path_rate: 0.4
   layerscale: 1.0e-05
