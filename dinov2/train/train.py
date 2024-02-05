@@ -50,7 +50,7 @@ For python-based LazyConfig, use "path.key=value".
     parser.add_argument(
         "--output-dir",
         "--output_dir",
-        default="",
+        default="/cluster/scratch/cmerk/dinov2_finetune",
         type=str,
         help="Output directory to save logs and checkpoints",
     )
@@ -197,7 +197,7 @@ def do_train(cfg, model, resume=False):
         target_transform=lambda _: (),
     )
     # sampler_type = SamplerType.INFINITE
-    sampler_type = SamplerType.SHARDED_INFINITE
+    sampler_type = SamplerType.INFINITE
     data_loader = make_data_loader(
         dataset=dataset,
         batch_size=cfg.train.batch_size_per_gpu,
@@ -295,9 +295,12 @@ def do_train(cfg, model, resume=False):
 
 
 def main(args):
+    print('1')
     cfg = setup(args)
+    print('2')
 
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
+    print('3')
     model.prepare_for_distributed_training()
 
     logger.info("Model:\n{}".format(model))
