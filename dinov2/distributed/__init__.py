@@ -261,7 +261,12 @@ def enable(*, set_cuda_current_device: bool = True, overwrite: bool = False, all
             _check_env_variable(key, value)
         os.environ[key] = value
 
-    dist.init_process_group(backend="nccl")
+    # dist.init_process_group(backend="nccl", init_method = "tcp://%s:%s" % (os.environ['MASTER_ADDR'], os.environ['MASTER_PORT']), world_size=int(os.environ['OMPI_COMM_WORLD_SIZE']), rank = int(os.environ['OMPI_COMM_WORLD_RANK']))
+    dist.init_process_group(backend='nccl',
+                       init_method="tcp://%s:%s" % (os.environ['MASTER_ADDR'], os.environ['MASTER_PORT']),
+                       world_size=1, 
+                       rank=int(os.environ['SLURM_PROCID']))
+
     dist.barrier()
 
     # Finalize setup
