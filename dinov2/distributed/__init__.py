@@ -13,8 +13,8 @@ import torch
 import torch.distributed as dist
 from datetime import timedelta
 
-_LOCAL_RANK = -1
-_LOCAL_WORLD_SIZE = -1
+_LOCAL_RANK = int(os.environ["SLURM_LOCALID"])
+_LOCAL_WORLD_SIZE = 1
 
 
 def is_enabled() -> bool:
