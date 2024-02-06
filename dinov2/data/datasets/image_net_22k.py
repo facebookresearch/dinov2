@@ -308,6 +308,7 @@ class EyePACSDataset(ExtendedVisionDataset):
             self,
             *,
             root: str,
+            extra: Optional[str] = None,
             transforms: Optional[Callable] = None,
             transform: Optional[Callable] = None,
             target_transform: Optional[Callable] = None,
@@ -332,6 +333,26 @@ class EyePACSDataset(ExtendedVisionDataset):
             # Create image paths
             self.image_paths = [os.path.join(self.root, image_path) for image_path in self.dataframe['image_path']]
             self.image_paths_rel = self.dataframe['image_path'].tolist()
+
+            # Merge with Airogs extra data
+            if extra is not None:
+                self._extra_root = extra
+                df_extra = pd.read_csv(os.path.join(extra, 'train_labels.csv'))
+                df_extra.rename(columns={'challenge_id':'image_name', 'class':'class_label'}, inplace=True)
+
+                # Convert class strings to integers
+                df_extra['class_label'] = df_extra['class_label'].map({'NRG':0, 'RG':1})
+
+                # Create relative image patths
+                df_extra['image_path'] = 'images/' + df_extra['image_name'] + '.jpg'
+
+                # Create image paths
+                self.image_paths_extra = [os.path.join(extra, image_path) for image_path in df_extra['image_path']]
+                self.image_paths_extra_rel = df_extra['image_path'].tolist()
+
+                # Merge dataframes
+                self.dataframe = pd.concat([self.dataframe, df_extra], ignore_index=True)
+                self.image_paths = self.image_paths + self.image_paths_extra
 
             return
 
