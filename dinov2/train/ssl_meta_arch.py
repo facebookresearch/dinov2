@@ -16,7 +16,9 @@ from dinov2.utils.utils import has_batchnorms
 from dinov2.utils.param_groups import get_params_groups_with_decay, fuse_params_groups
 from dinov2.fsdp import get_fsdp_wrapper, ShardedGradScaler, get_fsdp_modules, reshard_fsdp_model
 
-from dinov2.models.vision_transformer import BlockChunk
+from dinov2.models.vision_transformer import BlockChunk, DinoVisionTransformer
+from dinov2.models.block_exansion import expand_dinov2
+from dinov2.models.block_exansion import get_expanded_block_positions
 
 
 try:
@@ -69,11 +71,25 @@ class SSLMetaArch(nn.Module):
         student_backbone = get_downloaded_dino_vit_s(cfg.student.arch, embed_dim)
         teacher_backbone = get_downloaded_dino_vit_s(cfg.student.arch, embed_dim)
 
+        if cfg.block_expansion.enabled:
+            logger.info("OPTIONS -- block expansion ENABLED")
+            student_backbone = expand_dinov2(student_backbone, cfg.block_expansion.expanded_blocks, cfg.block_expansion.path_dropout)
+            teacher_backbone = expand_dinov2(teacher_backbone, cfg.block_expansion.expanded_blocks, cfg.block_expansion.path_dropout)
+
         # student_backbone, teacher_backbone, embed_dim = build_model_from_cfg(cfg)
+        # if cfg.block_expansion.enabled:
+        #     logger.info(f"OPTIONS -- block expansion: expanded blocks: {cfg.block_expansion.expanded_blocks}, fix weights of original blocks")
+        #     block_positions = get_expanded_block_positions(cfg.block_expansion.expanded_blocks)
+        #     for p in student_backbone.blocks.parameters():
+        #         p.requires_grad = False
+        #     for pos in block_positions:
+        #         for p in student_backbone.blocks[pos].parameters():
+        #             p.requires_grad = True
 
         student_model_dict["backbone"] = student_backbone
         teacher_model_dict["backbone"] = teacher_backbone
         logger.info(f"OPTIONS -- architecture : embed_dim: {embed_dim}")
+
 
         if cfg.student.pretrained_weights:
             chkpt = torch.load(cfg.student.pretrained_weights)
@@ -151,6 +167,19 @@ class SSLMetaArch(nn.Module):
         # there is no backpropagation through the teacher, so no need for gradients
         for p in self.teacher.parameters():
             p.requires_grad = False
+
+        if cfg.block_expansion.enabled:
+
+            print(self.student.backbone)
+            
+            logger.info(f"OPTIONS -- block expansion: expanded blocks: {cfg.block_expansion.expanded_blocks}, fix weights of original blocks")
+            block_positions = get_expanded_block_positions(cfg.block_expansion.expanded_blocks)
+            for p in self.student.backbone.blocks.parameters():
+                p.requires_grad = False
+            for pos in block_positions:
+                for p in self.student.backbone.blocks[pos].parameters():
+                    p.requires_grad = True
+
         logger.info(f"Student and Teacher are built: they are both {cfg.student.arch} network.")
 
     def forward(self, inputs):
@@ -158,8 +187,10 @@ class SSLMetaArch(nn.Module):
 
     def backprop_loss(self, loss):
         if self.fp16_scaler is not None:
+            self.fp16_scaler.scale(loss).retain_grad()
             self.fp16_scaler.scale(loss).backward()
         else:
+            loss.retain_grad()
             loss.backward()
 
     def forward_backward(self, images, teacher_temp):
@@ -420,14 +451,44 @@ class SSLMetaArch(nn.Module):
             all_params_groups += self.get_maybe_fused_params_for_submodel(m)
         return all_params_groups
 
-    def prepare_for_distributed_training(self):
+    def prepare_for_distributed_training(self, cfg):
         logger.info("DISTRIBUTED FSDP -- preparing model for distributed training")
+
         if has_batchnorms(self.student):
             raise NotImplementedError
         # below will synchronize all student subnetworks across gpus:
         for k, v in self.student.items():
+            
             self.teacher[k].load_state_dict(self.student[k].state_dict())
-            student_model_cfg = self.cfg.compute_precision.student[k]
-            self.student[k] = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k])
+
+            if isinstance(self.student[k], DinoVisionTransformer):
+
+                student_model_cfg = self.cfg.compute_precision.student[k]
+                # self.student[k].patch_embed = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k].patch_embed)
+
+                for block in self.student[k].blocks:
+                    block = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(block)
+
+                # self.student[k].norm = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k].norm)
+                # self.student[k].head = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k].head)
+            else:
+                student_model_cfg = self.cfg.compute_precision.student[k]
+                self.student[k] = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k])
+
             teacher_model_cfg = self.cfg.compute_precision.teacher[k]
             self.teacher[k] = get_fsdp_wrapper(teacher_model_cfg, modules_to_wrap={BlockChunk})(self.teacher[k])
+
+
+
+
+            # if cfg.block_expansion.enabled:
+
+            #     print(self.student[k]._fsdp_wrapped_module)
+                
+            #     logger.info(f"OPTIONS -- block expansion: expanded blocks: {cfg.block_expansion.expanded_blocks}, fix weights of original blocks")
+            #     block_positions = get_expanded_block_positions(cfg.block_expansion.expanded_blocks)
+            #     for p in self.student[k]._fsdp_wrapped_module.blocks.parameters():
+            #         p.requires_grad = False
+            #     for pos in block_positions:
+            #         for p in self.student[k]._fsdp_wrapped_module.blocks[pos].parameters():
+            #             p.requires_grad = True
