@@ -405,7 +405,7 @@ class SSLMetaArch(nn.Module):
 
         self.backprop_loss(loss_accumulator)
 
-        self.fsdp_synchronize_streams()
+        # self.fsdp_synchronize_streams()
 
         return loss_dict
 
@@ -458,37 +458,34 @@ class SSLMetaArch(nn.Module):
             raise NotImplementedError
         # below will synchronize all student subnetworks across gpus:
         for k, v in self.student.items():
-            
             self.teacher[k].load_state_dict(self.student[k].state_dict())
+
+            student_model_cfg = self.cfg.compute_precision.student[k]
+            teacher_model_cfg = self.cfg.compute_precision.teacher[k]
 
             if isinstance(self.student[k], DinoVisionTransformer):
 
-                student_model_cfg = self.cfg.compute_precision.student[k]
-                # self.student[k].patch_embed = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k].patch_embed)
+                self.student[k].patch_embed = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k].patch_embed)
 
-                for block in self.student[k].blocks:
-                    block = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(block)
+                for i,block in enumerate(self.student[k].blocks):
+                    self.student[k].blocks[i] = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k].blocks[i])
 
-                # self.student[k].norm = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k].norm)
-                # self.student[k].head = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k].head)
+                self.student[k].norm = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k].norm)
+                self.student[k].head = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k].head)
             else:
-                student_model_cfg = self.cfg.compute_precision.student[k]
                 self.student[k] = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k])
 
-            teacher_model_cfg = self.cfg.compute_precision.teacher[k]
-            self.teacher[k] = get_fsdp_wrapper(teacher_model_cfg, modules_to_wrap={BlockChunk})(self.teacher[k])
 
+            if isinstance(self.teacher[k], DinoVisionTransformer):
 
+                self.teacher[k].patch_embed = get_fsdp_wrapper(teacher_model_cfg, modules_to_wrap={BlockChunk})(self.teacher[k].patch_embed)
 
+                for i,block in enumerate(self.teacher[k].blocks):
+                    self.teacher[k].blocks[i] = get_fsdp_wrapper(teacher_model_cfg, modules_to_wrap={BlockChunk})(self.teacher[k].blocks[i])
 
-            # if cfg.block_expansion.enabled:
+                self.teacher[k].norm = get_fsdp_wrapper(teacher_model_cfg, modules_to_wrap={BlockChunk})(self.teacher[k].norm)
+                self.teacher[k].head = get_fsdp_wrapper(teacher_model_cfg, modules_to_wrap={BlockChunk})(self.teacher[k].head)
+            else:
+                self.teacher[k] = get_fsdp_wrapper(teacher_model_cfg, modules_to_wrap={BlockChunk})(self.teacher[k])
 
-            #     print(self.student[k]._fsdp_wrapped_module)
-                
-            #     logger.info(f"OPTIONS -- block expansion: expanded blocks: {cfg.block_expansion.expanded_blocks}, fix weights of original blocks")
-            #     block_positions = get_expanded_block_positions(cfg.block_expansion.expanded_blocks)
-            #     for p in self.student[k]._fsdp_wrapped_module.blocks.parameters():
-            #         p.requires_grad = False
-            #     for pos in block_positions:
-            #         for p in self.student[k]._fsdp_wrapped_module.blocks[pos].parameters():
-            #             p.requires_grad = True
+        return
