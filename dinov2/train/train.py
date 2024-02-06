@@ -301,7 +301,7 @@ def main(args):
 
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     print('3')
-    model.prepare_for_distributed_training()
+    model.prepare_for_distributed_training(cfg)
 
     logger.info("Model:\n{}".format(model))
     if args.eval_only:
