@@ -1,41 +1,41 @@
 MODEL:
   WEIGHTS: ''
 compute_precision:
-  grad_scaler: true
+  grad_scaler: false
   teacher:
     backbone:
-      sharding_strategy: SHARD_GRAD_OP
+      sharding_strategy: NO_SHARD
       mixed_precision:
         param_dtype: fp16
         reduce_dtype: fp16
         buffer_dtype: fp32
     dino_head:
-      sharding_strategy: SHARD_GRAD_OP
+      sharding_strategy: NO_SHARD
       mixed_precision:
         param_dtype: fp16
         reduce_dtype: fp16
         buffer_dtype: fp32
     ibot_head:
-      sharding_strategy: SHARD_GRAD_OP
+      sharding_strategy: NO_SHARD
       mixed_precision:
         param_dtype: fp16
         reduce_dtype: fp16
         buffer_dtype: fp32
   student:
     backbone:
-      sharding_strategy: SHARD_GRAD_OP
+      sharding_strategy: NO_SHARD
       mixed_precision:
         param_dtype: fp16
         reduce_dtype: fp16
         buffer_dtype: fp32
     dino_head:
-      sharding_strategy: SHARD_GRAD_OP
+      sharding_strategy: NO_SHARD
       mixed_precision:
         param_dtype: fp16
         reduce_dtype: fp32
         buffer_dtype: fp32
     ibot_head:
-      sharding_strategy: SHARD_GRAD_OP
+      sharding_strategy: NO_SHARD
       mixed_precision:
         param_dtype: fp16
         reduce_dtype: fp32
@@ -116,3 +116,7 @@ crops:
   local_crops_size: 98
 evaluation:
   eval_period_iterations: 12500
+block_expansion:
+  enabled: true
+  expanded_blocks: [3, 7, 11]
+  path_dropout: 0.3
