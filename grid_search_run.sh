@@ -1,4 +1,6 @@
-config_files=(ssl_default_config_small_noKoleo ssl_default_config_base_noKoleo ssl_default_config_base_withKoleo ssl_default_config_small_withKoleo)
+# config_files=(ssl_default_config_small_noKoleo ssl_default_config_base_noKoleo ssl_default_config_base_withKoleo ssl_default_config_small_withKoleo)
+
+config_files=(ssl_default_config_base_noKoleo)
 
 for config in "${config_files[@]}"
 do

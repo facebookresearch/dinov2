@@ -8,16 +8,14 @@
 #SBATCH --mem-per-cpu=6000
 #SBATCH --tmp=4000 # per node!!
 #SBATCH --job-name=dino_run
-#SBATCH --output=dino_run_%j.out
-#SBATCH --error=dino_run_%j.err
-#SBATCH --mail-type=BEGIN
-#SBATCH --mail-type=END
+#SBATCH --output=dino_run.out
+#SBATCH --error=dino_run.err
 
 
 # Load the required modules
-module load gcc/8.2.0 python_gpu/3.9.9
-module load eth_proxy
-
+# module load gcc/8.2.0 python_gpu/3.10.4 eth_proxy git
+module load gcc/8.2.0 python_gpu/3.9.9 eth_proxy git
+# module load cudnn/8.2.4.15
 source .env//bin/activate
 
 echo "GPUs allocated by SLURM: ${CUDA_VISIBLE_DEVICES}"
@@ -30,4 +28,4 @@ echo "Number of workers: ${num_tasks}"
 
 export PYTHONPATH=.
 
-torchrun --nproc_per_node=1 --master_port=$FREE_PORT dinov2/train/train.py --config-file dinov2/configs/$1.yaml --output_dir /cluster/scratch/cmerk/dinov2_finetune_$1
+torchrun --nproc_per_node=1 --master_port=$FREE_PORT dinov2/train/train.py --config-file dinov2/configs/$1.yaml --output_dir /cluster/scratch/cmerk/testdinov2/dinov2_finetune_$1
