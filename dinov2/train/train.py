@@ -250,13 +250,15 @@ def do_train(cfg, model, resume=False):
             if cfg.optim.clip_grad:
                 fp16_scaler.unscale_(optimizer)
                 for v in model.student.values():
-                    v.clip_grad_norm_(cfg.optim.clip_grad)
+                    torch.nn.utils.clip_grad_norm_(v.parameters(), cfg.optim.clip_grad)
+                    # v.torch.nn.utils.clip_grad_norm(cfg.optim.clip_grad)
             fp16_scaler.step(optimizer)
             fp16_scaler.update()
         else:
             if cfg.optim.clip_grad:
                 for v in model.student.values():
-                    v.clip_grad_norm_(cfg.optim.clip_grad)
+                    torch.nn.utils.clip_grad_norm_(v.parameters(), cfg.optim.clip_grad)
+                    # v.torch.nn.utils.clip_grad_norm(cfg.optim.clip_grad)
             optimizer.step()
 
         # perform teacher EMA update
