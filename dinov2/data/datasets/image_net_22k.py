@@ -17,6 +17,8 @@ import numpy as np
 import pandas as pd
 
 from .extended import ExtendedVisionDataset
+from .decoders import TargetDecoder, ImageDataDecoder
+
 
 
 _Labels = int
@@ -316,6 +318,12 @@ class EyePACSDataset(ExtendedVisionDataset):
         ) -> None:
             super().__init__(root, transforms, transform, target_transform)
 
+            # TODO: Currently hard coded crops
+            self.make_patches = True
+            self.patch_size = 768
+            self.patch_resize = 224
+            self.n_patches_per_axis = 5
+
             self.root = root
 
             train_val_df = pd.read_csv(os.path.join(root, 'filtered_trainLabels.csv'))
@@ -362,9 +370,49 @@ class EyePACSDataset(ExtendedVisionDataset):
         with open(image_path, 'rb') as f:
             return f.read()
         
+    def __getitem__(self, index: int) -> Tuple[Any, Any]:
+        img_index = index // (self.n_patches_per_axis ** 2) if self.make_patches else index
+        rel_index = index % (self.n_patches_per_axis ** 2) if self.make_patches else 0
+
+        try:
+            image_data = self.get_image_data(img_index)
+            image = ImageDataDecoder(image_data).decode()
+        except Exception as e:
+            raise RuntimeError(f"can not read image for sample {index}") from e
+        target = self.get_target(img_index)
+        target = TargetDecoder(target).decode()
+
+        # get patch if flag is set
+        if self.make_patches:
+            image = self._get_patch(image, rel_index)
+
+        if self.transforms is not None:
+            image, target = self.transforms(image, target)
+
+        return image, target
+    
+    def _get_patch(self, image: Any, rel_index: int) -> Any:
+
+        # Get image shape
+        image_width, image_height = image.size
+
+        stride_x = (image_width - self.patch_size) // (self.n_patches_per_axis - 1)
+        stride_y = (image_height - self.patch_size) // (self.n_patches_per_axis - 1)
+
+        # Get patch coordinates
+        x = rel_index % self.n_patches_per_axis
+        y = rel_index // self.n_patches_per_axis
+
+        # Get patch
+        patch = image.crop((x * stride_x, y * stride_y, x * stride_x + self.patch_size, y * stride_y + self.patch_size))
+
+        patch = patch.resize((self.patch_resize, self.patch_resize))
+
+        return patch
+        
 
     def get_target(self, index: int) -> Any:
         return self.dataframe['class_label'][index]
 
     def __len__(self) -> int:
-        return len(self.dataframe)    
+        return (len(self.dataframe) * (self.n_patches_per_axis ** 2)) if self.make_patches else len(self.dataframe)
