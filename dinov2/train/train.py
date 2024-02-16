@@ -22,6 +22,8 @@ from dinov2.utils.utils import CosineScheduler
 
 from dinov2.train.ssl_meta_arch import SSLMetaArch
 
+import torchvision
+
 
 torch.backends.cuda.matmul.allow_tf32 = True  # PyTorch 1.12 sets this to False by default
 logger = logging.getLogger("dinov2")
@@ -219,6 +221,7 @@ def do_train(cfg, model, resume=False):
     metric_logger = MetricLogger(delimiter="  ", output_file=metrics_file)
     header = "Training"
 
+    index = 0
     for data in metric_logger.log_every(
         data_loader,
         10,
@@ -226,6 +229,11 @@ def do_train(cfg, model, resume=False):
         max_iter,
         start_iter,
     ):
+        # # Save image for debugging
+        # img_toSave = (data["collated_global_crops"][0,:,:,:].float() - data["collated_global_crops"][0,:,:,:].float().min()) / (data["collated_global_crops"][0,:,:,:].float().max() - data["collated_global_crops"][0,:,:,:].float().min())
+        # torchvision.utils.save_image(img_toSave, f'/cluster/home/cmerk/dinov2/patch_{index}.jpeg')
+        # index += 1
+
         current_batch_size = data["collated_global_crops"].shape[0] / 2
         if iteration > max_iter:
             return
@@ -297,12 +305,11 @@ def do_train(cfg, model, resume=False):
 
 
 def main(args):
-    print('1')
+
     cfg = setup(args)
-    print('2')
 
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
-    print('3')
+
     model.prepare_for_distributed_training(cfg)
 
     logger.info("Model:\n{}".format(model))
