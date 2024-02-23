@@ -4,8 +4,8 @@
 # found in the LICENSE file in the root directory of this source tree.
 
 import itertools
-from typing import Any, Optional
 import warnings
+from typing import Any, Optional
 
 import numpy as np
 import torch

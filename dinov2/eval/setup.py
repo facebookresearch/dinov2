@@ -9,9 +9,9 @@ from typing import Any, List, Optional, Tuple
 import torch
 import torch.backends.cudnn as cudnn
 
+import dinov2.utils.utils as dinov2_utils
 from dinov2.models import build_model_from_cfg
 from dinov2.utils.config import setup
-import dinov2.utils.utils as dinov2_utils
 
 
 def get_args_parser(

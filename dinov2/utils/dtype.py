@@ -9,7 +9,6 @@ from typing import Dict, Union
 import numpy as np
 import torch
 
-
 TypeSpec = Union[str, np.dtype, torch.dtype]
 
 

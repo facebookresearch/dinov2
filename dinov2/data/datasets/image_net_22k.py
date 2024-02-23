@@ -3,20 +3,19 @@
 # This source code is licensed under the Apache License, Version 2.0
 # found in the LICENSE file in the root directory of this source tree.
 
+import os
+import warnings
 from dataclasses import dataclass
 from enum import Enum
 from functools import lru_cache
 from gzip import GzipFile
 from io import BytesIO
 from mmap import ACCESS_READ, mmap
-import os
 from typing import Any, Callable, List, Optional, Set, Tuple
-import warnings
 
 import numpy as np
 
 from .extended import ExtendedVisionDataset
-
 
 _Labels = int
 
