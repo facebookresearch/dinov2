@@ -396,15 +396,15 @@ class EyePACSDataset(ExtendedVisionDataset):
         # Get image shape
         image_width, image_height = image.size
 
-        stride_x = (image_width - self.patch_size) // (self.n_patches_per_axis - 1)
-        stride_y = (image_height - self.patch_size) // (self.n_patches_per_axis - 1)
+        stride_x = (image_width - int(self.patch_size * image_width)) // (self.n_patches_per_axis - 1)
+        stride_y = (image_height - int(self.patch_size * image_height)) // (self.n_patches_per_axis - 1)
 
         # Get patch coordinates
         x = rel_index % self.n_patches_per_axis
         y = rel_index // self.n_patches_per_axis
 
         # Get patch
-        patch = image.crop((x * stride_x, y * stride_y, x * stride_x + self.patch_size, y * stride_y + self.patch_size))
+        patch = image.crop((x * stride_x, y * stride_y, x * stride_x + self.patch_size * image_width, y * stride_y + self.patch_size * image_height))
 
         patch = patch.resize((self.patch_resize, self.patch_resize))
 
