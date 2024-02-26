@@ -315,14 +315,14 @@ class EyePACSDataset(ExtendedVisionDataset):
             transform: Optional[Callable] = None,
             target_transform: Optional[Callable] = None,
             mmap_cache_size: int = _DEFAULT_MMAP_CACHE_SIZE,
+            cfg: Optional[Any] = None,
         ) -> None:
             super().__init__(root, transforms, transform, target_transform)
 
-            # TODO: Currently hard coded crops
-            self.make_patches = True
-            self.patch_size = 768
-            self.patch_resize = 224
-            self.n_patches_per_axis = 5
+            self.make_patches = cfg.images.make_patches
+            self.patch_size = cfg.images.patch_size
+            self.patch_resize = cfg.images.patch_resize
+            self.n_patches_per_axis = cfg.images.n_patches_per_axis
 
             self.root = root
 
