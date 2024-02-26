@@ -92,7 +92,7 @@ optim:
   epochs: 300
   weight_decay: 0.04
   weight_decay_end: 0.2
-  base_lr: 0.02e-4 # 2.0e-4  # learning rate for a batch size of 1024
+  base_lr: 0.2e-4 # 2.0e-4  # learning rate for a batch size of 1024
   lr: 0.  # will be set after applying scaling rule
   warmup_epochs: 10
   min_lr: 1.0e-06
