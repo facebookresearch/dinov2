@@ -416,3 +416,38 @@ class EyePACSDataset(ExtendedVisionDataset):
 
     def __len__(self) -> int:
         return (len(self.dataframe) * (self.n_patches_per_axis ** 2)) if self.make_patches else len(self.dataframe)
+
+class BaseFolderDataset(EyePACSDataset):
+    def __init__(
+        self,
+        *,
+        root: str,
+        extra: Optional[str] = None,
+        transforms: Optional[Callable] = None,
+        transform: Optional[Callable] = None,
+        target_transform: Optional[Callable] = None,
+        mmap_cache_size: int = _DEFAULT_MMAP_CACHE_SIZE,
+        cfg: Optional[Any] = None,
+    ) -> None:
+        super(ExtendedVisionDataset, self).__init__(root, transforms, transform, target_transform)
+
+        self.make_patches = cfg.images.make_patches
+        self.patch_size = cfg.images.patch_size
+        self.patch_resize = cfg.images.patch_resize
+        self.n_patches_per_axis = cfg.images.n_patches_per_axis
+
+        self.root = root
+
+        image_names = os.listdir(os.path.join(root, 'images'))
+
+        # Create image paths
+        self.image_paths_rel = [os.path.join('images', image_nam) for image_nam in image_names]
+        self.image_paths = [os.path.join(self.root, 'images', image_nam) for image_nam in image_names]
+
+
+    def get_target(self, index: int) -> Any:
+        return None
+    
+    def __len__(self) -> int:
+        return len(self.image_paths_rel) * (self.n_patches_per_axis ** 2) if self.make_patches else len(self.image_paths_rel)
+    
