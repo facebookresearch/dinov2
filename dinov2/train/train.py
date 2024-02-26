@@ -156,12 +156,14 @@ def do_train(cfg, model, resume=False):
 
     OFFICIAL_EPOCH_LENGTH = cfg.train.OFFICIAL_EPOCH_LENGTH
     max_iter = cfg.optim.epochs * OFFICIAL_EPOCH_LENGTH
+    checkpoints_to_keep = 6
+    period = max_iter // (checkpoints_to_keep)
 
     periodic_checkpointer = PeriodicCheckpointer(
         checkpointer,
-        period=3 * OFFICIAL_EPOCH_LENGTH,
+        period=period,
         max_iter=max_iter,
-        max_to_keep=3,
+        max_to_keep=checkpoints_to_keep,
     )
 
     # setup data preprocessing
@@ -197,6 +199,7 @@ def do_train(cfg, model, resume=False):
         dataset_str=cfg.train.dataset_path,
         transform=data_transform,
         target_transform=lambda _: (),
+        cfg=cfg
     )
     # sampler_type = SamplerType.INFINITE
     sampler_type = SamplerType.SHARDED_INFINITE
@@ -222,6 +225,9 @@ def do_train(cfg, model, resume=False):
     header = "Training"
 
     index = 0
+    img_path = os.path.join((cfg.train.output_dir), 'trainImages')
+    os.makedirs(img_path, exist_ok=True)
+
     for data in metric_logger.log_every(
         data_loader,
         10,
@@ -229,10 +235,22 @@ def do_train(cfg, model, resume=False):
         max_iter,
         start_iter,
     ):
-        # # Save image for debugging
-        # img_toSave = (data["collated_global_crops"][0,:,:,:].float() - data["collated_global_crops"][0,:,:,:].float().min()) / (data["collated_global_crops"][0,:,:,:].float().max() - data["collated_global_crops"][0,:,:,:].float().min())
-        # torchvision.utils.save_image(img_toSave, f'/cluster/home/cmerk/dinov2/patch_{index}.jpeg')
-        # index += 1
+        # Save image for debugging
+        if index == 0:
+
+            for l in range(2):
+                for k in range(cfg.train.batch_size_per_gpu):
+                    img_name_global = os.path.join(img_path, f'{k}_{l}_global.jpeg')
+                    img_toSave_global = (data["collated_global_crops"][l*cfg.train.batch_size_per_gpu+k,:,:,:].float() - data["collated_global_crops"][l*cfg.train.batch_size_per_gpu+k,:,:,:].float().min()) / (data["collated_global_crops"][l*cfg.train.batch_size_per_gpu+k,:,:,:].float().max() - data["collated_global_crops"][l*cfg.train.batch_size_per_gpu+k,:,:,:].float().min())
+                    torchvision.utils.save_image(img_toSave_global, img_name_global)
+
+            for l in range(cfg.crops.local_crops_number):
+                for k in range(cfg.train.batch_size_per_gpu):
+                    img_name_local = os.path.join(img_path, f'{k}_{l}_local.jpeg')
+                    img_toSave_local = (data["collated_local_crops"][l*cfg.train.batch_size_per_gpu+k,:,:,:].float() - data["collated_local_crops"][l*cfg.train.batch_size_per_gpu+k,:,:,:].float().min()) / (data["collated_local_crops"][l*cfg.train.batch_size_per_gpu+k,:,:,:].float().max() - data["collated_local_crops"][l*cfg.train.batch_size_per_gpu+k,:,:,:].float().min())
+                    torchvision.utils.save_image(img_toSave_local, img_name_local)
+
+            index += 1
 
         current_batch_size = data["collated_global_crops"].shape[0] / 2
         if iteration > max_iter:
