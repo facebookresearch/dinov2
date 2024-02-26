@@ -60,6 +60,7 @@ ibot:
   head_hidden_dim: 2048
 train:
   batch_size_per_gpu: 48
+  accumulation_steps: 20
   dataset_path: ImageFolder:root=/cluster/scratch/cmerk/datasets_preprocessed/airogs_preprocessed # eyepacs:root=/cluster/scratch/cmerk/datasets_preprocessed/eyepacs_preprocessed:extra=/cluster/scratch/cmerk/datasets_preprocessed/airogs_preprocessed
   saveckp_freq: 20
   seed: 0
@@ -89,10 +90,10 @@ teacher:
   teacher_temp: 0.07
   warmup_teacher_temp_epochs: 30
 optim:
-  epochs: 300
+  epochs: 150
   weight_decay: 0.04
   weight_decay_end: 0.2
-  base_lr: 0.2e-4 # 2.0e-4  # learning rate for a batch size of 1024
+  base_lr: 2.0e-4 # 2.0e-4  # learning rate for a batch size of 1024
   lr: 0.  # will be set after applying scaling rule
   warmup_epochs: 10
   min_lr: 1.0e-06
@@ -121,6 +122,6 @@ block_expansion:
   path_dropout: 0.3
 images:
   make_patches: True
-  patch_size: 768
+  patch_size: 0.33
   patch_resize: 224
   n_patches_per_axis: 5

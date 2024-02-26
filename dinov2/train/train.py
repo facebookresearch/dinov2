@@ -228,11 +228,16 @@ def do_train(cfg, model, resume=False):
     img_path = os.path.join((cfg.train.output_dir), 'trainImages')
     os.makedirs(img_path, exist_ok=True)
 
+    # TODO: Does not consider multi GPU
+    true_batch_size = cfg.train.batch_size_per_gpu * cfg.train.accumulation_steps
+    print('Using Accumulation Steps, true batch size: ', true_batch_size)
+    accum = 0
+
     for data in metric_logger.log_every(
         data_loader,
-        10,
+        10 * cfg.train.accumulation_steps,
         header,
-        max_iter,
+        max_iter * cfg.train.accumulation_steps,
         start_iter,
     ):
         # Save image for debugging
@@ -252,72 +257,92 @@ def do_train(cfg, model, resume=False):
 
             index += 1
 
-        current_batch_size = data["collated_global_crops"].shape[0] / 2
+        if accum % cfg.train.accumulation_steps == 0:
+            current_batch_size = data["collated_global_crops"].shape[0] / 2
+        else:
+            current_batch_size += data["collated_global_crops"].shape[0] / 2
         if iteration > max_iter:
             return
 
         # apply schedules
-
         lr = lr_schedule[iteration]
         wd = wd_schedule[iteration]
         mom = momentum_schedule[iteration]
         teacher_temp = teacher_temp_schedule[iteration]
         last_layer_lr = last_layer_lr_schedule[iteration]
-        apply_optim_scheduler(optimizer, lr, wd, last_layer_lr)
 
-        # compute losses
+        if accum % cfg.train.accumulation_steps == cfg.train.accumulation_steps - 1:
+            apply_optim_scheduler(optimizer, lr, wd, last_layer_lr)
 
-        optimizer.zero_grad(set_to_none=True)
-        loss_dict = model.forward_backward(data, teacher_temp=teacher_temp)
+        if accum % cfg.train.accumulation_steps == 0:
+            # compute losses
+            optimizer.zero_grad(set_to_none=True)
 
-        # clip gradients
-
-        if fp16_scaler is not None:
-            if cfg.optim.clip_grad:
-                fp16_scaler.unscale_(optimizer)
-                for v in model.student.values():
-                    torch.nn.utils.clip_grad_norm_(v.parameters(), cfg.optim.clip_grad)
-                    # v.torch.nn.utils.clip_grad_norm(cfg.optim.clip_grad)
-            fp16_scaler.step(optimizer)
-            fp16_scaler.update()
+        if accum % cfg.train.accumulation_steps == 0:
+            loss_dict = model.forward_backward(data, teacher_temp=teacher_temp)
         else:
-            if cfg.optim.clip_grad:
-                for v in model.student.values():
-                    torch.nn.utils.clip_grad_norm_(v.parameters(), cfg.optim.clip_grad)
-                    # v.torch.nn.utils.clip_grad_norm(cfg.optim.clip_grad)
-            optimizer.step()
+            loss_dict_ = model.forward_backward(data, teacher_temp=teacher_temp)
+            for k in loss_dict_:
+                loss_dict[k] += loss_dict_[k]
 
-        # perform teacher EMA update
+        if accum % cfg.train.accumulation_steps == cfg.train.accumulation_steps - 1:
 
-        model.update_teacher(mom)
+            # Scale loss
+            for k in loss_dict:
+                loss_dict[k] /= cfg.train.accumulation_steps
+            
+            # clip gradients
+            if fp16_scaler is not None:
+                if cfg.optim.clip_grad:
+                    fp16_scaler.unscale_(optimizer)
+                    for v in model.student.values():
+                        torch.nn.utils.clip_grad_norm_(v.parameters(), cfg.optim.clip_grad)
+                        # v.torch.nn.utils.clip_grad_norm(cfg.optim.clip_grad)
+                fp16_scaler.step(optimizer)
+                fp16_scaler.update()
+            else:
+                if cfg.optim.clip_grad:
+                    for v in model.student.values():
+                        torch.nn.utils.clip_grad_norm_(v.parameters(), cfg.optim.clip_grad)
+                        # v.torch.nn.utils.clip_grad_norm(cfg.optim.clip_grad)
+                optimizer.step()
 
-        # logging
+            # perform teacher EMA update
 
-        if distributed.get_global_size() > 1:
-            for v in loss_dict.values():
-                torch.distributed.all_reduce(v)
-        loss_dict_reduced = {k: v.item() / distributed.get_global_size() for k, v in loss_dict.items()}
+            model.update_teacher(mom)
 
-        if math.isnan(sum(loss_dict_reduced.values())):
-            logger.info("NaN detected")
-            raise AssertionError
-        losses_reduced = sum(loss for loss in loss_dict_reduced.values())
+            # logging
 
-        metric_logger.update(lr=lr)
-        metric_logger.update(wd=wd)
-        metric_logger.update(mom=mom)
-        metric_logger.update(last_layer_lr=last_layer_lr)
-        metric_logger.update(current_batch_size=current_batch_size)
-        metric_logger.update(total_loss=losses_reduced, **loss_dict_reduced)
+            if distributed.get_global_size() > 1:
+                for v in loss_dict.values():
+                    torch.distributed.all_reduce(v)
+            loss_dict_reduced = {k: v.item() / distributed.get_global_size() for k, v in loss_dict.items()}
 
-        # checkpointing and testing
+            if math.isnan(sum(loss_dict_reduced.values())):
+                logger.info("NaN detected")
+                raise AssertionError
+            losses_reduced = sum(loss for loss in loss_dict_reduced.values())
 
-        if cfg.evaluation.eval_period_iterations > 0 and (iteration + 1) % cfg.evaluation.eval_period_iterations == 0:
-            do_test(cfg, model, f"training_{iteration}")
-            torch.cuda.synchronize()
-        periodic_checkpointer.step(iteration)
+            metric_logger.update(lr=lr)
+            metric_logger.update(wd=wd)
+            metric_logger.update(mom=mom)
+            metric_logger.update(last_layer_lr=last_layer_lr)
+            metric_logger.update(current_batch_size=current_batch_size)
+            metric_logger.update(total_loss=losses_reduced, **loss_dict_reduced)
 
-        iteration = iteration + 1
+            # checkpointing and testing
+
+            if cfg.evaluation.eval_period_iterations > 0 and (iteration + 1) % cfg.evaluation.eval_period_iterations == 0:
+                do_test(cfg, model, f"training_{iteration}")
+                torch.cuda.synchronize()
+            periodic_checkpointer.step(iteration)
+
+            iteration = iteration + 1
+
+            accum = 0
+        else:
+            accum += 1
+
     metric_logger.synchronize_between_processes()
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
 
