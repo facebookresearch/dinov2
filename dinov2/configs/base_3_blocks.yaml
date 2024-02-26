@@ -60,7 +60,7 @@ ibot:
   head_hidden_dim: 2048
 train:
   batch_size_per_gpu: 48
-  dataset_path: eyepacs:root=/cluster/scratch/cmerk/datasets_preprocessed/eyepacs_preprocessed:extra=/cluster/scratch/cmerk/datasets_preprocessed/airogs_preprocessed
+  dataset_path: ImageFolder:root=/cluster/scratch/cmerk/datasets_preprocessed/airogs_preprocessed # eyepacs:root=/cluster/scratch/cmerk/datasets_preprocessed/eyepacs_preprocessed:extra=/cluster/scratch/cmerk/datasets_preprocessed/airogs_preprocessed
   saveckp_freq: 20
   seed: 0
   num_workers: 20
