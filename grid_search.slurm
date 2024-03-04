@@ -4,7 +4,7 @@
 #SBATCH --ntasks=20
 #SBATCH --gpus-per-node=1
 #SBATCH --gres=gpumem:24g
-#SBATCH --time=10:00:00
+#SBATCH --time=24:00:00
 #SBATCH --mem-per-cpu=6000
 #SBATCH --tmp=4000 # per node!!
 #SBATCH --job-name=dino_run
@@ -28,4 +28,4 @@ echo "Number of workers: ${num_tasks}"
 
 export PYTHONPATH=.
 
-torchrun --nproc_per_node=1 --master_port=$FREE_PORT dinov2/train/train.py --config-file dinov2/configs/$1.yaml --output_dir /cluster/scratch/cmerk/testdinov2/dinov2_finetune_$1
+torchrun --nproc_per_node=1 --master_port=$FREE_PORT dinov2/train/train.py --config-file dinov2/configs/$1.yaml --output_dir $2
