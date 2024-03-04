@@ -60,12 +60,12 @@ ibot:
   head_hidden_dim: 2048
 train:
   batch_size_per_gpu: 48
-  accumulation_steps: 10
-  dataset_path: ImageFolder:root=/cluster/scratch/cmerk/datasets_preprocessed/airogs_preprocessed # eyepacs:root=/cluster/scratch/cmerk/datasets_preprocessed/eyepacs_preprocessed:extra=/cluster/scratch/cmerk/datasets_preprocessed/airogs_preprocessed
+  accumulation_steps: 12
+  dataset_path: ImageFolder:root=/cluster/scratch/cmerk/datasets/filtered_dataset # eyepacs:root=/cluster/scratch/cmerk/datasets_preprocessed/eyepacs_preprocessed:extra=/cluster/scratch/cmerk/datasets_preprocessed/airogs_preprocessed
   saveckp_freq: 20
   seed: 0
   num_workers: 20
-  OFFICIAL_EPOCH_LENGTH: 100
+  OFFICIAL_EPOCH_LENGTH: 10
   cache_dataset: true
   centering: "sinkhorn_knopp" # or "sinkhorn_knopp" or "centering"
 student:
@@ -90,7 +90,7 @@ teacher:
   teacher_temp: 0.07
   warmup_teacher_temp_epochs: 30
 optim:
-  epochs: 100
+  epochs: 50
   weight_decay: 0.04
   weight_decay_end: 0.2
   base_lr: 2.0e-4 # 2.0e-4  # learning rate for a batch size of 1024
@@ -117,11 +117,11 @@ crops:
 evaluation:
   eval_period_iterations: 12500
 block_expansion:
-  enabled: false
-  expanded_blocks: [] #[3, 7, 11]
+  enabled: True
+  expanded_blocks: [3, 7, 11]
   path_dropout: 0.3
 images:
-  make_patches: True
+  make_patches: False
   patch_size: 0.33
   patch_resize: 224
   n_patches_per_axis: 5
