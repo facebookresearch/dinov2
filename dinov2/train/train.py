@@ -162,8 +162,8 @@ def do_train(cfg, model, resume=False):
     periodic_checkpointer = PeriodicCheckpointer(
         checkpointer,
         period=period,
-        max_iter=max_iter,
-        max_to_keep=checkpoints_to_keep,
+        # max_iter=max_iter,
+        # max_to_keep=checkpoints_to_keep,
     )
 
     # setup data preprocessing
@@ -232,6 +232,10 @@ def do_train(cfg, model, resume=False):
     true_batch_size = cfg.train.batch_size_per_gpu * cfg.train.accumulation_steps
     print('Using Accumulation Steps, true batch size: ', true_batch_size)
     accum = 0
+
+    best_total_loss = 10000000
+    best_iteration = -1
+    max_save_frequency = cfg.train.OFFICIAL_EPOCH_LENGTH
 
     for data in metric_logger.log_every(
         data_loader,
@@ -336,6 +340,19 @@ def do_train(cfg, model, resume=False):
                 do_test(cfg, model, f"training_{iteration}")
                 torch.cuda.synchronize()
             periodic_checkpointer.step(iteration)
+
+            # Check if best total loss
+            if (losses_reduced < best_total_loss) and ((iteration - best_iteration) > max_save_frequency):                    
+
+                # Delete old best iteration
+                if best_iteration != -1:
+                    file_to_remove = os.path.join(cfg.train.output_dir, f"best_total_loss_{best_iteration}.rank_0.pth")
+                    os.remove(file_to_remove)
+
+                best_iteration = iteration
+                best_total_loss = losses_reduced
+                checkpoint_name = f"best_total_loss_{iteration}"
+                periodic_checkpointer.save(checkpoint_name)
 
             iteration = iteration + 1
 
