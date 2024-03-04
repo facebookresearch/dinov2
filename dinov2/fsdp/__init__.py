@@ -151,7 +151,7 @@ class FSDPCheckpointer(Checkpointer):
         """
         if distributed.is_enabled():
             torch.distributed.barrier()
-        save_file = os.path.join(self.save_dir, f"last_checkpoint.{rankstr()}")
+        save_file = os.path.join(self.save_dir, f"last_checkpoint.{rankstr()}.pth")
         with self.path_manager.open(save_file, "w") as f:
             f.write(last_filename_basename)  # pyre-ignore
 
