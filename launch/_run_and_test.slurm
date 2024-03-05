@@ -28,7 +28,7 @@ echo "Number of workers: ${num_tasks}"
 
 export PYTHONPATH=.
 
-# torchrun --nproc_per_node=1 --master_port=$FREE_PORT dinov2/train/train.py --config-file dinov2/configs/$1.yaml --output_dir $2
+torchrun --nproc_per_node=1 --master_port=$FREE_PORT dinov2/train/train.py --config-file dinov2/configs/$1.yaml --output_dir $2
 
 ####################################################################################################
 function parse_yaml {
@@ -62,13 +62,11 @@ export $(parse_yaml ${6}/dinov2/configs/${1}.yaml "config_")
 
 # Remove [ and ] from config_block_expansion_expanded_blocks
 block_expansion_positions=$(echo $config_block_expansion_expanded_blocks | tr -d '[]')
-echo $block_expansion_positions
-
 
 # Few Shot
 torchrun --nproc_per_node=1 --master_port=$FREE_PORT ${4}/main_finetune.py \
  --batch_size 8 --world_size 1 --model dinov2_vitb14 \
- --epochs 1 --warmup_epochs 10 --blr 4e-2 --weight_decay 1e-3 \
+ --epochs 100 --warmup_epochs 10 --blr 4e-2 --weight_decay 1e-3 \
  --nb_classes 5 --num_workers $num_tasks \
  --data_path ${3} \
  --task ${2}/cross_eval/few_shot_${5} \
@@ -86,7 +84,7 @@ torchrun --nproc_per_node=1 --master_port=$FREE_PORT ${4}/main_finetune.py \
 # Full
 torchrun --nproc_per_node=1 --master_port=$FREE_PORT ${4}/main_finetune.py \
  --batch_size 64 --world_size 1 --model dinov2_vitb14 \
- --epochs 1 --warmup_epochs 10 --blr 4e-2 --weight_decay 1e-3 \
+ --epochs 100 --warmup_epochs 10 --blr 4e-2 --weight_decay 1e-3 \
  --nb_classes 5 --num_workers $num_tasks \
  --data_path ${3} \
  --task ${2}/cross_eval/full \
