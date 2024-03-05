@@ -93,7 +93,7 @@ optim:
   epochs: 50
   weight_decay: 0.04
   weight_decay_end: 0.2
-  base_lr: 2.0e-4 # 2.0e-4  # learning rate for a batch size of 1024
+  base_lr: 0.5e-4 # 2.0e-4  # learning rate for a batch size of 1024
   lr: 0.  # will be set after applying scaling rule
   warmup_epochs: 10
   min_lr: 1.0e-06
@@ -118,7 +118,7 @@ evaluation:
   eval_period_iterations: 12500
 block_expansion:
   enabled: True
-  expanded_blocks: [3, 7, 11]
+  expanded_blocks: [3,7,11]
   path_dropout: 0.3
 images:
   make_patches: True
