@@ -1,16 +1,16 @@
-# config_files=(ssl_default_config_small_noKoleo ssl_default_config_base_noKoleo ssl_default_config_base_withKoleo ssl_default_config_small_withKoleo)
+#!bin/bash
+
+user="cmerk"
 
 # DINOv2
-code_location="/cluster/home/cmerk/dinov2"
+code_location="/cluster/home/${cmerk}/dinov2"
 config_files=(base_3_blocks)
-output_dir="/cluster/scratch/cmerk/test_dinov2"
-block_expansion_positions="3,7,11"
-n_samples=16
+output_dir="/cluster/scratch/${cmerk}/dinov2_tests_05032024/inc_warmup_epochs_____"
 
 # DR Training and Test
-aptos_dataset_dir="/cluster/scratch/cmerk/datasets/aptos2019-blindness-detection"
-code_dir="/cluster/home/cmerk/Fundus_Foundation_Models"
-
+aptos_dataset_dir="/cluster/scratch/${cmerk}/datasets/aptos2019-blindness-detection"
+code_dir="/cluster/home/${cmerk}/Fundus_Foundation_Models"
+n_samples=16
 
 # Get directory of this file
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
