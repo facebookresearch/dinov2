@@ -4,13 +4,12 @@
 #SBATCH --ntasks=20
 #SBATCH --gpus-per-node=1
 #SBATCH --gres=gpumem:24g
-#SBATCH --time=24:00:00
+#SBATCH --time=12:00:00
 #SBATCH --mem-per-cpu=6000
 #SBATCH --tmp=4000 # per node!!
-#SBATCH --job-name=dino_run
-#SBATCH --output=dino_run.out
-#SBATCH --error=dino_run.err
-
+#SBATCH --job-name=dino_run_%j
+#SBATCH --output=dino_run_%j.out
+#SBATCH --error=dino_run_%j.err
 
 # Load the required modules
 # module load gcc/8.2.0 python_gpu/3.10.4 eth_proxy git
@@ -79,7 +78,8 @@ torchrun --nproc_per_node=1 --master_port=$FREE_PORT ${4}/main_finetune.py \
  --color_jitter_param_brightness 0.2 --color_jitter_param_contrast 0.2 --color_jitter_param_saturation 0.1 --color_jitter_param_hue 0.1 \
  --fix_backbone True --n_classification_heads 1 \
  --block_expansion_positions ${block_expansion_positions} \
- --few_shot_learning ${5} --n_few_shot_folds 5
+ --few_shot_learning ${5} --n_few_shot_folds 5 \
+ --yaml_config dinov2/configs/$1.yaml
 
 # Full
 torchrun --nproc_per_node=1 --master_port=$FREE_PORT ${4}/main_finetune.py \
@@ -96,4 +96,5 @@ torchrun --nproc_per_node=1 --master_port=$FREE_PORT ${4}/main_finetune.py \
  --pretrained_checkpoint ${checkpoint_file} \
  --color_jitter_param_brightness 0.2 --color_jitter_param_contrast 0.2 --color_jitter_param_saturation 0.1 --color_jitter_param_hue 0.1 \
  --fix_backbone True --n_classification_heads 1 \
- --block_expansion_positions ${5}
+ --block_expansion_positions ${block_expansion_positions} \
+ --yaml_config dinov2/configs/$1.yaml
