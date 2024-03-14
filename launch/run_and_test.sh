@@ -3,13 +3,13 @@
 user="cmerk"
 
 # DINOv2
-code_location="/cluster/home/${cmerk}/dinov2"
+code_location="/cluster/home/${user}/dinov2"
 config_files=(base_3_blocks)
-output_dir="/cluster/scratch/${cmerk}/dinov2_tests_05032024/inc_warmup_epochs_____"
+output_dir="/cluster/scratch/${user}/dinov2_tests_05032024/fewer_epochs_teacher_warmup_path_dropout_old_model_init"
 
 # DR Training and Test
-aptos_dataset_dir="/cluster/scratch/${cmerk}/datasets/aptos2019-blindness-detection"
-code_dir="/cluster/home/${cmerk}/Fundus_Foundation_Models"
+aptos_dataset_dir="/cluster/scratch/${user}/datasets/aptos2019-blindness-detection"
+code_dir="/cluster/home/${user}/Fundus_Foundation_Models"
 n_samples=16
 
 # Get directory of this file
