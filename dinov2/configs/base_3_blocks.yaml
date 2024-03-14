@@ -69,11 +69,11 @@ train:
   cache_dataset: true
   centering: "sinkhorn_knopp" # or "sinkhorn_knopp" or "centering"
 student:
-  arch: dinov2_vitb14 # was vit_base, changed because loading function was modified
+  arch: vit_base # was vit_base, changed because loading function was modified, dinov2_vitb14
   patch_size: 14
   drop_path_rate: 0.4
   layerscale: 1.0e-05
-  drop_path_uniform: false # orignal: true
+  drop_path_uniform: true # false # orignal: true
   pretrained_weights: ''
   ffn_layer: "mlp" #"swiglufused" or "mlp"
   block_chunks: 0
