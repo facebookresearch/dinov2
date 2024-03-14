@@ -51,6 +51,7 @@ def add_block(backbone, position, drop_path_rate=0.0, init_value=0.0):
     added_block.sample_drop_ratio = drop_path_rate
 
     added_block.drop_path2 = DropPath(drop_path_rate) if drop_path_rate > 0.0 else nn.Identity()
+    added_block.drop_path1 = DropPath(drop_path_rate) if drop_path_rate > 0.0 else nn.Identity()
 
     expanded_backbone = copy.deepcopy(backbone)
     #add added_block one position after position
