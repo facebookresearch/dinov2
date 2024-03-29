@@ -1,10 +1,10 @@
-name: dinov2-extras
+name: dinov2
 channels:
   - defaults
   - pytorch
-  - nvidia
   - xformers
   - conda-forge
+  - nvidia/label/cuda-11.7.0
 dependencies:
   - python=3.10
   - pytorch::pytorch=1.13.1
