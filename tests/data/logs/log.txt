@@ -1,0 +1,2690 @@
+I20240506 16:34:33 11842 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240506 16:34:33 11842 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240506 16:34:33 11842 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240506 16:34:33 11842 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 10
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240506 16:34:33 11842 dinov2 augmentations.py:34] ###################################
+I20240506 16:34:33 11842 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240506 16:34:33 11842 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240506 16:34:33 11842 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240506 16:34:33 11842 dinov2 augmentations.py:38] local_crops_number: 8
+I20240506 16:34:33 11842 dinov2 augmentations.py:39] global_crops_size: 224
+I20240506 16:34:33 11842 dinov2 augmentations.py:40] local_crops_size: 96
+I20240506 16:34:33 11842 dinov2 augmentations.py:41] ###################################
+I20240506 16:39:34 12505 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240506 16:39:34 12505 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240506 16:39:34 12505 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240506 16:39:34 12505 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 10
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240506 16:39:34 12505 dinov2 augmentations.py:34] ###################################
+I20240506 16:39:34 12505 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240506 16:39:34 12505 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240506 16:39:34 12505 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240506 16:39:34 12505 dinov2 augmentations.py:38] local_crops_number: 8
+I20240506 16:39:34 12505 dinov2 augmentations.py:39] global_crops_size: 224
+I20240506 16:39:34 12505 dinov2 augmentations.py:40] local_crops_size: 96
+I20240506 16:39:34 12505 dinov2 augmentations.py:41] ###################################
+I20240506 16:40:52 12701 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240506 16:40:52 12701 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240506 16:40:52 12701 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240506 16:40:52 12701 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 10
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240506 16:41:19 12796 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240506 16:41:19 12796 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240506 16:41:19 12796 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240506 16:41:19 12796 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 10
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240506 16:41:19 12796 dinov2 augmentations.py:34] ###################################
+I20240506 16:41:19 12796 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240506 16:41:19 12796 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240506 16:41:19 12796 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240506 16:41:19 12796 dinov2 augmentations.py:38] local_crops_number: 8
+I20240506 16:41:19 12796 dinov2 augmentations.py:39] global_crops_size: 224
+I20240506 16:41:19 12796 dinov2 augmentations.py:40] local_crops_size: 96
+I20240506 16:41:19 12796 dinov2 augmentations.py:41] ###################################
+I20240506 16:41:19 12796 dinov2 loaders.py:122] sampler: sharded infinite
+I20240506 16:41:19 12796 dinov2 loaders.py:206] using PyTorch data loader
+W20240506 16:41:19 12796 py.warnings warnings.py:109] /home/guevel/.local/lib/python3.10/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 10 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+
+I20240506 16:41:19 12796 dinov2 loaders.py:221] infinite data loader
+I20240507 10:28:43 144829 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240507 10:28:43 144829 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240507 10:28:43 144829 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240507 10:28:43 144829 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 10
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240507 10:28:43 144829 dinov2 augmentations.py:34] ###################################
+I20240507 10:28:43 144829 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240507 10:28:43 144829 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240507 10:28:43 144829 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240507 10:28:43 144829 dinov2 augmentations.py:38] local_crops_number: 8
+I20240507 10:28:43 144829 dinov2 augmentations.py:39] global_crops_size: 224
+I20240507 10:28:43 144829 dinov2 augmentations.py:40] local_crops_size: 96
+I20240507 10:28:43 144829 dinov2 augmentations.py:41] ###################################
+I20240507 10:28:43 144829 dinov2 loaders.py:122] sampler: sharded infinite
+I20240507 10:28:43 144829 dinov2 loaders.py:206] using PyTorch data loader
+W20240507 10:28:43 144829 py.warnings warnings.py:109] /home/guevel/.local/lib/python3.10/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 10 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+
+I20240507 10:28:43 144829 dinov2 loaders.py:221] infinite data loader
+I20240507 10:34:02 145953 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240507 10:34:02 145953 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240507 10:34:02 145953 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240507 10:34:02 145953 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240507 10:34:02 145953 dinov2 augmentations.py:34] ###################################
+I20240507 10:34:02 145953 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240507 10:34:02 145953 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240507 10:34:02 145953 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240507 10:34:02 145953 dinov2 augmentations.py:38] local_crops_number: 8
+I20240507 10:34:02 145953 dinov2 augmentations.py:39] global_crops_size: 224
+I20240507 10:34:02 145953 dinov2 augmentations.py:40] local_crops_size: 96
+I20240507 10:34:02 145953 dinov2 augmentations.py:41] ###################################
+I20240507 10:34:03 145953 dinov2 loaders.py:122] sampler: sharded infinite
+I20240507 10:34:03 145953 dinov2 loaders.py:206] using PyTorch data loader
+I20240507 10:34:03 145953 dinov2 loaders.py:221] infinite data loader
+I20240507 11:49:17 155359 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240507 11:49:17 155359 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240507 11:49:17 155359 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240507 11:49:17 155359 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240507 11:49:17 155359 dinov2 augmentations.py:34] ###################################
+I20240507 11:49:17 155359 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240507 11:49:17 155359 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240507 11:49:17 155359 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240507 11:49:17 155359 dinov2 augmentations.py:38] local_crops_number: 8
+I20240507 11:49:17 155359 dinov2 augmentations.py:39] global_crops_size: 224
+I20240507 11:49:17 155359 dinov2 augmentations.py:40] local_crops_size: 96
+I20240507 11:49:17 155359 dinov2 augmentations.py:41] ###################################
+I20240507 11:49:18 155359 dinov2 loaders.py:122] sampler: sharded infinite
+I20240507 11:49:18 155359 dinov2 loaders.py:206] using PyTorch data loader
+I20240507 11:49:18 155359 dinov2 loaders.py:221] infinite data loader
+I20240507 11:52:21 155939 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240507 11:52:21 155939 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240507 11:52:21 155939 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240507 11:52:21 155939 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240507 11:52:21 155939 dinov2 augmentations.py:34] ###################################
+I20240507 11:52:21 155939 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240507 11:52:21 155939 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240507 11:52:21 155939 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240507 11:52:21 155939 dinov2 augmentations.py:38] local_crops_number: 8
+I20240507 11:52:21 155939 dinov2 augmentations.py:39] global_crops_size: 224
+I20240507 11:52:21 155939 dinov2 augmentations.py:40] local_crops_size: 96
+I20240507 11:52:21 155939 dinov2 augmentations.py:41] ###################################
+I20240507 11:52:21 155939 dinov2 loaders.py:122] sampler: sharded infinite
+I20240507 11:52:21 155939 dinov2 loaders.py:206] using PyTorch data loader
+I20240507 11:52:22 155939 dinov2 loaders.py:221] infinite data loader
+I20240507 11:53:11 156248 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240507 11:53:11 156248 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240507 11:53:11 156248 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240507 11:53:11 156248 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240507 11:53:11 156248 dinov2 augmentations.py:34] ###################################
+I20240507 11:53:11 156248 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240507 11:53:11 156248 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240507 11:53:11 156248 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240507 11:53:11 156248 dinov2 augmentations.py:38] local_crops_number: 8
+I20240507 11:53:11 156248 dinov2 augmentations.py:39] global_crops_size: 224
+I20240507 11:53:11 156248 dinov2 augmentations.py:40] local_crops_size: 96
+I20240507 11:53:11 156248 dinov2 augmentations.py:41] ###################################
+I20240507 11:53:11 156248 dinov2 loaders.py:122] sampler: sharded infinite
+I20240507 11:53:11 156248 dinov2 loaders.py:206] using PyTorch data loader
+I20240507 11:53:11 156248 dinov2 loaders.py:221] infinite data loader
+I20240507 11:55:26 156723 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240507 11:55:26 156723 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240507 11:55:26 156723 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240507 11:55:26 156723 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240507 11:55:26 156723 dinov2 augmentations.py:34] ###################################
+I20240507 11:55:26 156723 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240507 11:55:26 156723 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240507 11:55:26 156723 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240507 11:55:26 156723 dinov2 augmentations.py:38] local_crops_number: 8
+I20240507 11:55:26 156723 dinov2 augmentations.py:39] global_crops_size: 224
+I20240507 11:55:26 156723 dinov2 augmentations.py:40] local_crops_size: 96
+I20240507 11:55:26 156723 dinov2 augmentations.py:41] ###################################
+I20240507 11:55:26 156723 dinov2 loaders.py:122] sampler: sharded infinite
+I20240507 11:55:26 156723 dinov2 loaders.py:206] using PyTorch data loader
+I20240507 11:55:26 156723 dinov2 loaders.py:221] infinite data loader
+I20240507 11:58:04 157252 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240507 11:58:04 157252 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240507 11:58:04 157252 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240507 11:58:05 157252 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240507 11:58:07 157252 dinov2 augmentations.py:34] ###################################
+I20240507 11:58:07 157252 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240507 11:58:07 157252 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240507 11:58:07 157252 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240507 11:58:07 157252 dinov2 augmentations.py:38] local_crops_number: 8
+I20240507 11:58:07 157252 dinov2 augmentations.py:39] global_crops_size: 224
+I20240507 11:58:07 157252 dinov2 augmentations.py:40] local_crops_size: 96
+I20240507 11:58:07 157252 dinov2 augmentations.py:41] ###################################
+I20240507 11:58:07 157252 dinov2 loaders.py:122] sampler: sharded infinite
+I20240507 11:58:07 157252 dinov2 loaders.py:206] using PyTorch data loader
+I20240507 11:58:07 157252 dinov2 loaders.py:221] infinite data loader
+I20240507 11:59:51 157686 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240507 11:59:51 157686 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240507 11:59:51 157686 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240507 11:59:51 157686 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240507 11:59:51 157686 dinov2 augmentations.py:34] ###################################
+I20240507 11:59:51 157686 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240507 11:59:51 157686 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240507 11:59:51 157686 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240507 11:59:51 157686 dinov2 augmentations.py:38] local_crops_number: 8
+I20240507 11:59:51 157686 dinov2 augmentations.py:39] global_crops_size: 224
+I20240507 11:59:51 157686 dinov2 augmentations.py:40] local_crops_size: 96
+I20240507 11:59:51 157686 dinov2 augmentations.py:41] ###################################
+I20240507 11:59:51 157686 dinov2 loaders.py:122] sampler: sharded infinite
+I20240507 11:59:51 157686 dinov2 loaders.py:206] using PyTorch data loader
+I20240507 11:59:51 157686 dinov2 loaders.py:221] infinite data loader
+I20240507 12:02:10 158271 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240507 12:02:10 158271 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240507 12:02:10 158271 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240507 12:02:10 158271 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240507 12:02:11 158271 dinov2 augmentations.py:34] ###################################
+I20240507 12:02:11 158271 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240507 12:02:11 158271 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240507 12:02:11 158271 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240507 12:02:11 158271 dinov2 augmentations.py:38] local_crops_number: 8
+I20240507 12:02:11 158271 dinov2 augmentations.py:39] global_crops_size: 224
+I20240507 12:02:11 158271 dinov2 augmentations.py:40] local_crops_size: 96
+I20240507 12:02:11 158271 dinov2 augmentations.py:41] ###################################
+I20240507 12:02:11 158271 dinov2 loaders.py:122] sampler: sharded infinite
+I20240507 12:02:11 158271 dinov2 loaders.py:206] using PyTorch data loader
+I20240507 12:02:11 158271 dinov2 loaders.py:221] infinite data loader
+I20240512 14:58:01 3631753 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240512 14:58:01 3631753 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240512 14:58:01 3631753 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240512 14:58:01 3631753 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240512 14:58:01 3631753 dinov2 augmentations.py:34] ###################################
+I20240512 14:58:01 3631753 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240512 14:58:01 3631753 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240512 14:58:01 3631753 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240512 14:58:01 3631753 dinov2 augmentations.py:38] local_crops_number: 8
+I20240512 14:58:01 3631753 dinov2 augmentations.py:39] global_crops_size: 224
+I20240512 14:58:01 3631753 dinov2 augmentations.py:40] local_crops_size: 96
+I20240512 14:58:01 3631753 dinov2 augmentations.py:41] ###################################
+I20240512 14:58:04 3631753 dinov2 loaders.py:122] sampler: sharded infinite
+I20240512 14:58:04 3631753 dinov2 loaders.py:206] using PyTorch data loader
+I20240512 14:58:04 3631753 dinov2 loaders.py:221] infinite data loader
+I20240512 19:57:56 1304929 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240512 19:57:56 1304929 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240512 19:57:56 1304929 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240512 19:57:56 1304929 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240512 19:57:56 1304929 dinov2 augmentations.py:34] ###################################
+I20240512 19:57:56 1304929 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240512 19:57:56 1304929 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240512 19:57:56 1304929 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240512 19:57:56 1304929 dinov2 augmentations.py:38] local_crops_number: 8
+I20240512 19:57:56 1304929 dinov2 augmentations.py:39] global_crops_size: 224
+I20240512 19:57:56 1304929 dinov2 augmentations.py:40] local_crops_size: 96
+I20240512 19:57:56 1304929 dinov2 augmentations.py:41] ###################################
+I20240512 19:57:59 1304929 dinov2 loaders.py:122] sampler: sharded infinite
+I20240512 19:57:59 1304929 dinov2 loaders.py:206] using PyTorch data loader
+I20240512 19:57:59 1304929 dinov2 loaders.py:221] infinite data loader
+I20240512 20:03:32 1306050 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240512 20:03:32 1306050 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240512 20:03:32 1306050 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240512 20:03:32 1306050 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240512 20:03:33 1306050 dinov2 augmentations.py:34] ###################################
+I20240512 20:03:33 1306050 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240512 20:03:33 1306050 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240512 20:03:33 1306050 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240512 20:03:33 1306050 dinov2 augmentations.py:38] local_crops_number: 8
+I20240512 20:03:33 1306050 dinov2 augmentations.py:39] global_crops_size: 224
+I20240512 20:03:33 1306050 dinov2 augmentations.py:40] local_crops_size: 96
+I20240512 20:03:33 1306050 dinov2 augmentations.py:41] ###################################
+I20240512 20:03:34 1306050 dinov2 loaders.py:122] sampler: sharded infinite
+I20240512 20:03:34 1306050 dinov2 loaders.py:206] using PyTorch data loader
+I20240512 20:03:34 1306050 dinov2 loaders.py:221] infinite data loader
+I20240512 20:03:36 1306050 dinov2 augmentations.py:34] ###################################
+I20240512 20:03:36 1306050 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240512 20:03:36 1306050 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240512 20:03:36 1306050 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240512 20:03:36 1306050 dinov2 augmentations.py:38] local_crops_number: 8
+I20240512 20:03:36 1306050 dinov2 augmentations.py:39] global_crops_size: 224
+I20240512 20:03:36 1306050 dinov2 augmentations.py:40] local_crops_size: 96
+I20240512 20:03:36 1306050 dinov2 augmentations.py:41] ###################################
+I20240512 20:04:46 1306600 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240512 20:04:46 1306600 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240512 20:04:46 1306600 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240512 20:04:46 1306600 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240512 20:04:46 1306600 dinov2 augmentations.py:34] ###################################
+I20240512 20:04:46 1306600 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240512 20:04:46 1306600 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240512 20:04:46 1306600 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240512 20:04:46 1306600 dinov2 augmentations.py:38] local_crops_number: 8
+I20240512 20:04:46 1306600 dinov2 augmentations.py:39] global_crops_size: 224
+I20240512 20:04:46 1306600 dinov2 augmentations.py:40] local_crops_size: 96
+I20240512 20:04:46 1306600 dinov2 augmentations.py:41] ###################################
+I20240512 20:04:46 1306600 dinov2 loaders.py:122] sampler: sharded infinite
+I20240512 20:04:46 1306600 dinov2 loaders.py:206] using PyTorch data loader
+I20240512 20:04:46 1306600 dinov2 loaders.py:221] infinite data loader
+I20240512 20:04:49 1306600 dinov2 augmentations.py:34] ###################################
+I20240512 20:04:49 1306600 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240512 20:04:49 1306600 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240512 20:04:49 1306600 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240512 20:04:49 1306600 dinov2 augmentations.py:38] local_crops_number: 8
+I20240512 20:04:49 1306600 dinov2 augmentations.py:39] global_crops_size: 224
+I20240512 20:04:49 1306600 dinov2 augmentations.py:40] local_crops_size: 96
+I20240512 20:04:49 1306600 dinov2 augmentations.py:41] ###################################
+I20240512 20:05:08 1306600 dinov2 loaders.py:122] sampler: sharded infinite
+I20240512 20:05:08 1306600 dinov2 loaders.py:206] using PyTorch data loader
+I20240512 20:05:08 1306600 dinov2 loaders.py:221] infinite data loader
+I20240512 20:08:38 1307390 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240512 20:08:38 1307390 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240512 20:08:38 1307390 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240512 20:08:38 1307390 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240512 20:08:38 1307390 dinov2 augmentations.py:34] ###################################
+I20240512 20:08:38 1307390 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240512 20:08:38 1307390 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240512 20:08:38 1307390 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240512 20:08:38 1307390 dinov2 augmentations.py:38] local_crops_number: 8
+I20240512 20:08:38 1307390 dinov2 augmentations.py:39] global_crops_size: 224
+I20240512 20:08:38 1307390 dinov2 augmentations.py:40] local_crops_size: 96
+I20240512 20:08:38 1307390 dinov2 augmentations.py:41] ###################################
+I20240512 20:08:40 1307390 dinov2 loaders.py:122] sampler: sharded infinite
+I20240512 20:08:40 1307390 dinov2 loaders.py:206] using PyTorch data loader
+I20240512 20:08:40 1307390 dinov2 loaders.py:221] infinite data loader
+I20240512 20:08:43 1307390 dinov2 augmentations.py:34] ###################################
+I20240512 20:08:43 1307390 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240512 20:08:43 1307390 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240512 20:08:43 1307390 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240512 20:08:43 1307390 dinov2 augmentations.py:38] local_crops_number: 8
+I20240512 20:08:43 1307390 dinov2 augmentations.py:39] global_crops_size: 224
+I20240512 20:08:43 1307390 dinov2 augmentations.py:40] local_crops_size: 96
+I20240512 20:08:43 1307390 dinov2 augmentations.py:41] ###################################
+I20240512 20:08:48 1307390 dinov2 loaders.py:122] sampler: sharded infinite
+I20240512 20:08:48 1307390 dinov2 loaders.py:206] using PyTorch data loader
+I20240512 20:08:48 1307390 dinov2 loaders.py:221] infinite data loader
+I20240513 16:34:12 1462630 dinov2 config.py:59] git:
+  sha: e1277af2ba9496fbadf7aec6eba56e8d882d1e35, status: has uncommitted changes, branch: main
+
+I20240513 16:34:12 1462630 dinov2 config.py:60] config_file: config_test.yaml
+eval: 
+eval_only: False
+no_resume: False
+opts: ['train.output_dir=/home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data']
+output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+I20240513 16:34:12 1462630 dinov2 config.py:26] sqrt scaling learning rate; base: 0.004, new: 0.0007071067811865476
+I20240513 16:34:12 1462630 dinov2 config.py:33] MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+train:
+  batch_size_per_gpu: 32
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  output_dir: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 4
+  OFFICIAL_EPOCH_LENGTH: 1
+  cache_dataset: true
+  centering: centering
+student:
+  arch: vit_large
+  patch_size: 16
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.0007071067811865476
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+I20240513 16:34:12 1462630 dinov2 augmentations.py:34] ###################################
+I20240513 16:34:12 1462630 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240513 16:34:12 1462630 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240513 16:34:12 1462630 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240513 16:34:12 1462630 dinov2 augmentations.py:38] local_crops_number: 8
+I20240513 16:34:12 1462630 dinov2 augmentations.py:39] global_crops_size: 224
+I20240513 16:34:12 1462630 dinov2 augmentations.py:40] local_crops_size: 96
+I20240513 16:34:12 1462630 dinov2 augmentations.py:41] ###################################
+I20240513 16:34:12 1462630 dinov2 loaders.py:122] sampler: sharded infinite
+I20240513 16:34:12 1462630 dinov2 loaders.py:206] using PyTorch data loader
+I20240513 16:34:12 1462630 dinov2 loaders.py:221] infinite data loader
+I20240513 16:34:15 1462630 dinov2 augmentations.py:34] ###################################
+I20240513 16:34:15 1462630 dinov2 augmentations.py:35] Using data augmentation parameters:
+I20240513 16:34:15 1462630 dinov2 augmentations.py:36] global_crops_scale: [0.32, 1.0]
+I20240513 16:34:15 1462630 dinov2 augmentations.py:37] local_crops_scale: [0.05, 0.32]
+I20240513 16:34:15 1462630 dinov2 augmentations.py:38] local_crops_number: 8
+I20240513 16:34:15 1462630 dinov2 augmentations.py:39] global_crops_size: 224
+I20240513 16:34:15 1462630 dinov2 augmentations.py:40] local_crops_size: 96
+I20240513 16:34:15 1462630 dinov2 augmentations.py:41] ###################################
+I20240513 16:34:16 1462630 dinov2 loaders.py:122] sampler: sharded infinite
+I20240513 16:34:16 1462630 dinov2 loaders.py:206] using PyTorch data loader
+I20240513 16:34:16 1462630 dinov2 loaders.py:221] infinite data loader

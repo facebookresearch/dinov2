@@ -1,0 +1,23 @@
+name: cell_sim
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - xformers>=0.0.18
+  - torchmetrics
+  - torchdata
+  - omegaconf
+  - submitit
+  - fvcore
+  - iopath
+  - pip
+  - pip:
+      - --index-url https://download.pytorch.org/whl/cu118
+      - torch==2.3.0+cu118
+      - torchvision
+      - --extra-index-url https://pypi.nvidia.com
+      - cuml-cu11
+

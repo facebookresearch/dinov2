@@ -12,7 +12,7 @@ from functools import partial
 from fvcore.common.checkpoint import PeriodicCheckpointer
 import torch
 
-from dinov2.data import SamplerType, make_data_loader, make_dataset
+from dinov2.data import SamplerType, make_data_loader, make_custom_dataset
 from dinov2.data import collate_data_and_cast, DataAugmentationDINO, MaskingGenerator
 import dinov2.distributed as distributed
 from dinov2.fsdp import FSDPCheckpointer
@@ -25,7 +25,6 @@ from dinov2.train.ssl_meta_arch import SSLMetaArch
 
 torch.backends.cuda.matmul.allow_tf32 = True  # PyTorch 1.12 sets this to False by default
 logger = logging.getLogger("dinov2")
-
 
 def get_args_parser(add_help: bool = True):
     parser = argparse.ArgumentParser("DINOv2 training", add_help=add_help)
@@ -145,10 +144,10 @@ def do_train(cfg, model, resume=False):
         momentum_schedule,
         teacher_temp_schedule,
         last_layer_lr_schedule,
-    ) = build_schedulers(cfg)
+    ) = build_schedulers(cfg) # create training parameters that depends on the epochs
 
     # checkpointer
-    checkpointer = FSDPCheckpointer(model, cfg.train.output_dir, optimizer=optimizer, save_to_disk=True)
+    checkpointer = FSDPCheckpointer(model, cfg.train.output_dir, optimizer=optimizer, save_to_disk=True) # make a checkpointer that saves periodically in fsdp fashion in order to retake training if some workers fail
 
     start_iter = checkpointer.resume_or_load(cfg.MODEL.WEIGHTS, resume=resume).get("iteration", -1) + 1
 
@@ -157,10 +156,10 @@ def do_train(cfg, model, resume=False):
 
     periodic_checkpointer = PeriodicCheckpointer(
         checkpointer,
-        period=3 * OFFICIAL_EPOCH_LENGTH,
+        period=10 * OFFICIAL_EPOCH_LENGTH,
         max_iter=max_iter,
-        max_to_keep=3,
-    )
+        max_to_keep=2,
+    ) # wrap the checkpointer to tune the frequency to save and the number of versions to keep
 
     # setup data preprocessing
 
@@ -178,7 +177,7 @@ def do_train(cfg, model, resume=False):
         cfg.crops.local_crops_number,
         global_crops_size=cfg.crops.global_crops_size,
         local_crops_size=cfg.crops.local_crops_size,
-    )
+    ) # make DINOV2 data transformation (global and local crops)
 
     collate_fn = partial(
         collate_data_and_cast,
@@ -191,13 +190,12 @@ def do_train(cfg, model, resume=False):
 
     # setup data loader
 
-    dataset = make_dataset(
+    dataset = make_custom_dataset(
         dataset_str=cfg.train.dataset_path,
         transform=data_transform,
-        target_transform=lambda _: (),
     )
     # sampler_type = SamplerType.INFINITE
-    sampler_type = SamplerType.SHARDED_INFINITE
+    sampler_type = SamplerType.SHARDED_INFINITE # define the sampler to use for fsdp
     data_loader = make_data_loader(
         dataset=dataset,
         batch_size=cfg.train.batch_size_per_gpu,
@@ -209,6 +207,9 @@ def do_train(cfg, model, resume=False):
         drop_last=True,
         collate_fn=collate_fn,
     )
+
+    # A bit of verbose for information sake
+    print("There are {} images in the dataset used".format(dataset.__len__()))
 
     # training loop
 
@@ -267,7 +268,7 @@ def do_train(cfg, model, resume=False):
 
         if distributed.get_global_size() > 1:
             for v in loss_dict.values():
-                torch.distributed.all_reduce(v)
+                torch.distributed.all_reduce(v) # synchronize the gradients calculated on the different shards and gpus
         loss_dict_reduced = {k: v.item() / distributed.get_global_size() for k, v in loss_dict.items()}
 
         if math.isnan(sum(loss_dict_reduced.values())):

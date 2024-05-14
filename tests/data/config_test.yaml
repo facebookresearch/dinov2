@@ -1,0 +1,7 @@
+train:
+  dataset_path: /home/guevel/OT4D/cell_similarity/src/cell_similarity/tests/data/dataset_test
+  batch_size_per_gpu: 32
+  OFFICIAL_EPOCH_LENGTH: 1
+  num_workers: 4
+student:
+  block_chunks: 4

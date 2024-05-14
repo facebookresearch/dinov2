@@ -5,12 +5,12 @@
 
 import logging
 from enum import Enum
-from typing import Any, Callable, List, Optional, TypeVar
+from typing import Any, Callable, List, Optional, TypeVar, Union
 
 import torch
 from torch.utils.data import Sampler
 
-from .datasets import ImageNet, ImageNet22k
+from .datasets import ImageNet, ImageNet22k, ImageDataset
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler
 
 
@@ -63,6 +63,13 @@ def _parse_dataset_str(dataset_str: str):
 
     return class_, kwargs
 
+def make_custom_dataset(
+        dataset_path:Union[str, list],
+        transform: Optional[Callable] = None
+):
+    dataset = ImageDataset(root=dataset_path, transform=transform)
+
+    return dataset
 
 def make_dataset(
     *,
