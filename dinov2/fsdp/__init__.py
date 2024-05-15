@@ -64,7 +64,7 @@ def is_sharded_fsdp(x):
 
 def free_if_fsdp(x):
     if is_sharded_fsdp(x):
-        handles = x._handles
+        handles = x._handle
         true_list = [True for h in handles]
         _reshard(x, handles, true_list)
 
@@ -95,7 +95,7 @@ class FSDPCheckpointer(Checkpointer):
             return
 
         data = {}
-        with FSDP.state_dict_type(self.model, StateDictType.LOCAL_STATE_DICT):
+        with FSDP.state_dict_type(self.model, StateDictType.FULL_STATE_DICT):
             data["model"] = self.model.state_dict()
 
         # data["model"] = self.model.state_dict()
@@ -112,7 +112,7 @@ class FSDPCheckpointer(Checkpointer):
         self.tag_last_checkpoint(basename)
 
     def load(self, *args, **kwargs):
-        with FSDP.state_dict_type(self.model, StateDictType.LOCAL_STATE_DICT):
+        with FSDP.state_dict_type(self.model, StateDictType.FULL_STATE_DICT):
             return super().load(*args, **kwargs)
 
     def has_checkpoint(self) -> bool:
