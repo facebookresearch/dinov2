@@ -24,7 +24,7 @@ try:
 except ImportError:
     raise AssertionError("xFormers is required for training")
 
-
+TORCH_VERSION = torch.__version__
 logger = logging.getLogger("dinov2")
 
 
@@ -348,9 +348,19 @@ class SSLMetaArch(nn.Module):
     def fsdp_synchronize_streams(self):
         if self.need_to_synchronize_fsdp_streams:
             torch.cuda.synchronize()
-            self.student.dino_head._streams = (
-                self.teacher.dino_head._streams
-            ) = self.student.backbone._streams = self.teacher.backbone._streams
+            if int(TORCH_VERSION[2]) < 1:
+                self.student.dino_head._streams = (
+                    self.teacher.dino_head._streams
+                ) = self.student.backbone._streams = self.teacher.backbone._streams
+
+            else:
+                attrs = ["_unshard_stream", "_post_backward_stream", "_pre_unshard_stream", "_all_reduce_stream", "_default_stream"]
+                for attr in attrs:
+                    stream = getattr(self.teacher.dino_head, attr)
+                    setattr(self.student.dino_head, attr, stream)
+                    setattr(self.student.backbone, attr, stream)
+                    setattr(self.teacher.backbone, attr, stream)
+
             self.need_to_synchronize_fsdp_streams = False
 
     def update_teacher(self, m):

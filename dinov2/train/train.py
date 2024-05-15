@@ -191,7 +191,7 @@ def do_train(cfg, model, resume=False):
     # setup data loader
 
     dataset = make_custom_dataset(
-        dataset_str=cfg.train.dataset_path,
+        dataset_path=cfg.train.dataset_path,
         transform=data_transform,
     )
     # sampler_type = SamplerType.INFINITE
@@ -297,6 +297,7 @@ def do_train(cfg, model, resume=False):
 
 def main(args):
     cfg = setup(args)
+    torch.cuda.memory._record_memory_history()
 
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()
@@ -312,6 +313,7 @@ def main(args):
         return do_test(cfg, model, f"manual_{iteration}")
 
     do_train(cfg, model, resume=not args.no_resume)
+    torch.cuda.memory._dump_snapshot(os.path.join(cfg.train.output_dir, "memory_snapshot.pickle"))
 
 
 if __name__ == "__main__":
