@@ -77,6 +77,12 @@ def get_args_parser(
         type=str,
         help="Nodes to exclude",
     )
+    parser.add_argument(
+        "--mem-per-gpu",
+        default="30G",
+        type=str,
+        help="Minimal memory to request per gpu"
+    )
     return parser
 
 
@@ -110,6 +116,7 @@ def submit_jobs(task_class, args, name: str):
         timeout_min=args.timeout,  # max is 60 * 72
         slurm_signal_delay_s=120,
         slurm_partition=args.partition,
+        mem_per_gpu=args.mem_per_gpu,
         **kwargs,
     )
     executor.update_parameters(name=name, **executor_params)
