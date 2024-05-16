@@ -37,7 +37,7 @@ class ImageDataset(Dataset):
                 if file.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff')):
                     if is_valid:
                         try:
-                            Image.open(os.path.join(root, file))
+                            Image.open(os.path.join(root, file)).convert('RGB')
                             images.append(os.path.join(root, file))
                         
                         except OSError:

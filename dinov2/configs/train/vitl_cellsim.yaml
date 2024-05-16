@@ -1,0 +1,32 @@
+train:
+  dataset_path: 
+    - /home/manon/classification/data/Single_cells/medhi
+    - /home/manon/classification/data/Single_cells/vexas
+    - /home/manon/classification/data/Single_cells/TAMIS
+    - /home/manon/classification/data/Single_cells/saint_antoine
+  centering: sinkhorn_knopp
+  batch_size_per_gpu: 32
+  output_dir: /home/guevel/OT4D/cell_similarity/vit_large_multidataset
+  OFFICIAL_EPOCH_LENGTH: 1
+dino:
+  head_n_prototypes: 131072
+  head_bottleneck_dim: 384
+ibot:
+  separate_head: true
+  head_n_prototypes: 131072
+student:
+  arch: vit_large
+  patch_size: 14
+  drop_path_rate: 0.4
+  ffn_layer: swiglufused
+  block_chunks: 4
+teacher:
+  momentum_teacher: 0.994
+optim:
+  epochs: 500
+  weight_decay_end: 0.2
+  base_lr: 2.0e-04  # learning rate for a batch size of 1024
+  warmup_epochs: 80
+  layerwise_decay: 1.0
+crops:
+  local_crops_size: 98
