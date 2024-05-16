@@ -50,7 +50,7 @@ class ImageDataset(Dataset):
     
     def get_image_data(self, index: int):
         path = self.images_list[index]
-        with open(path) as f:
+        with open(path, 'rb') as f:
             image_data = f.read()
 
         return image_data
