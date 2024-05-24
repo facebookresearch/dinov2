@@ -14,6 +14,9 @@ class ImageDataset(Dataset):
         self.frac = frac
         self.preserved_images = []
         self.images_list = self._get_image_list()
+        self.path_preserved = path_preserved if isinstance(path_preserved, list) else list(path_preserved)
+        self.frac = frac
+        self.preserved_images = []
 
     def _get_image_list(self):
         images = []
