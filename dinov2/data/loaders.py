@@ -65,9 +65,11 @@ def _parse_dataset_str(dataset_str: str):
 
 def make_custom_dataset(
         dataset_path:Union[str, list],
-        transform: Optional[Callable] = None
+        transform: Optional[Callable] = None,
+        path_preserved: List[str] = [],
+        frac: float = 0.1,
 ):
-    dataset = ImageDataset(root=dataset_path, transform=transform)
+    dataset = ImageDataset(root=dataset_path, transform=transform, path_preserved=path_preserved, frac=frac)
 
     return dataset
 

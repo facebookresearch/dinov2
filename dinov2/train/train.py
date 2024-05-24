@@ -18,7 +18,7 @@ import dinov2.distributed as distributed
 from dinov2.fsdp import FSDPCheckpointer
 from dinov2.logging import MetricLogger
 from dinov2.utils.config import setup
-from dinov2.utils.utils import CosineScheduler
+from dinov2.utils.utils import CosineScheduler, write_list
 
 from dinov2.train.ssl_meta_arch import SSLMetaArch
 
@@ -193,7 +193,15 @@ def do_train(cfg, model, resume=False):
     dataset = make_custom_dataset(
         dataset_path=cfg.train.dataset_path,
         transform=data_transform,
+        path_preserved=cfg.train.path_preserved,
+        frac=cfg.train.frac
     )
+
+    # save the preserved images
+
+    if dataset.preserved_images:
+        write_list(os.path.join(cfg.train.output_dir, 'preserved_images.pkl'))
+
     # sampler_type = SamplerType.INFINITE
     sampler_type = SamplerType.SHARDED_INFINITE # define the sampler to use for fsdp
     data_loader = make_data_loader(
