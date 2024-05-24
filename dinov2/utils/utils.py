@@ -7,7 +7,9 @@ import logging
 import os
 import random
 import subprocess
+import pickle
 from urllib.parse import urlparse
+from typing import List
 
 import numpy as np
 import torch
@@ -93,3 +95,7 @@ def has_batchnorms(model):
         if isinstance(module, bn_types):
             return True
     return False
+
+def write_list(file_out, string_list: List[str]):
+    with open(file_out, 'wb') as f:
+        pickle.dump(string_list, f)

@@ -3,10 +3,12 @@ train:
     - /home/manon/classification/data/Single_cells/medhi
     - /home/manon/classification/data/Single_cells/vexas_original/Unlabeled
     - /home/manon/classification/data/Single_cells/matek
+  path_preserved:
+    - /home/manon/classification/data/Single_cells/matek
   centering: sinkhorn_knopp
   batch_size_per_gpu: 64
   output_dir: /home/guevel/OT4D/cell_similarity/vitl_register
-  OFFICIAL_EPOCH_LENGTH: 1
+  frac: 0.1
 dino:
   head_n_prototypes: 131072
   head_bottleneck_dim: 384
@@ -23,7 +25,7 @@ student:
 teacher:
   momentum_teacher: 0.994
 optim:
-  epochs: 500
+  epochs: 100
   weight_decay_end: 0.2
   base_lr: 2.0e-04  # learning rate for a batch size of 1024
   warmup_epochs: 80

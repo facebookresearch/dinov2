@@ -10,13 +10,10 @@ class ImageDataset(Dataset):
     def __init__(self, root, transform=None, path_preserved: List[str]=[], frac: float=0.1):
         self.root = root
         self.transform = transform
-        self.path_preserved = path_preserved if isinstance(path_preserved, list) else list(path_preserved)
+        self.path_preserved = path_preserved if isinstance(path_preserved, list) else [path_preserved]
         self.frac = frac
         self.preserved_images = []
         self.images_list = self._get_image_list()
-        self.path_preserved = path_preserved if isinstance(path_preserved, list) else list(path_preserved)
-        self.frac = frac
-        self.preserved_images = []
 
     def _get_image_list(self):
         images = []
@@ -24,7 +21,8 @@ class ImageDataset(Dataset):
         if isinstance(self.root, (str, pathlib.PosixPath)):
             try:
                 p = self.root
-                images.extend(self._retrieve_images(p, preserve=p in self.path_preserved, frac=self.frac))
+                preserve = p in self.path_preserved
+                images.extend(self._retrieve_images(p, preserve=preserve, frac=self.frac))
 
             except OSError:
                 print("The root given is nor a list nor a path")
@@ -32,7 +30,8 @@ class ImageDataset(Dataset):
         else:
             for p in self.root:
                 try:
-                    images.extend(self._retrieve_images(p, preserve=p in self.path_preserved, frac=self.frac))
+                    preserve = p in self.path_preserved
+                    images.extend(self._retrieve_images(p, preserve=preserve, frac=self.frac))
                 
                 except OSError:
                     print(f"the path indicated at {p} cannot be found.")
@@ -40,6 +39,7 @@ class ImageDataset(Dataset):
         return images
     
     def _retrieve_images(self, path, is_valid=False, preserve=False, frac=1):
+        images_ini = len(self.preserved_images)
         images = []
         for root, _, files in os.walk(path):
             images_dir = []
@@ -55,12 +55,16 @@ class ImageDataset(Dataset):
                     else:
                         images_dir.append(os.path.join(root, file))
                     
-                if preserve:
-                    random.seed(24)
-                    random.shuffle(images_dir)
-                    split_index = int(len(images_dir) * frac)
-                    self.preserved_images.extend(images_dir[:split_index])
-                    images.extend(images_dir[split_index:])
+            if preserve:
+                random.seed(24)
+                random.shuffle(images_dir)
+                split_index = int(len(images_dir) * frac)
+                self.preserved_images.extend(images_dir[:split_index])
+                images.extend(images_dir[split_index:])
+        
+        images_end = len(self.preserved_images)
+        if preserve:
+            print(f"{images_end - images_ini} images have been saved for the dataset at path {path}")
 
         return images
     
