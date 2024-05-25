@@ -200,7 +200,7 @@ def do_train(cfg, model, resume=False):
     # save the preserved images
 
     if dataset.preserved_images:
-        write_list(os.path.join(cfg.train.output_dir, 'preserved_images.pkl'))
+        write_list(os.path.join(cfg.train.output_dir, 'preserved_images.pkl'), dataset.preserved_images)
 
     # sampler_type = SamplerType.INFINITE
     sampler_type = SamplerType.SHARDED_INFINITE # define the sampler to use for fsdp
