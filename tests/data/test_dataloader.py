@@ -1,23 +1,26 @@
-import os
+from functools import partial
+from omegaconf import OmegaConf
+from pathlib import Path
 
 import torch
-from functools import partial
-from pathlib import Path
-from cell_similarity.data.datasets import ImageDataset
-from cell_similarity.data.collate import collate_data_and_cast
-from dinov2.data import DataAugmentationDINO, MaskingGenerator, SamplerType, make_data_loader
-from dinov2.train.ssl_meta_arch import SSLMetaArch
-from dinov2.utils.config import setup
-from dinov2.train.train import get_args_parser
+from dinov2.data.datasets import ImageDataset
+from dinov2.data.collate import collate_data_and_cast
+from dinov2.data import (
+    DataAugmentationDINO,
+    MaskingGenerator,
+    SamplerType,
+    make_data_loader,
+)
 
-def test_single_path(cfg):
-    
+cfg = OmegaConf.load(Path(__file__).parent / "config.yaml")
+
+def test_single_path():
     img_size = cfg.crops.global_crops_size
     patch_size = cfg.student.patch_size
     n_tokens = (img_size // patch_size) ** 2
     mask_generator = MaskingGenerator(
         input_size=(img_size // patch_size, img_size // patch_size),
-        max_num_patches=0.5 * img_size // patch_size * img_size // patch_size
+        max_num_patches=0.5 * img_size // patch_size * img_size // patch_size,
     )
     inputs_dtype = torch.half
 
@@ -37,8 +40,8 @@ def test_single_path(cfg):
         mask_generator=mask_generator,
         dtype=inputs_dtype,
     )
-    
-    path_dataset_test = os.path.join(os.getcwd(), 'dataset_test')
+
+    path_dataset_test = Path(__file__).parent / "dataset_test"
     dataset = ImageDataset(root=path_dataset_test, transform=data_transform)
 
     sampler_type = SamplerType.SHARDED_INFINITE
@@ -48,24 +51,27 @@ def test_single_path(cfg):
         num_workers=cfg.train.num_workers,
         shuffle=True,
         sampler_type=sampler_type,
-        sampler_advance=0,  
+        sampler_advance=0,
         drop_last=True,
         collate_fn=collate_fn,
     )
-    
+
     for i in data_loader:
-        assert i['collated_global_crops'].shape[0] == cfg.train.batch_size_per_gpu * 2 
-        assert i['collated_local_crops'].shape[0] == cfg.train.batch_size_per_gpu * cfg.crops.local_crops_number
+        assert i["collated_global_crops"].shape[0] == cfg.train.batch_size_per_gpu * 2
+        assert (
+            i["collated_local_crops"].shape[0]
+            == cfg.train.batch_size_per_gpu * cfg.crops.local_crops_number
+        )
         break
 
-def test_several_paths(cfg):
-    
+
+def test_several_paths():
     img_size = cfg.crops.global_crops_size
     patch_size = cfg.student.patch_size
     n_tokens = (img_size // patch_size) ** 2
     mask_generator = MaskingGenerator(
         input_size=(img_size // patch_size, img_size // patch_size),
-        max_num_patches=0.5 * img_size // patch_size * img_size // patch_size
+        max_num_patches=0.5 * img_size // patch_size * img_size // patch_size,
     )
     inputs_dtype = torch.half
 
@@ -86,8 +92,7 @@ def test_several_paths(cfg):
         dtype=inputs_dtype,
     )
 
-    base_path = Path(os.getcwd())
-    dirs = ['dataset_test', 'dataset_bis']
+    dirs = [Path(__file__).parent / i for i in ["dataset_test", "dataset_bis"]]
     dataset = ImageDataset(root=dirs, transform=data_transform)
     sampler_type = SamplerType.SHARDED_INFINITE
     data_loader = make_data_loader(
@@ -96,20 +101,20 @@ def test_several_paths(cfg):
         num_workers=cfg.train.num_workers,
         shuffle=True,
         sampler_type=sampler_type,
-        sampler_advance=0,  
+        sampler_advance=0,
         drop_last=True,
         collate_fn=collate_fn,
     )
-    
+
     for i in data_loader:
-        assert i['collated_global_crops'].shape[0] == cfg.train.batch_size_per_gpu * 2 
-        assert i['collated_local_crops'].shape[0] == cfg.train.batch_size_per_gpu * cfg.crops.local_crops_number
+        assert i["collated_global_crops"].shape[0] == cfg.train.batch_size_per_gpu * 2
+        assert (
+            i["collated_local_crops"].shape[0]
+            == cfg.train.batch_size_per_gpu * cfg.crops.local_crops_number
+        )
         break
 
-if __name__ == '__main__':
-    args = get_args_parser(add_help=True).parse_args()
-    cfg = setup(args)
-    test_single_path(cfg)
-    print("test_single_path succesfull")
-    test_several_paths(cfg)
-    print("test_several_paths successfull")
+
+if __name__ == "__main__":    
+    test_single_path()
+    test_several_paths()
