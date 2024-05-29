@@ -15,9 +15,7 @@ dependencies:
   - iopath
   - pip
   - pip:
-      - --index-url https://download.pytorch.org/whl/cu118
-      - torch==2.3.0+cu118
+      - --index-url https://download.pytorch.org/whl/cpu
+      - torch==2.3.0+cpu
       - torchvision
-      - --extra-index-url https://pypi.nvidia.com
-      - cuml-cu11
 
