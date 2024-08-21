@@ -7,13 +7,13 @@ import math
 import logging
 import os
 
-from omegaconf import OmegaConf
+import wandb
+from omegaconf import OmegaConf, DictConfig
 
 import dinov2.distributed as distributed
 from dinov2.logging import setup_logging
 from dinov2.utils import utils
 from dinov2.configs import dinov2_default_config
-
 
 logger = logging.getLogger("dinov2")
 
@@ -60,6 +60,19 @@ def default_setup(args):
     logger.info("\n".join("%s: %s" % (k, str(v)) for k, v in sorted(dict(vars(args)).items())))
 
 
+def setup_wandb(cfg: DictConfig):
+    """
+    Setup wandb in the main process
+    """
+    if distributed.is_main_process():
+        config = OmegaConf.to_container(cfg)
+        # disable wandb if no_wandb is set in the config
+        no_wandb = config.get("no_wandb", False)
+        mode = "disabled" if no_wandb else "online"
+        dataset_name = cfg["train"]["dataset_path"].split(":")[0]
+        wandb.init(project=f"dinov2-{dataset_name}", config=config, mode=mode)
+
+
 def setup(args):
     """
     Create configs and perform basic setups.
@@ -69,4 +82,5 @@ def setup(args):
     default_setup(args)
     apply_scaling_rules_to_cfg(cfg)
     write_config(cfg, args.output_dir)
+    setup_wandb(cfg)
     return cfg

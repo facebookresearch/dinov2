@@ -10,6 +10,7 @@ import logging
 import time
 
 import torch
+import wandb
 
 import dinov2.distributed as distributed
 
@@ -59,6 +60,10 @@ class MetricLogger(object):
             data_time=data_time,
         )
         dict_to_dump.update({k: v.median for k, v in self.meters.items()})
+        # log to wandb as well
+        for k, v in self.meters.items():
+            wandb.log({k: v.median}, step=iteration)
+
         with open(self.output_file, "a") as f:
             f.write(json.dumps(dict_to_dump) + "\n")
         pass
