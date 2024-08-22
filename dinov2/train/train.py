@@ -15,6 +15,7 @@ import torch
 from dinov2.data import SamplerType, make_data_loader, make_dataset
 from dinov2.data import collate_data_and_cast, DataAugmentationDINO, MaskingGenerator
 import dinov2.distributed as distributed
+from dinov2.data.datasets.histo_dataset import HistoPatchDataset
 from dinov2.fsdp import FSDPCheckpointer
 from dinov2.logging import MetricLogger
 from dinov2.utils.config import setup
@@ -197,8 +198,10 @@ def do_train(cfg, model, resume=False):
         transform=data_transform,
         target_transform=lambda _: (),
     )
-    # sampler_type = SamplerType.INFINITE
+
     sampler_type = SamplerType.SHARDED_INFINITE
+    if isinstance(dataset, HistoPatchDataset):
+        sampler_type = SamplerType.DISTRIBUTED_HISTO_INFINITE
     data_loader = make_data_loader(
         dataset=dataset,
         batch_size=cfg.train.batch_size_per_gpu,
@@ -296,7 +299,8 @@ def do_train(cfg, model, resume=False):
 
 
 def main(args):
-    cfg = setup(args)
+    wandb = not args.no_wandb
+    cfg = setup(args, wandb)
 
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()

@@ -1,4 +1,4 @@
-name: dinov2
+name: fm-histo
 channels:
   - defaults
   - pytorch
@@ -17,6 +17,7 @@ dependencies:
   - xformers::xformers
   - wandb
   - h5py
+  - boto3
   - pip
   - pip:
     - git+https://github.com/facebookincubator/submitit

@@ -11,8 +11,9 @@ import torch
 from torch.utils.data import Sampler
 
 from .datasets import ImageNet, ImageNet22k
+from .datasets.histo_dataset import HistoPatchDataset
+from .datasets.histo_sampler import HistoInfiniteDistributedSampler
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler
-
 
 logger = logging.getLogger("dinov2")
 
@@ -23,6 +24,7 @@ class SamplerType(Enum):
     INFINITE = 2
     SHARDED_INFINITE = 3
     SHARDED_INFINITE_NEW = 4
+    DISTRIBUTED_HISTO_INFINITE = 5
 
 
 def _make_bool_str(b: bool) -> str:
@@ -58,6 +60,8 @@ def _parse_dataset_str(dataset_str: str):
             kwargs["split"] = ImageNet.Split[kwargs["split"]]
     elif name == "ImageNet22k":
         class_ = ImageNet22k
+    elif name == "HistoPatchDataset":
+        class_ = HistoPatchDataset
     else:
         raise ValueError(f'Unsupported dataset "{name}"')
 
@@ -65,10 +69,10 @@ def _parse_dataset_str(dataset_str: str):
 
 
 def make_dataset(
-    *,
-    dataset_str: str,
-    transform: Optional[Callable] = None,
-    target_transform: Optional[Callable] = None,
+        *,
+        dataset_str: str,
+        transform: Optional[Callable] = None,
+        target_transform: Optional[Callable] = None,
 ):
     """
     Creates a dataset with the specified parameters.
@@ -154,6 +158,13 @@ def _make_sampler(
             shuffle=shuffle,
             seed=seed,
             drop_last=False,
+        )
+    elif type == SamplerType.DISTRIBUTED_HISTO_INFINITE:
+        logger.info("sampler: distributed histo")
+        return HistoInfiniteDistributedSampler(
+            dataset=dataset,
+            shuffle=shuffle,
+            seed=seed,
         )
 
     logger.info("sampler: none")
