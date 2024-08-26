@@ -50,16 +50,8 @@ class HistoInfiniteDistributedSampler(Sampler[T_co]):
         self.file_patch_indices = {}
         for file_id in self.file_ids:
             start_idx = file_id * self.dataset.internal_patch_count
-            file_path = self.dataset.file_list[file_id]
-            patch_count = self.dataset.file_patch_count[file_path]
-            end_idx = start_idx + patch_count
+            end_idx = start_idx + self.dataset.internal_patch_count
             indices = list(range(start_idx, end_idx))
-            if patch_count < self.dataset.internal_patch_count:
-                # if the file has fewer patches than internal_patch_count, duplicate patches from the same file
-                padding_size = self.dataset.internal_patch_count - patch_count
-                padding_indices = np.random.choice(range(start_idx, end_idx), padding_size, replace=True)
-                indices.extend(padding_indices)
-
             self.file_patch_indices[file_id] = indices
 
     def __iter__(self) -> Iterator[T_co]:
@@ -80,8 +72,6 @@ class HistoInfiniteDistributedSampler(Sampler[T_co]):
         indices = []
         for file_id in file_ids:
             indices.extend(self.file_patch_indices[file_id])
-
-        assert len(indices) == self.num_samples
 
         # shuffle indices if necessary
         if self.shuffle:

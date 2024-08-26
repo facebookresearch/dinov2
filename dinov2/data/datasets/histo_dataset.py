@@ -85,20 +85,9 @@ class HistoPatchDataset(VisionDataset):
         else:
             self.file_list = self.file_list[train_count:]
 
-        # compute number of patches in the dataset
-        self.num_patches = 0
-        self.file_patch_count = {}
-        small_patch_file_count = 0
-        for file_path in tqdm(self.file_list):
-            patch_count = self._load_patches(file_path, return_count=True)
-            if patch_count != self.internal_patch_count:
-                small_patch_file_count += 1
-                assert small_patch_file_count <= 2, f"Multiple files with patch count smaller than {self.internal_patch_count} are not allowed!"
-            self.num_patches += patch_count
-            self.file_patch_count[file_path] = patch_count
-
-        # sort files by number of patches in descending order
-        self.file_list = sorted(self.file_list, key=lambda f: self.file_patch_count[f], reverse=True)
+        # calculate number of patches in the dataset
+        # there might be a single file with fewer patches than internal_patch_count, but we ignore it
+        self.num_patches = len(self.file_list) * self.internal_patch_count
 
         # initialize file cache dictionary
         self.file_cache = {}
@@ -126,9 +115,11 @@ class HistoPatchDataset(VisionDataset):
 
         file_path = self.file_list[file_idx]
         if file_path in self.file_cache:
+            print("Cache hit")
             # cache hit
             patches = self.file_cache[file_path]
         else:
+            print("Cache miss")
             # cache miss: load patches from the file
             if len(self.file_cache) >= self.cache_size:
                 # remove the first element from the cache
@@ -138,6 +129,8 @@ class HistoPatchDataset(VisionDataset):
             patches = self._load_patches(file_path)
             self.file_cache[file_path] = patches
 
+        # adjust patch_idx if necessary
+        patch_idx = patch_idx % patches.shape[0]
         # convert patch to image
         img = patches[patch_idx]
         img = np.transpose(img, (1, 2, 0))

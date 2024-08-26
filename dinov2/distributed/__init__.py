@@ -157,8 +157,9 @@ class _TorchDistributedEnvironment:
         self.local_rank = -1
         self.local_world_size = -1
 
-        if _is_slurm_job_process():
-            return self._set_from_slurm_env()
+        # prevent messing with the environment!
+        #if _is_slurm_job_process():
+        #    return self._set_from_slurm_env()
 
         env_vars = _collect_env_vars()
         if not env_vars:
@@ -250,6 +251,8 @@ def enable(*, set_cuda_current_device: bool = True, overwrite: bool = False, all
         raise RuntimeError("Distributed mode has already been enabled")
     torch_env = _TorchDistributedEnvironment()
     torch_env.export(overwrite=overwrite)
+    # print OS env for debugging
+    print(os.environ)
 
     if set_cuda_current_device:
         torch.cuda.set_device(torch_env.local_rank)

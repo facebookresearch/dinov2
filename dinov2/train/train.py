@@ -7,6 +7,7 @@ import argparse
 import logging
 import math
 import os
+import time
 from functools import partial
 
 from fvcore.common.checkpoint import PeriodicCheckpointer
@@ -243,8 +244,9 @@ def do_train(cfg, model, resume=False):
         last_layer_lr = last_layer_lr_schedule[iteration]
         apply_optim_scheduler(optimizer, lr, wd, last_layer_lr)
 
+        # measure the time of single iteration
+        s0 = time.perf_counter()
         # compute losses
-
         optimizer.zero_grad(set_to_none=True)
         loss_dict = model.forward_backward(data, teacher_temp=teacher_temp)
 
@@ -262,6 +264,8 @@ def do_train(cfg, model, resume=False):
                 for v in model.student.values():
                     v.clip_grad_norm_(cfg.optim.clip_grad)
             optimizer.step()
+        # log iter time
+        logger.info(f"iter time: {time.perf_counter() - s0:.2f}")
 
         # perform teacher EMA update
 
