@@ -7,7 +7,6 @@ import h5py
 import numpy as np
 from PIL import Image
 from torchvision.datasets import VisionDataset
-from tqdm import tqdm
 
 
 class HistoPatchDataset(VisionDataset):
@@ -115,11 +114,9 @@ class HistoPatchDataset(VisionDataset):
 
         file_path = self.file_list[file_idx]
         if file_path in self.file_cache:
-            print("Cache hit")
             # cache hit
             patches = self.file_cache[file_path]
         else:
-            print("Cache miss")
             # cache miss: load patches from the file
             if len(self.file_cache) >= self.cache_size:
                 # remove the first element from the cache
