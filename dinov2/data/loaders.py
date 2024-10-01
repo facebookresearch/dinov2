@@ -10,7 +10,7 @@ from typing import Any, Callable, List, Optional, TypeVar
 import torch
 from torch.utils.data import Sampler
 
-from .datasets import ImageNet, ImageNet22k
+from .datasets import ImageNet, ImageNet22k, ImageShipSet1, ImageShipSet1Extra, ImageShipSet1_20P, ImageShipSet1_40P, ImageShipSet1_60P, ImageShipSet1_80P, ImageShipSet2
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler
 
 
@@ -58,6 +58,34 @@ def _parse_dataset_str(dataset_str: str):
             kwargs["split"] = ImageNet.Split[kwargs["split"]]
     elif name == "ImageNet22k":
         class_ = ImageNet22k
+    elif name == "ImageShipSet1":
+        class_ = ImageShipSet1
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipSet1.Split[kwargs["split"]]
+    elif name == "ImageShipSet1Extra":
+        class_ = ImageShipSet1Extra
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipSet1Extra.Split[kwargs["split"]]
+    elif name == "ImageShipSet1_20P":
+        class_ = ImageShipSet1_20P
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipSet1_20P.Split[kwargs["split"]]
+    elif name == "ImageShipSet1_40P":
+        class_ = ImageShipSet1_40P
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipSet1_40P.Split[kwargs["split"]]
+    elif name == "ImageShipSet1_60P":
+        class_ = ImageShipSet1_60P
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipSet1_60P.Split[kwargs["split"]]
+    elif name == "ImageShipSet1_80P":
+        class_ = ImageShipSet1_80P
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipSet1_80P.Split[kwargs["split"]]
+    elif name == "ImageShipSet2":
+        class_ = ImageShipSet2
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipSet2.Split[kwargs["split"]]
     else:
         raise ValueError(f'Unsupported dataset "{name}"')
 
