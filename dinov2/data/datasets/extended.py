@@ -22,8 +22,9 @@ class ExtendedVisionDataset(VisionDataset):
 
     def __getitem__(self, index: int) -> Tuple[Any, Any]:
         try:
-            image_data = self.get_image_data(index)
-            image = ImageDataDecoder(image_data).decode()
+            # image_data = self.get_image_data(index)
+            # image = ImageDataDecoder(image_data).decode()
+            image = self.get_image_data(index)
         except Exception as e:
             raise RuntimeError(f"can not read image for sample {index}") from e
         target = self.get_target(index)
