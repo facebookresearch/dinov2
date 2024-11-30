@@ -10,28 +10,25 @@ class NextVitSmall(torch.nn.Module):
     def __init__(self, num_classes=197*1024) -> None:
         super().__init__()
 
-        # # define backbone
-        # self.backbone = _get_nextvit(
-        #     model_size="small",
-        #     frozen_stages=-1,
-        #     norm_eval=False,
-        #     with_extra_norm=True,
-        #     norm_cfg=dict(type="SyncBN", requires_grad=True),
-        #     in_channels=3,
-        # )
+        # define backbone
+        self.backbone = _get_nextvit(
+            model_size="small",
+            frozen_stages=-1,
+            norm_eval=False,
+            with_extra_norm=True,
+            norm_cfg=dict(type="SyncBN", requires_grad=True),
+            in_channels=3,
+        )
 
-        self.conv = torch.nn.Conv2d(in_channels=3, out_channels=1024, kernel_size=32, stride=32, padding=0)
         assert num_classes == 197 * 1024
-        self.num_register_tokens = 1
+        self.num_register_tokens = 0
         self.embed_dim = 1024
         self.blocks = [0] * 6
         self.proj_head = torch.nn.Linear(1024, num_classes)
 
     def forward_backbone(self, x, masks=None):
-        # y = self.backbone(x)  # use y[-1]
-        y = self.conv(x)
-        print(x.shape, y.shape)
-        y = functional.adaptive_avg_pool2d(y, (1, 1))
+        y = self.backbone(x)  # use y[-1]
+        y = functional.adaptive_avg_pool2d(y[-1], (1, 1))
         y = torch.flatten(y, 1)
         y = self.proj_head(y)
 
