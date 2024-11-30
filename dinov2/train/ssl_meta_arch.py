@@ -396,8 +396,8 @@ class SSLMetaArch(nn.Module):
 
     def prepare_for_distributed_training(self):
         logger.info("DISTRIBUTED FSDP -- preparing model for distributed training")
-        if has_batchnorms(self.student):
-            raise NotImplementedError
+        # if has_batchnorms(self.student):
+        #     raise NotImplementedError
         # below will synchronize all student subnetworks across gpus:
         for k, v in self.student.items():
             self.teacher[k].load_state_dict(self.student[k].state_dict())

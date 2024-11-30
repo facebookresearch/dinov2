@@ -22,10 +22,6 @@ from dinov2.utils.utils import CosineScheduler
 
 from dinov2.train.ssl_meta_arch import SSLMetaArch
 
-import sys
-sys.path.append('/home/li.yu/code/JupiterCVML/europa/base/src/europa')
-from dl.network.nextvit_brt import _get_nextvit
-
 
 torch.backends.cuda.matmul.allow_tf32 = True  # PyTorch 1.12 sets this to False by default
 logger = logging.getLogger("dinov2")
@@ -44,9 +40,9 @@ def get_args_parser(add_help: bool = True):
     parser.add_argument(
         "opts",
         help="""
-Modify config options at the end of the command. For Yacs configs, use
-space-separated "PATH.KEY VALUE" pairs.
-For python-based LazyConfig, use "path.key=value".
+        Modify config options at the end of the command. For Yacs configs, use
+        space-separated "PATH.KEY VALUE" pairs.
+        For python-based LazyConfig, use "path.key=value".
         """.strip(),
         default=None,
         nargs=argparse.REMAINDER,
@@ -306,18 +302,6 @@ def main(args):
 
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()
-
-    # model = _get_nextvit(
-    #             model_size="small",
-    #             frozen_stages=-1,
-    #             norm_eval=False,
-    #             with_extra_norm=True,
-    #             norm_cfg=dict(type="SyncBN", requires_grad=True),
-    #             in_channels=3,
-    #         )
-    # print('tunable parameters', sum(p.numel() for p in model.parameters() if p.requires_grad))
-    # if args.distributed:
-    #     model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu], find_unused_parameters=True)
 
     logger.info("Model:\n{}".format(model))
     if args.eval_only:

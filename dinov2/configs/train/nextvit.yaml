@@ -2,6 +2,21 @@
 train:
   dataset_path: ImageNet:split=TRAIN
   batch_size_per_gpu: 64
+compute_precision:
+  teacher:
+    backbone:
+      sharding_strategy: NO_SHARD  # SHARD_GRAD_OP
+    dino_head:
+      sharding_strategy: NO_SHARD
+    ibot_head:
+      sharding_strategy: NO_SHARD
+  student:
+    backbone:
+      sharding_strategy: NO_SHARD
+    dino_head:
+      sharding_strategy: NO_SHARD
+    ibot_head:
+      sharding_strategy: NO_SHARD
 student:
-  arch: vit_large  # vit_large, nextvit
+  arch: nextvit  # vit_large, nextvit
   block_chunks: 4
