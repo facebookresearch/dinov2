@@ -12,8 +12,8 @@ from typing import Dict, List
 import torch
 import torch.distributed as dist
 
-_LOCAL_RANK = -1
-_LOCAL_WORLD_SIZE = -1
+_LOCAL_RANK = 0
+_LOCAL_WORLD_SIZE = 1
 
 
 def is_enabled() -> bool:

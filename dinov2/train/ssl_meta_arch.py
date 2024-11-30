@@ -37,7 +37,7 @@ class SSLMetaArch(nn.Module):
         student_model_dict = dict()
         teacher_model_dict = dict()
 
-        student_backbone, teacher_backbone, embed_dim = build_model_from_cfg(cfg)
+        student_backbone, teacher_backbone, embed_dim = build_model_from_cfg(cfg)  # embed_dim=1024
         student_model_dict["backbone"] = student_backbone
         teacher_model_dict["backbone"] = teacher_backbone
         logger.info(f"OPTIONS -- architecture : embed_dim: {embed_dim}")
@@ -47,13 +47,13 @@ class SSLMetaArch(nn.Module):
             logger.info(f"OPTIONS -- pretrained weights: loading from {cfg.student.pretrained_weights}")
             student_backbone.load_state_dict(chkpt["model"], strict=False)
 
-        self.embed_dim = embed_dim
-        self.dino_out_dim = cfg.dino.head_n_prototypes
+        self.embed_dim = embed_dim  # 1024
+        self.dino_out_dim = cfg.dino.head_n_prototypes  # 65536
 
-        self.do_dino = cfg.dino.loss_weight > 0
-        self.do_koleo = cfg.dino.koleo_loss_weight > 0
-        self.do_ibot = cfg.ibot.loss_weight > 0
-        self.ibot_separate_head = cfg.ibot.separate_head
+        self.do_dino = cfg.dino.loss_weight > 0           # True
+        self.do_koleo = cfg.dino.koleo_loss_weight > 0    # True
+        self.do_ibot = cfg.ibot.loss_weight > 0           # True
+        self.ibot_separate_head = cfg.ibot.separate_head  # False
 
         logger.info("OPTIONS -- DINO")
         if self.do_dino:
@@ -81,7 +81,7 @@ class SSLMetaArch(nn.Module):
         if self.do_dino or self.do_ibot:
             student_model_dict["dino_head"] = dino_head()
             teacher_model_dict["dino_head"] = dino_head()
-
+        
         logger.info("OPTIONS -- IBOT")
         logger.info(f"OPTIONS -- IBOT -- loss_weight: {cfg.ibot.loss_weight}")
         logger.info(f"OPTIONS -- IBOT masking -- ibot_mask_ratio_tuple: {cfg.ibot.mask_ratio_min_max}")
@@ -134,18 +134,18 @@ class SSLMetaArch(nn.Module):
         assert n_global_crops == 2
         n_local_crops = self.cfg.crops.local_crops_number
 
-        global_crops = images["collated_global_crops"].cuda(non_blocking=True)
-        local_crops = images["collated_local_crops"].cuda(non_blocking=True)
+        global_crops = images["collated_global_crops"].cuda(non_blocking=True)  # 128x3x224x224
+        local_crops = images["collated_local_crops"].cuda(non_blocking=True)    # 512x3x96x96
 
-        masks = images["collated_masks"].cuda(non_blocking=True)
-        mask_indices_list = images["mask_indices_list"].cuda(non_blocking=True)
-        n_masked_patches_tensor = images["n_masked_patches"].cuda(non_blocking=True)
-        n_masked_patches = mask_indices_list.shape[0]
-        upperbound = images["upperbound"]
-        masks_weight = images["masks_weight"].cuda(non_blocking=True)
+        masks = images["collated_masks"].cuda(non_blocking=True)  # 128x196
+        mask_indices_list = images["mask_indices_list"].cuda(non_blocking=True)  # 3730x
+        n_masked_patches_tensor = images["n_masked_patches"].cuda(non_blocking=True)  # 1x
+        n_masked_patches = mask_indices_list.shape[0]  # 3730
+        upperbound = images["upperbound"]  # 3771
+        masks_weight = images["masks_weight"].cuda(non_blocking=True)  # 3730x
 
-        n_local_crops_loss_terms = max(n_local_crops * n_global_crops, 1)
-        n_global_crops_loss_terms = (n_global_crops - 1) * n_global_crops
+        n_local_crops_loss_terms = max(n_local_crops * n_global_crops, 1)  # 16
+        n_global_crops_loss_terms = (n_global_crops - 1) * n_global_crops  # 2
 
         do_dino = self.do_dino
         do_ibot = self.do_ibot
@@ -226,7 +226,7 @@ class SSLMetaArch(nn.Module):
 
             return teacher_dino_softmaxed_centered_list, masked_teacher_ibot_softmaxed_centered
 
-        teacher_dino_softmaxed_centered_list, masked_teacher_ibot_softmaxed_centered = get_teacher_output()
+        teacher_dino_softmaxed_centered_list, masked_teacher_ibot_softmaxed_centered = get_teacher_output()  # [64x65536, 64x65536], 3730x65536
         reshard_fsdp_model(self.teacher)
 
         loss_dict = {}

@@ -22,6 +22,10 @@ from dinov2.utils.utils import CosineScheduler
 
 from dinov2.train.ssl_meta_arch import SSLMetaArch
 
+import sys
+sys.path.append('/home/li.yu/code/JupiterCVML/europa/base/src/europa')
+from dl.network.nextvit_brt import _get_nextvit
+
 
 torch.backends.cuda.matmul.allow_tf32 = True  # PyTorch 1.12 sets this to False by default
 logger = logging.getLogger("dinov2")
@@ -54,6 +58,9 @@ For python-based LazyConfig, use "path.key=value".
         type=str,
         help="Output directory to save logs and checkpoints",
     )
+    parser.add_argument('--world_size', default=1, type=int,
+                        help='number of distributed processes')
+    parser.add_argument('--dist_url', default='env://', help='url used to set up distributed training')
 
     return parser
 
@@ -133,7 +140,7 @@ def do_test(cfg, model, iteration):
 
 def do_train(cfg, model, resume=False):
     model.train()
-    inputs_dtype = torch.half
+    inputs_dtype = torch.half  # torch.float16
     fp16_scaler = model.fp16_scaler  # for mixed precision training
 
     # setup optimizer
@@ -152,8 +159,8 @@ def do_train(cfg, model, resume=False):
 
     start_iter = checkpointer.resume_or_load(cfg.MODEL.WEIGHTS, resume=resume).get("iteration", -1) + 1
 
-    OFFICIAL_EPOCH_LENGTH = cfg.train.OFFICIAL_EPOCH_LENGTH
-    max_iter = cfg.optim.epochs * OFFICIAL_EPOCH_LENGTH
+    OFFICIAL_EPOCH_LENGTH = cfg.train.OFFICIAL_EPOCH_LENGTH  # 1250
+    max_iter = cfg.optim.epochs * OFFICIAL_EPOCH_LENGTH      # 125000
 
     periodic_checkpointer = PeriodicCheckpointer(
         checkpointer,
@@ -164,9 +171,9 @@ def do_train(cfg, model, resume=False):
 
     # setup data preprocessing
 
-    img_size = cfg.crops.global_crops_size
-    patch_size = cfg.student.patch_size
-    n_tokens = (img_size // patch_size) ** 2
+    img_size = cfg.crops.global_crops_size    # 224
+    patch_size = cfg.student.patch_size       # 16
+    n_tokens = (img_size // patch_size) ** 2  # 196
     mask_generator = MaskingGenerator(
         input_size=(img_size // patch_size, img_size // patch_size),
         max_num_patches=0.5 * img_size // patch_size * img_size // patch_size,
@@ -299,6 +306,18 @@ def main(args):
 
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()
+
+    # model = _get_nextvit(
+    #             model_size="small",
+    #             frozen_stages=-1,
+    #             norm_eval=False,
+    #             with_extra_norm=True,
+    #             norm_cfg=dict(type="SyncBN", requires_grad=True),
+    #             in_channels=3,
+    #         )
+    # print('tunable parameters', sum(p.numel() for p in model.parameters() if p.requires_grad))
+    # if args.distributed:
+    #     model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu], find_unused_parameters=True)
 
     logger.info("Model:\n{}".format(model))
     if args.eval_only:

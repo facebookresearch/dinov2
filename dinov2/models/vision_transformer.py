@@ -212,14 +212,14 @@ class DinoVisionTransformer(nn.Module):
 
     def prepare_tokens_with_masks(self, x, masks=None):
         B, nc, w, h = x.shape
-        x = self.patch_embed(x)
+        x = self.patch_embed(x)  # teacher 128x3x224x224 -> 128x196x1024
         if masks is not None:
             x = torch.where(masks.unsqueeze(-1), self.mask_token.to(x.dtype).unsqueeze(0), x)
 
-        x = torch.cat((self.cls_token.expand(x.shape[0], -1, -1), x), dim=1)
-        x = x + self.interpolate_pos_encoding(x, w, h)
+        x = torch.cat((self.cls_token.expand(x.shape[0], -1, -1), x), dim=1)  # teacher 128x197x1024
+        x = x + self.interpolate_pos_encoding(x, w, h)  # teacher 128x197x1024
 
-        if self.register_tokens is not None:
+        if self.register_tokens is not None:  # self.register_tokens is None
             x = torch.cat(
                 (
                     x[:, :1],
@@ -232,9 +232,9 @@ class DinoVisionTransformer(nn.Module):
         return x
 
     def forward_features_list(self, x_list, masks_list):
-        x = [self.prepare_tokens_with_masks(x, masks) for x, masks in zip(x_list, masks_list)]
+        x = [self.prepare_tokens_with_masks(x, masks) for x, masks in zip(x_list, masks_list)]  # student 128x3x224x224 -> 128x197x1024, 512x3x96x96 -> 512x37x1024
         for blk in self.blocks:
-            x = blk(x)
+            x = blk(x)  # student 128x197x1024, 512x37x1024
 
         all_x = x
         output = []
@@ -242,30 +242,30 @@ class DinoVisionTransformer(nn.Module):
             x_norm = self.norm(x)
             output.append(
                 {
-                    "x_norm_clstoken": x_norm[:, 0],
-                    "x_norm_regtokens": x_norm[:, 1 : self.num_register_tokens + 1],
-                    "x_norm_patchtokens": x_norm[:, self.num_register_tokens + 1 :],
-                    "x_prenorm": x,
-                    "masks": masks,
+                    "x_norm_clstoken": x_norm[:, 0],  # student 128x1024, 512x1024
+                    "x_norm_regtokens": x_norm[:, 1 : self.num_register_tokens + 1],  # student 128x0x1024, 512x0x1024
+                    "x_norm_patchtokens": x_norm[:, self.num_register_tokens + 1 :],  # student 128x196x1024, 512x36x1024
+                    "x_prenorm": x,  # student 128x197x1024, 512x37x1024
+                    "masks": masks,  # student 128x196, None
                 }
             )
         return output
 
     def forward_features(self, x, masks=None):
-        if isinstance(x, list):
+        if isinstance(x, list):  # student x [128x3x224x224, 512x3x96x96], masks [128x196, None]
             return self.forward_features_list(x, masks)
 
-        x = self.prepare_tokens_with_masks(x, masks)
+        x = self.prepare_tokens_with_masks(x, masks)  # teacher 128x3x224x224 -> 128x197x1024
 
         for blk in self.blocks:
-            x = blk(x)
+            x = blk(x)  # teacher 128x197x1024
 
-        x_norm = self.norm(x)
+        x_norm = self.norm(x)  # teacher 128x197x1024
         return {
-            "x_norm_clstoken": x_norm[:, 0],
-            "x_norm_regtokens": x_norm[:, 1 : self.num_register_tokens + 1],
-            "x_norm_patchtokens": x_norm[:, self.num_register_tokens + 1 :],
-            "x_prenorm": x,
+            "x_norm_clstoken": x_norm[:, 0],  # teacher 128x1024
+            "x_norm_regtokens": x_norm[:, 1 : self.num_register_tokens + 1],  # teacher 128x0x1024
+            "x_norm_patchtokens": x_norm[:, self.num_register_tokens + 1 :],  # teacher 128x196x1024
+            "x_prenorm": x,  # teacher 128x197x1024
             "masks": masks,
         }
 

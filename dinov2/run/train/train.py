@@ -9,7 +9,8 @@ import sys
 
 from dinov2.logging import setup_logging
 from dinov2.train import get_args_parser as get_train_args_parser
-from dinov2.run.submit import get_args_parser, submit_jobs
+# from dinov2.run.submit import get_args_parser, submit_jobs
+from dinov2.run.submit import get_args_parser
 
 
 logger = logging.getLogger("dinov2")
@@ -22,7 +23,7 @@ class Trainer(object):
     def __call__(self):
         from dinov2.train import main as train_main
 
-        self._setup_args()
+        # self._setup_args()
         train_main(self.args)
 
     def checkpoint(self):
@@ -51,7 +52,13 @@ def main():
     setup_logging()
 
     assert os.path.exists(args.config_file), "Configuration file does not exist!"
-    submit_jobs(Trainer, args, name="dinov2:train")
+    print(args)
+    # submit_jobs(Trainer, args, name="dinov2:train")
+
+    from dinov2.train import main as train_main
+
+    train_main(args)
+
     return 0
 
 

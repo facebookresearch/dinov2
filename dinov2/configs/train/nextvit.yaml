@@ -1,0 +1,7 @@
+# this corresponds to the default config
+train:
+  dataset_path: ImageNet:split=TRAIN
+  batch_size_per_gpu: 64
+student:
+  arch: vit_large  # vit_large, nextvit
+  block_chunks: 4

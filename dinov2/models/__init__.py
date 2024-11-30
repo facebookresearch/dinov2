@@ -6,6 +6,7 @@
 import logging
 
 from . import vision_transformer as vits
+from .nextvit import NextVitSmall
 
 
 logger = logging.getLogger("dinov2")
@@ -27,14 +28,20 @@ def build_model(args, only_teacher=False, img_size=224):
             interpolate_offset=args.interpolate_offset,
             interpolate_antialias=args.interpolate_antialias,
         )
-        teacher = vits.__dict__[args.arch](**vit_kwargs)
+        if args.arch in vits.__dict__:
+            teacher = vits.__dict__[args.arch](**vit_kwargs)
+        else:
+            teacher = NextVitSmall()
         if only_teacher:
             return teacher, teacher.embed_dim
-        student = vits.__dict__[args.arch](
-            **vit_kwargs,
-            drop_path_rate=args.drop_path_rate,
-            drop_path_uniform=args.drop_path_uniform,
-        )
+        if args.arch in vits.__dict__:
+            student = vits.__dict__[args.arch](
+                **vit_kwargs,
+                drop_path_rate=args.drop_path_rate,
+                drop_path_uniform=args.drop_path_uniform,
+            )
+        else:
+            student = NextVitSmall()
         embed_dim = student.embed_dim
     return student, teacher, embed_dim
 
