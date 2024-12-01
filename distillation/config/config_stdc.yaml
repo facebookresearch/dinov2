@@ -79,3 +79,5 @@ checkpoints:
   monitor: val_similarity
   mode: max
   save_top_k: 3
+
+resume_from_checkpoint: /home/arda/dinov2/distillation/checkpoints/stdc/epoch=2-val_similarity=0.33.ckpt
