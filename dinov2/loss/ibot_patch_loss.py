@@ -89,17 +89,27 @@ class iBOTPatchLoss(nn.Module):
         Q *= B  # the columns must sum to 1 so that Q is an assignment
         return Q.t()
 
-    def forward(self, student_patch_tokens, teacher_patch_tokens, student_masks_flat):
+    # def forward(self, student_patch_tokens, teacher_patch_tokens, student_masks_flat):
+    #     """
+    #     Cross-entropy between softmax outputs of the teacher and student networks.
+    #     student_patch_tokens: (B, N, D) tensor
+    #     teacher_patch_tokens: (B, N, D) tensor
+    #     student_masks_flat: (B, N) tensor
+    #     """
+    #     t = teacher_patch_tokens
+    #     s = student_patch_tokens
+    #     loss = torch.sum(t * F.log_softmax(s / self.student_temp, dim=-1), dim=-1)
+    #     loss = torch.sum(loss * student_masks_flat.float(), dim=-1) / student_masks_flat.sum(dim=-1).clamp(min=1.0)
+    #     return -loss.mean()
+    def forward(self, student_patch_tokens, teacher_patch_tokens):
         """
         Cross-entropy between softmax outputs of the teacher and student networks.
-        student_patch_tokens: (B, N, D) tensor
-        teacher_patch_tokens: (B, N, D) tensor
-        student_masks_flat: (B, N) tensor
+        student_patch_tokens: (N, D) tensor - flattened patches
+        teacher_patch_tokens: (N, D) tensor - flattened patches
         """
         t = teacher_patch_tokens
         s = student_patch_tokens
         loss = torch.sum(t * F.log_softmax(s / self.student_temp, dim=-1), dim=-1)
-        loss = torch.sum(loss * student_masks_flat.float(), dim=-1) / student_masks_flat.sum(dim=-1).clamp(min=1.0)
         return -loss.mean()
 
     def forward_masked(
@@ -149,3 +159,7 @@ class iBOTPatchLoss(nn.Module):
             self.center = self.center * self.center_momentum + _t * (1 - self.center_momentum)
 
             self.updated = True
+
+
+# 1. use mse with feature maps
+# 2. MSE cosine

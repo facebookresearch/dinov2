@@ -1,7 +1,7 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-#
-# This source code is licensed under the Apache License, Version 2.0
-# found in the LICENSE file in the root directory of this source tree.
+# # Copyright (c) Meta Platforms, Inc. and affiliates.
+# #
+# # This source code is licensed under the Apache License, Version 2.0
+# # found in the LICENSE file in the root directory of this source tree.
 
 import torch
 import random
@@ -47,3 +47,4 @@ def collate_data_and_cast(samples_list, mask_ratio_tuple, mask_probability, dtyp
         "upperbound": upperbound,
         "n_masked_patches": torch.full((1,), fill_value=mask_indices_list.shape[0], dtype=torch.long),
     }
+

@@ -6,38 +6,38 @@ compute_precision:
     backbone:
       sharding_strategy: SHARD_GRAD_OP
       mixed_precision:
-        param_dtype: fp32  # Changed from fp16
+        param_dtype: fp32
         reduce_dtype: fp32
         buffer_dtype: fp32
     dino_head:
       sharding_strategy: SHARD_GRAD_OP
       mixed_precision:
-        param_dtype: fp32  # Changed from fp16
+        param_dtype: fp32
         reduce_dtype: fp32
         buffer_dtype: fp32
     ibot_head:
       sharding_strategy: SHARD_GRAD_OP
       mixed_precision:
-        param_dtype: fp32  # Changed from fp16
+        param_dtype: fp32
         reduce_dtype: fp32
         buffer_dtype: fp32
   student:
     backbone:
       sharding_strategy: SHARD_GRAD_OP
       mixed_precision:
-        param_dtype: fp32  # Changed from fp16
+        param_dtype: fp32
         reduce_dtype: fp32
         buffer_dtype: fp32
     dino_head:
       sharding_strategy: SHARD_GRAD_OP
       mixed_precision:
-        param_dtype: fp32  # Changed from fp16
+        param_dtype: fp32
         reduce_dtype: fp32
         buffer_dtype: fp32
     ibot_head:
       sharding_strategy: SHARD_GRAD_OP
       mixed_precision:
-        param_dtype: fp32  # Changed from fp16
+        param_dtype: fp32
         reduce_dtype: fp32
         buffer_dtype: fp32
 dino:
@@ -61,13 +61,13 @@ ibot:
 train:
   batch_size_per_gpu: 64
   dataset_path: CustomDataset:root=/home/arda/.cache/kagglehub/datasets/ardaerendoru/gtagta/versions/1/GTA5/GTA5/images
-  output_dir: .
+  output_dir: /storage/disk0/arda/dinov2/dinov2/train
   saveckp_freq: 20
   seed: 0
   num_workers: 10
   OFFICIAL_EPOCH_LENGTH: 1250
   cache_dataset: true
-  centering: "centering" # or "sinkhorn_knopp"
+  centering: centering
 student:
   arch: vit_large
   patch_size: 16
@@ -75,7 +75,7 @@ student:
   layerscale: 1.0e-05
   drop_path_uniform: true
   pretrained_weights: ''
-  ffn_layer: "mlp"
+  ffn_layer: mlp
   block_chunks: 0
   qkv_bias: true
   proj_bias: true
@@ -93,8 +93,8 @@ optim:
   epochs: 100
   weight_decay: 0.04
   weight_decay_end: 0.4
-  base_lr: 0.004  # learning rate for a batch size of 1024
-  lr: 0.  # will be set after applying scaling rule
+  base_lr: 0.004
+  lr: 0.001
   warmup_epochs: 10
   min_lr: 1.0e-06
   clip_grad: 3.0

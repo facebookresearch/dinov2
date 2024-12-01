@@ -9,6 +9,11 @@ import math
 import os
 from functools import partial
 
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+
+
 from fvcore.common.checkpoint import PeriodicCheckpointer
 import torch
 
@@ -19,7 +24,7 @@ from dinov2.fsdp import FSDPCheckpointer
 from dinov2.logging import MetricLogger
 from dinov2.utils.config import setup
 from dinov2.utils.utils import CosineScheduler
-
+from fvcore.common.checkpoint import Checkpointer
 from dinov2.train.ssl_meta_arch import SSLMetaArch
 
 
@@ -121,14 +126,13 @@ def apply_optim_scheduler(optimizer, lr, wd, last_layer_lr):
 
 def do_test(cfg, model, iteration):
     new_state_dict = model.teacher.state_dict()
-
-    if distributed.is_main_process():
-        iterstring = str(iteration)
-        eval_dir = os.path.join(cfg.train.output_dir, "eval", iterstring)
-        os.makedirs(eval_dir, exist_ok=True)
-        # save teacher checkpoint
-        teacher_ckp_path = os.path.join(eval_dir, "teacher_checkpoint.pth")
-        torch.save({"teacher": new_state_dict}, teacher_ckp_path)
+    
+    iterstring = str(iteration)
+    eval_dir = os.path.join(cfg.train.output_dir, "eval", iterstring)
+    os.makedirs(eval_dir, exist_ok=True)
+    # save teacher checkpoint
+    teacher_ckp_path = os.path.join(eval_dir, "teacher_checkpoint.pth")
+    torch.save({"teacher": new_state_dict}, teacher_ckp_path)
 
 
 def do_train(cfg, model, resume=False):
@@ -147,8 +151,12 @@ def do_train(cfg, model, resume=False):
         last_layer_lr_schedule,
     ) = build_schedulers(cfg)
 
-    # checkpointer
-    checkpointer = FSDPCheckpointer(model, cfg.train.output_dir, optimizer=optimizer, save_to_disk=True)
+    checkpointer = Checkpointer(
+        model, 
+        cfg.train.output_dir,
+        optimizer=optimizer,
+        save_to_disk=True
+    )
 
     start_iter = checkpointer.resume_or_load(cfg.MODEL.WEIGHTS, resume=resume).get("iteration", -1) + 1
 
@@ -191,13 +199,13 @@ def do_train(cfg, model, resume=False):
 
     # setup data loader
 
-    dataset = make_dataset(
+    dataset = make_dataset(                    # TODO: Implement your own dataset
         dataset_str=cfg.train.dataset_path,
         transform=data_transform,
         target_transform=lambda _: (),
     )
-    # sampler_type = SamplerType.INFINITE
-    sampler_type = SamplerType.SHARDED_INFINITE
+    sampler_type = SamplerType.INFINITE
+    # sampler_type = SamplerType.SHARDED_INFINITE
     data_loader = make_data_loader(
         dataset=dataset,
         batch_size=cfg.train.batch_size_per_gpu,
@@ -261,15 +269,15 @@ def do_train(cfg, model, resume=False):
 
         # perform teacher EMA update
 
-        model.update_teacher(mom)
+        # model.update_teacher(mom)
 
         # logging
 
-        if distributed.get_global_size() > 1:
-            for v in loss_dict.values():
-                torch.distributed.all_reduce(v)
-        loss_dict_reduced = {k: v.item() / distributed.get_global_size() for k, v in loss_dict.items()}
-
+        # if distributed.get_global_size() > 1:
+        #     for v in loss_dict.values():
+        #         torch.distributed.all_reduce(v)
+        # loss_dict_reduced = {k: v.item() / distributed.get_global_size() for k, v in loss_dict.items()}
+        loss_dict_reduced = {k: v.item() for k, v in loss_dict.items()}
         if math.isnan(sum(loss_dict_reduced.values())):
             logger.info("NaN detected")
             raise AssertionError
@@ -290,24 +298,32 @@ def do_train(cfg, model, resume=False):
         periodic_checkpointer.step(iteration)
 
         iteration = iteration + 1
-    metric_logger.synchronize_between_processes()
+    # metric_logger.synchronize_between_processes()
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
 
 
 def main(args):
     cfg = setup(args)
-
-    model = SSLMetaArch(cfg).to(torch.device("cuda"))
-    model.prepare_for_distributed_training()
+    
+    model = SSLMetaArch(cfg).to(torch.device("cuda:1"))
+    # model.prepare_for_distributed_training()
 
     logger.info("Model:\n{}".format(model))
+
+    # Initialize checkpointer
+    checkpointer = Checkpointer(
+        model,
+        save_dir=cfg.train.output_dir,
+        save_to_disk=True
+    )
+
     if args.eval_only:
-        iteration = (
-            FSDPCheckpointer(model, save_dir=cfg.train.output_dir)
-            .resume_or_load(cfg.MODEL.WEIGHTS, resume=not args.no_resume)
-            .get("iteration", -1)
-            + 1
-        )
+        # Load checkpoint if weights are specified
+        if cfg.MODEL.WEIGHTS:
+            checkpoint = checkpointer.resume_or_load(cfg.MODEL.WEIGHTS, resume=not args.no_resume)
+            iteration = checkpoint.get("iteration", -1) + 1
+        else:
+            iteration = 0
         return do_test(cfg, model, f"manual_{iteration}")
 
     do_train(cfg, model, resume=not args.no_resume)

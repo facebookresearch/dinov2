@@ -15,7 +15,54 @@ from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler
 
 
 logger = logging.getLogger("dinov2")
+from torch.utils.data import Dataset
+from PIL import Image
+import os
+import torch
+from typing import Tuple, List, Optional
+import torch 
+from PIL import Image
+import os
+import numpy as np
+import random
+from torch.utils.data import Dataset
 
+
+class CustomDataset(Dataset):
+    def __init__(self, root: str, transform=None, target_transform=None):
+        self.root_path = root
+        self.transform = transform
+        self.target_transform = target_transform
+        self.data = self._load_data()
+
+    def _load_data(self):
+        """Load all image paths from the directory."""
+        image_paths = []
+        for filename in os.listdir(self.root_path):
+            if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                image_paths.append(os.path.join(self.root_path, filename))
+        return sorted(image_paths)  # Sort for consistency
+
+    def __getitem__(self, index: int) -> Tuple[torch.Tensor, Any]:
+        img_path = self.data[index]
+        img = Image.open(img_path).convert('RGB')
+        
+        if self.transform:
+            img = self.transform(img)
+        else:
+            img = torch.from_numpy(np.array(img)).permute(2, 0, 1).float() / 255
+            
+        target = ()
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+            
+        return img, target
+
+    def __len__(self) -> int:
+        return len(self.data)
+    
+
+    
 
 class SamplerType(Enum):
     DISTRIBUTED = 0
@@ -58,6 +105,8 @@ def _parse_dataset_str(dataset_str: str):
             kwargs["split"] = ImageNet.Split[kwargs["split"]]
     elif name == "ImageNet22k":
         class_ = ImageNet22k
+    elif name == "CustomDataset":  # Add this section
+        class_ = CustomDataset
     else:
         raise ValueError(f'Unsupported dataset "{name}"')
 
