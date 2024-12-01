@@ -11,3 +11,4 @@ dist/
 .vscode/
 **/logs/
 **/checkpoints/
+distillation_old/
