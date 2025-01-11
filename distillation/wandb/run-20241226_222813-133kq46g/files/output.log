@@ -1,0 +1,28 @@
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/2
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 202, in <module>
+[rank1]:     main()
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 198, in main
+[rank1]:     trainer.train()
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 159, in train
+[rank1]:     self.trainer.fit(self.distillation_module, self.data_module)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 538, in fit
+[rank1]:     call._call_and_handle_interrupt(
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+[rank1]:     return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+[rank1]:     return function(*args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 574, in _fit_impl
+[rank1]:     self._run(model, ckpt_path=ckpt_path)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 945, in _run
+[rank1]:     call._call_configure_model(self)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 119, in _call_configure_model
+[rank1]:     _call_lightning_module_hook(trainer, "configure_model")
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 167, in _call_lightning_module_hook
+[rank1]:     output = fn(*args, **kwargs)
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train/distillation_module.py", line 149, in configure_model
+[rank1]:     self.proj_student = self.proj_student.to(self.device)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1931, in __getattr__
+[rank1]:     raise AttributeError(
+[rank1]: AttributeError: 'DistillationModule' object has no attribute 'proj_student'

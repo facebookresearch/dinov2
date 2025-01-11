@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 201, in <module>
+    main()
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 196, in main
+    trainer = DistillationTrainer(config=config)
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 53, in __init__
+    self.trainer = self._create_trainer()
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 135, in _create_trainer
+    return L.Trainer(
+  File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/utilities/argparse.py", line 70, in insert_env_defaults
+    return fn(self, **kwargs)
+TypeError: Trainer.__init__() got an unexpected keyword argument 'track_grad_norm'
+Traceback (most recent call last):
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 201, in <module>
+    main()
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 196, in main
+    trainer = DistillationTrainer(config=config)
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 53, in __init__
+    self.trainer = self._create_trainer()
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 135, in _create_trainer
+    return L.Trainer(
+  File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/utilities/argparse.py", line 70, in insert_env_defaults
+    return fn(self, **kwargs)
+TypeError: Trainer.__init__() got an unexpected keyword argument 'track_grad_norm'

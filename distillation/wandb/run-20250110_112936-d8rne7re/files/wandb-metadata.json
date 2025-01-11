@@ -1,0 +1,51 @@
+{
+  "os":  "Linux-6.8.0-49-generic-x86_64-with-glibc2.39",
+  "python":  "CPython 3.10.15",
+  "startedAt":  "2025-01-10T11:29:36.161366Z",
+  "args":  [
+    "--config=/home/arda/dinov2/distillation/config/config_original.yaml"
+  ],
+  "program":  "/storage/disk0/arda/dinov2/distillation/train.py",
+  "codePath":  "distillation/train.py",
+  "git":  {
+    "remote":  "https://github.com/ardaerendogru/dinov2.git",
+    "commit":  "69b50c8ff2cea529bf7598da8a8a2d49773aca53"
+  },
+  "email":  "ardaerendogru2632@gmail.com",
+  "root":  "/storage/disk0/arda/dinov2/distillation",
+  "host":  "focoos",
+  "executable":  "/home/arda/miniconda3/envs/distillation/bin/python",
+  "codePathLocal":  "train.py",
+  "cpu_count":  48,
+  "cpu_count_logical":  96,
+  "gpu":  "NVIDIA L40S",
+  "gpu_count":  2,
+  "disk":  {
+    "/":  {
+      "total":  "105089261568",
+      "used":  "90706690048"
+    }
+  },
+  "memory":  {
+    "total":  "540647890944"
+  },
+  "cpu":  {
+    "count":  48,
+    "countLogical":  96
+  },
+  "gpu_nvidia":  [
+    {
+      "name":  "NVIDIA L40S",
+      "memoryTotal":  "48305799168",
+      "cudaCores":  18176,
+      "architecture":  "Ada"
+    },
+    {
+      "name":  "NVIDIA L40S",
+      "memoryTotal":  "48305799168",
+      "cudaCores":  18176,
+      "architecture":  "Ada"
+    }
+  ],
+  "cudaVersion":  "12.4"
+}

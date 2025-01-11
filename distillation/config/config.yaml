@@ -1,6 +1,8 @@
 student:
   model_name: resnet
   student_key: res5
+  pretrained: true
+  # checkpoint_path: /home/arda/dinov2/distillation/checkpoints/stdc_encoder.pth
   kwargs:
     depth: 50
     out_features: ['res5']
@@ -25,7 +27,7 @@ teacher:
     kernel_size: 1
     stride: 1
     padding: 0
-    activation: ReLU
+    # activation: ReLU
 
 
 data_transform:
@@ -38,39 +40,41 @@ data_transform:
 
 
 
+
 optimizer:
   type: AdamW
   kwargs:
-    lr: 2.5e-4
+    lr: 0.0001
     betas: [0.9, 0.999]
     weight_decay: 0.05
   scheduler:
     type: CosineAnnealingLR
     kwargs:
       T_max: 30
-      eta_min: 1e-6
+      eta_min: 0.00001
     monitor: val_loss
     interval: epoch
     frequency: 1
 
 loss:
   alpha: 1.0
-  beta: 1.0
+  beta: 0.0
 
 
 train:
   name: resnet50
   max_epochs: 30
   accelerator: gpu
-  devices: [1]
+  devices: [0,1]
   num_nodes: 1
-  strategy: auto
-
+  strategy: ddp
+  # resume_from_checkpoint: /home/arda/dinov2/distillation/logs/resnet50/distillation/version_58/checkpoints/epoch=26-val_similarity=0.56.ckpt
 
 data_loader:
-  data_dir: /home/arda/data/train2017
-  batch_size: 32
-  num_workers: 8
+  data_dir: /storage/disk2/sam_resized
+  batch_size: 256
+  num_workers: 16
+  
 
 
 feature_matcher:
@@ -84,3 +88,4 @@ checkpoints:
   monitor: val_similarity
   mode: max
   save_top_k: 3
+

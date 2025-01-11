@@ -1,0 +1,1 @@
+{"train_loss":221.56606,"_step":5579,"val_loss":218.69301,"_wandb":{"runtime":38633},"train_mse_loss":221.56606,"global_step":54899,"_runtime":38610.387586569,"_timestamp":1.7345821326025796e+09,"train_similarity":0.5672538,"train_cosine_loss":0.43274617,"epoch":29,"val_similarity":0.57286525}

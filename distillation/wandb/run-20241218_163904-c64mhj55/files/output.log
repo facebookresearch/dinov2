@@ -1,0 +1,11 @@
+[34m[1mwandb[0m: logging graph, to disable use `wandb.watch(log_graph=False)`
+Traceback (most recent call last):
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 205, in <module>
+    main()
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 200, in main
+    trainer = DistillationTrainer(config=config)
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 55, in __init__
+    self.trainer = self._create_trainer()
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 130, in _create_trainer
+    os.makedirs(wandb_logger.experiment.save_dir, exist_ok=True)
+AttributeError: 'Run' object has no attribute 'save_dir'

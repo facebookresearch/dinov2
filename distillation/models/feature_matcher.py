@@ -7,9 +7,7 @@ class FeatureMatcher(nn.Module):
         out_channels: int,
         kernel_size: int = 1,
         stride: int = 1,
-        padding: int = 0,
-        activation: str = 'ReLU'
-    ):
+        padding: int = 0    ):
         super().__init__()
         
         layers = []
@@ -20,12 +18,9 @@ class FeatureMatcher(nn.Module):
                 kernel_size=kernel_size,
                 stride=stride,
                 padding=padding,
-                bias=False
+                bias=True
             )
         )
-        
-        if activation:
-            layers.append(getattr(nn, activation)())
         
         self.matcher = nn.Sequential(*layers)
     

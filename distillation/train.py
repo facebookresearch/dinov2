@@ -5,19 +5,30 @@ from typing import Dict, Any
 from dataclasses import dataclass
 import argparse
 sys.path.append('../')
-import pytorch_lightning as pl
+import lightning as L
 import torch
 import yaml
-from pytorch_lightning.callbacks import ModelCheckpoint
-from pytorch_lightning.loggers import TensorBoardLogger
+from lightning.pytorch.callbacks import ModelCheckpoint
+from lightning.pytorch.loggers import TensorBoardLogger
 from omegaconf import OmegaConf
 
 from models import DINOv2ViT
 from models.model_wrapper import ModelWrapper
 from train.distillation_module import DistillationModule
-from datasets.GTA5 import CustomDataModule
+from distillation.datasets.CustomDataset import CustomDataModule
 from dinov2.data.augmentations import DataAugmentationDINO
+import tempfile
+import wandb
+os.environ["NCCL_P2P_DISABLE"] = "1"
+# Create a temporary directory in your home or storage
+USER_TMP = '/storage/disk0/arda/tmp'
+os.makedirs(USER_TMP, exist_ok=True)
 
+# Set multiple environment variables to ensure temp files go to the right place
+os.environ['TMPDIR'] = USER_TMP
+os.environ['TEMP'] = USER_TMP
+os.environ['TMP'] = USER_TMP
+tempfile.tempdir = USER_TMP
 
 @dataclass
 class TrainingConfig:
@@ -42,6 +53,7 @@ class DistillationTrainer:
         self.teacher, self.student = self._create_models()
         self.distillation_module = self._create_distillation_module()
         self.trainer = self._create_trainer()
+        self.checkpoint_path = self.cfg.train.get('resume_from_checkpoint', None)
 
     def _setup_training_config(self) -> TrainingConfig:
         """Setup training configuration."""
@@ -81,7 +93,7 @@ class DistillationTrainer:
             model_type=self.cfg['student']['model_name'],
             n_patches=self.cfg.teacher.n_patches,
             target_feature=[self.cfg['student']['student_key']],
-            feature_matcher_config=self.cfg['teacher']['feature_matcher'],
+            feature_matcher_config=self.cfg['feature_matcher'],
             **self.cfg['student']['kwargs']
         )
         return teacher, student
@@ -94,33 +106,38 @@ class DistillationTrainer:
             cfg=self.cfg
         )
 
-    def _create_trainer(self) -> pl.Trainer:
-        """Create PyTorch Lightning trainer."""
+        
+    def _create_trainer(self) -> L.Trainer:
+        """Create Lightning trainer."""
+        experiment_dir = f"logs/{self.cfg.train.name}"
+        wandb_config = OmegaConf.to_container(self.cfg, resolve=True)
+        wandb.init(
+            config=wandb_config,  # Log config to wandb
+            project=self.cfg.wandb.project,
+            name=self.cfg.wandb.name,
+            tags=self.cfg.wandb.tags,
+            notes=self.cfg.wandb.notes,
+            sync_tensorboard=True
+        )
+        wandb.define_metric("global_step")
+
+
+        logger = TensorBoardLogger(experiment_dir, name="distillation",default_hp_metric=False )
+        logger.log_hyperparams(self.cfg)
+
+        # Log tensorboard directory to wandb for easy access        
+        # Set up checkpoint callback to save in the same experiment directory
         checkpoint_callback = ModelCheckpoint(
-            dirpath=self.cfg.checkpoints.dirpath + f"/{self.cfg.train.name}",
+            dirpath=os.path.join(logger.log_dir, "checkpoints"),
             filename="{epoch}-{val_similarity:.2f}",
             monitor=self.cfg.checkpoints.monitor,
             mode=self.cfg.checkpoints.mode,
-            save_top_k=self.cfg.checkpoints.save_top_k
+            save_top_k=self.cfg.checkpoints.save_top_k,
+            save_last=True
         )
 
-        logger = TensorBoardLogger(f"logs/{self.cfg.train.name}", name="distillation")
-        logger.log_hyperparams(self.cfg)
-        checkpoint_dir = os.path.join(self.cfg.checkpoints.dirpath, self.cfg.train.name)
-        checkpoint_path = self._find_latest_checkpoint(checkpoint_dir)
-
-        # Also save config as text for better readability
-        experiment_dir = logger.log_dir
-        os.makedirs(experiment_dir, exist_ok=True)
-        config_path = os.path.join(experiment_dir, 'config.yaml')
-        OmegaConf.save(self.cfg, config_path)
-
-        if checkpoint_path:
-            print(f"Resuming training from checkpoint: {checkpoint_path}")
-        else:
-            print("Starting training from scratch")
-
-        return pl.Trainer(
+        return L.Trainer(
+            default_root_dir='/storage/disk0/arda/tmp',  # Set default root dir
             max_epochs=self.training_config.max_epochs,
             accelerator=self.cfg.train.accelerator,
             devices=self.cfg.train.devices,
@@ -129,28 +146,19 @@ class DistillationTrainer:
             precision=self.training_config.precision,
             callbacks=[checkpoint_callback],
             logger=logger,
-            resume_from_checkpoint=checkpoint_path
+            num_sanity_val_steps=0,
+            # resume_from_checkpoint=self.cfg.train.get('resume_from_checkpoint', None)
+
         )
 
     def train(self):
         """Execute training pipeline."""
-        self.trainer.fit(self.distillation_module, self.data_module)
-
-    def _find_latest_checkpoint(self, checkpoint_dir: str) -> str | None:
-        """Find the latest checkpoint in the specified directory."""
-        if not os.path.exists(checkpoint_dir):
-            return None
-            
-        checkpoints = [f for f in os.listdir(checkpoint_dir) if f.endswith('.ckpt')]
-        if not checkpoints:
-            return None
-            
-        # Sort by modification time, newest first
-        latest_checkpoint = max(
-            checkpoints,
-            key=lambda x: os.path.getmtime(os.path.join(checkpoint_dir, x))
-        )
-        return os.path.join(checkpoint_dir, latest_checkpoint)
+        if self.checkpoint_path:
+            print(f"Resuming training from checkpoint: {self.checkpoint_path}")
+            self.trainer.fit(self.distillation_module, self.data_module, ckpt_path=self.checkpoint_path)
+        else:
+            print("Starting training from scratch.")
+            self.trainer.fit(self.distillation_module, self.data_module)
 
 def setup_environment():
     """Setup environment configurations."""

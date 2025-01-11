@@ -1,0 +1,66 @@
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/2
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1]
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1243, in _try_get_data
+[rank1]:     data = self._data_queue.get(timeout=timeout)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/multiprocessing/queues.py", line 113, in get
+[rank1]:     if not self._poll(timeout):
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/multiprocessing/connection.py", line 257, in poll
+[rank1]:     return self._poll(timeout)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/multiprocessing/connection.py", line 424, in _poll
+[rank1]:     r = wait([self], timeout)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/multiprocessing/connection.py", line 931, in wait
+[rank1]:     ready = selector.select(timeout)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/selectors.py", line 416, in select
+[rank1]:     fd_event_list = self._selector.poll(timeout)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/utils/data/_utils/signal_handling.py", line 73, in handler
+[rank1]:     _error_if_any_worker_fails()
+[rank1]: RuntimeError: DataLoader worker (pid 4034294) is killed by signal: Killed.
+
+[rank1]: The above exception was the direct cause of the following exception:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 200, in <module>
+[rank1]:     main()
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 196, in main
+[rank1]:     trainer.train()
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 157, in train
+[rank1]:     self.trainer.fit(self.distillation_module, self.data_module)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 538, in fit
+[rank1]:     call._call_and_handle_interrupt(
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+[rank1]:     return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+[rank1]:     return function(*args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 574, in _fit_impl
+[rank1]:     self._run(model, ckpt_path=ckpt_path)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 981, in _run
+[rank1]:     results = self._run_stage()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1025, in _run_stage
+[rank1]:     self.fit_loop.run()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 205, in run
+[rank1]:     self.advance()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 363, in advance
+[rank1]:     self.epoch_loop.run(self._data_fetcher)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 140, in run
+[rank1]:     self.advance(data_fetcher)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 212, in advance
+[rank1]:     batch, _, __ = next(data_fetcher)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 133, in __next__
+[rank1]:     batch = super().__next__()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 60, in __next__
+[rank1]:     batch = next(self.iterator)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 341, in __next__
+[rank1]:     out = next(self._iterator)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 78, in __next__
+[rank1]:     out[i] = next(self.iterators[i])
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 701, in __next__
+[rank1]:     data = self._next_data()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1448, in _next_data
+[rank1]:     idx, data = self._get_data()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1412, in _get_data
+[rank1]:     success, data = self._try_get_data()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1256, in _try_get_data
+[rank1]:     raise RuntimeError(
+[rank1]: RuntimeError: DataLoader worker (pid(s) 4034294) exited unexpectedly

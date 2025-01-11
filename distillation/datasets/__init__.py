@@ -1,2 +1,2 @@
-from .GTA5 import CustomDataModule, GTA5Dataset
+from .CustomDataset import CustomDataModule
 from .collate_fn import collate_data_and_cast

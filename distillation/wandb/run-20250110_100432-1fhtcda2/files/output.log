@@ -1,0 +1,33 @@
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/2
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1]
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 200, in <module>
+[rank1]:     main()
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 196, in main
+[rank1]:     trainer.train()
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 157, in train
+[rank1]:     self.trainer.fit(self.distillation_module, self.data_module)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 538, in fit
+[rank1]:     call._call_and_handle_interrupt(
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+[rank1]:     return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+[rank1]:     return function(*args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 574, in _fit_impl
+[rank1]:     self._run(model, ckpt_path=ckpt_path)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 981, in _run
+[rank1]:     results = self._run_stage()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1025, in _run_stage
+[rank1]:     self.fit_loop.run()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 206, in run
+[rank1]:     self.on_advance_end()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 378, in on_advance_end
+[rank1]:     call._call_callback_hooks(trainer, "on_train_epoch_end", monitoring_callbacks=True)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 218, in _call_callback_hooks
+[rank1]:     fn(trainer, trainer.lightning_module, *args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/callbacks/model_checkpoint.py", line 325, in on_train_epoch_end
+[rank1]:     self._save_topk_checkpoint(trainer, monitor_candidates)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/callbacks/model_checkpoint.py", line 383, in _save_topk_checkpoint
+[rank1]:     raise MisconfigurationException(m)
+[rank1]: lightning.fabric.utilities.exceptions.MisconfigurationException: `ModelCheckpoint(monitor='val_similarity')` could not find the monitored key in the returned metrics: ['train_spatial_loss', 'train_frequency_loss', 'train_cosine_similarity', 'train_loss', 'val_spatial_loss', 'val_frequency_loss', 'val_cosine_similarity', 'val_loss', 'epoch', 'step']. HINT: Did you call `log('val_similarity', value)` in the `LightningModule`?

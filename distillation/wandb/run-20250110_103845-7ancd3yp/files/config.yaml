@@ -1,0 +1,155 @@
+_wandb:
+    value:
+        cli_version: 0.19.1
+        m:
+            - "1": global_step
+              "6":
+                - 3
+              "7": []
+        python_version: 3.10.15
+        t:
+            "1":
+                - 1
+                - 41
+                - 55
+                - 106
+            "2":
+                - 1
+                - 41
+                - 55
+                - 106
+            "3":
+                - 7
+                - 13
+                - 15
+                - 16
+                - 23
+                - 35
+                - 55
+            "4": 3.10.15
+            "5": 0.19.1
+            "8":
+                - 5
+            "12": 0.19.1
+            "13": linux-x86_64
+checkpoints:
+    value:
+        dirpath: checkpoints
+        mode: max
+        monitor: val_cosine_similarity
+        save_top_k: 3
+data_loader:
+    value:
+        batch_size: 32
+        data_dir: /home/arda/data/train2017
+        num_workers: 8
+data_transform:
+    value:
+        global_crops_scale:
+            - 0.32
+            - 1
+        global_crops_size:
+            - 224
+            - 224
+        local_crops_scale:
+            - 0.05
+            - 0.32
+        local_crops_size:
+            - 224
+            - 224
+        n_global_crops: 2
+        n_local_crops: 8
+feature_matcher:
+    value:
+        kernel_size: 1
+        out_channels: 2048
+        padding: 0
+        stride: 1
+loss:
+    value:
+        losses:
+            - kwargs:
+                alpha:
+                    - 0.6
+                    - 0.4
+                dis_freq: high
+                name: scalekd
+                num_heads: 16
+                pos_dims: 1536
+                pos_hw:
+                    - 16
+                    - 16
+                query_hw:
+                    - 16
+                    - 16
+                self_query: true
+                softmax_scale:
+                    - 5
+                    - 5
+                student_dims: 2048
+                teacher_dims: 1536
+                use_this: true
+                window_shapes:
+                    - 1
+                    - 1
+              type: scalekd
+              weight: 1
+            - kwargs:
+                student_dims: 2048
+                teacher_dims: 1536
+              type: dinoiser
+              weight: 1
+optimizer:
+    value:
+        kwargs:
+            betas:
+                - 0.9
+                - 0.999
+            lr: 0.00025
+            weight_decay: 0.05
+        scheduler:
+            frequency: 1
+            interval: epoch
+            kwargs:
+                T_max: 30
+                eta_min: 2.5e-05
+            monitor: val_loss
+            type: CosineAnnealingLR
+        type: AdamW
+student:
+    value:
+        checkpoint_path: /home/arda/dinov2/distillation/checkpoints/resnet50_distilled.pth
+        kwargs:
+            depth: 50
+            freeze_at: 0
+            norm_type: BN
+            out_features:
+                - res5
+        model_name: resnet
+        pretrained: true
+        student_key: res5
+teacher:
+    value:
+        model_name: dinov2_vitg14
+        n_patches: 256
+        out_dim: 1536
+        teacher_key: feature_map
+train:
+    value:
+        accelerator: gpu
+        devices:
+            - 0
+            - 1
+        max_epochs: 30
+        name: resnet50
+        num_nodes: 1
+        strategy: ddp
+wandb:
+    value:
+        name: resnet50
+        notes: Knowledge distillation from DINOv2 to ResNet50
+        project: dinov2-distillation
+        tags:
+            - distillation
+            - resnet
+            - dinov2

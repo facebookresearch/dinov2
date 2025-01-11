@@ -1,0 +1,37 @@
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/2
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 2 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+
+  | Name    | Type         | Params | Mode
+-------------------------------------------------
+0 | student | ModelWrapper | 27.7 M | train
+1 | teacher | DINOv2ViT    | 1.1 B  | train
+2 | loss_fn | CompoundLoss | 0      | train
+3 | loss_0  | ScaleKD      | 141 M  | train
+-------------------------------------------------
+169 M     Trainable params
+1.1 B     Non-trainable params
+1.3 B     Total params
+5,224.217 Total estimated model params size (MB)
+790       Modules in train mode
+0         Modules in eval mode
+Epoch 0:   0%|                                                                                                        | 0/1830 [00:00<?, ?it/s]{'spatial_loss': tensor(309.2357, device='cuda:0', grad_fn=<MulBackward0>), 'frequency_loss': tensor(204.8258, device='cuda:0', grad_fn=<MulBackward0>), 'cosine_similarity': tensor(-0.0066, device='cuda:0', grad_fn=<MeanBackward0>), 'loss': tensor(514.0615, device='cuda:0', grad_fn=<AddBackward0>)}
+Epoch 0:   0%|                                                                                    | 1/1830 [00:05<2:49:34,  0.18it/s, v_num=11]{'spatial_loss': tensor(305.7183, device='cuda:0', grad_fn=<MulBackward0>), 'frequency_loss': tensor(204.7213, device='cuda:0', grad_fn=<MulBackward0>), 'cosine_similarity': tensor(0.0048, device='cuda:0', grad_fn=<MeanBackward0>), 'loss': tensor(510.4396, device='cuda:0', grad_fn=<AddBackward0>)}
+Epoch 0:   0%|                                                                                    | 2/1830 [00:06<1:38:12,  0.31it/s, v_num=11]{'spatial_loss': tensor(302.0717, device='cuda:0', grad_fn=<MulBackward0>), 'frequency_loss': tensor(204.5843, device='cuda:0', grad_fn=<MulBackward0>), 'cosine_similarity': tensor(0.0167, device='cuda:0', grad_fn=<MeanBackward0>), 'loss': tensor(506.6560, device='cuda:0', grad_fn=<AddBackward0>)}
+Epoch 0:   0%|▏                                                                                   | 3/1830 [00:07<1:13:56,  0.41it/s, v_num=11]{'spatial_loss': tensor(297.8787, device='cuda:0', grad_fn=<MulBackward0>), 'frequency_loss': tensor(204.4561, device='cuda:0', grad_fn=<MulBackward0>), 'cosine_similarity': tensor(0.0303, device='cuda:0', grad_fn=<MeanBackward0>), 'loss': tensor(502.3348, device='cuda:0', grad_fn=<AddBackward0>)}
+Epoch 0:   0%|▏                                                                                   | 4/1830 [00:08<1:01:45,  0.49it/s, v_num=11]{'spatial_loss': tensor(292.6427, device='cuda:0', grad_fn=<MulBackward0>), 'frequency_loss': tensor(204.2894, device='cuda:0', grad_fn=<MulBackward0>), 'cosine_similarity': tensor(0.0474, device='cuda:0', grad_fn=<MeanBackward0>), 'loss': tensor(496.9321, device='cuda:0', grad_fn=<AddBackward0>)}
+Epoch 0:   0%|▏                                                                                     | 5/1830 [00:08<54:27,  0.56it/s, v_num=11]{'spatial_loss': tensor(288.4066, device='cuda:0', grad_fn=<MulBackward0>), 'frequency_loss': tensor(204.1878, device='cuda:0', grad_fn=<MulBackward0>), 'cosine_similarity': tensor(0.0612, device='cuda:0', grad_fn=<MeanBackward0>), 'loss': tensor(492.5945, device='cuda:0', grad_fn=<AddBackward0>)}
+Epoch 0:   0%|▎                                                                                     | 6/1830 [00:09<49:35,  0.61it/s, v_num=11]{'spatial_loss': tensor(285.0583, device='cuda:0', grad_fn=<MulBackward0>), 'frequency_loss': tensor(204.1437, device='cuda:0', grad_fn=<MulBackward0>), 'cosine_similarity': tensor(0.0721, device='cuda:0', grad_fn=<MeanBackward0>), 'loss': tensor(489.2020, device='cuda:0', grad_fn=<AddBackward0>)}
+Epoch 0:   0%|▎                                                                                     | 7/1830 [00:10<46:03,  0.66it/s, v_num=11]{'spatial_loss': tensor(280.2302, device='cuda:0', grad_fn=<MulBackward0>), 'frequency_loss': tensor(204.0324, device='cuda:0', grad_fn=<MulBackward0>), 'cosine_similarity': tensor(0.0878, device='cuda:0', grad_fn=<MeanBackward0>), 'loss': tensor(484.2626, device='cuda:0', grad_fn=<AddBackward0>)}
+Epoch 0:   0%|▍                                                                                     | 8/1830 [00:11<43:24,  0.70it/s, v_num=11]
+
+Detected KeyboardInterrupt, attempting graceful shutdown ...

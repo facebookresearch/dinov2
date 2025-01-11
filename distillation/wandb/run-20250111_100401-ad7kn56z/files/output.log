@@ -1,0 +1,81 @@
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/2
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 2 processes
+----------------------------------------------------------------------------------------------------
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 200, in <module>
+[rank0]:     main()
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 196, in main
+[rank0]:     trainer.train()
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 157, in train
+[rank0]:     self.trainer.fit(self.distillation_module, self.data_module)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 538, in fit
+[rank0]:     call._call_and_handle_interrupt(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+[rank0]:     return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+[rank0]:     return function(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 574, in _fit_impl
+[rank0]:     self._run(model, ckpt_path=ckpt_path)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 938, in _run
+[rank0]:     self.__setup_profiler()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1071, in __setup_profiler
+[rank0]:     self.profiler.setup(stage=self.state.fn, local_rank=local_rank, log_dir=self.log_dir)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1233, in log_dir
+[rank0]:     dirpath = self.strategy.broadcast(dirpath)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/ddp.py", line 307, in broadcast
+[rank0]:     torch.distributed.broadcast_object_list(obj, src, group=_group.WORLD)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/distributed/c10d_logger.py", line 83, in wrapper
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py", line 3129, in broadcast_object_list
+[rank0]:     broadcast(object_sizes_tensor, src=src, group=group)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/distributed/c10d_logger.py", line 83, in wrapper
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py", line 2417, in broadcast
+[rank0]:     work = default_pg.broadcast([tensor], opts)
+[rank0]: torch.distributed.DistBackendError: NCCL error in: ../torch/csrc/distributed/c10d/NCCLUtils.hpp:317, unhandled system error (run with NCCL_DEBUG=INFO for details), NCCL version 2.21.5
+[rank0]: ncclSystemError: System call (e.g. socket, malloc) or external library call failed or device error.
+[rank0]: Last error:
+[rank0]: nvmlInit_v2() failed: Driver/library version mismatch
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 200, in <module>
+[rank0]:     main()
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 196, in main
+[rank0]:     trainer.train()
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 157, in train
+[rank0]:     self.trainer.fit(self.distillation_module, self.data_module)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 538, in fit
+[rank0]:     call._call_and_handle_interrupt(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+[rank0]:     return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+[rank0]:     return function(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 574, in _fit_impl
+[rank0]:     self._run(model, ckpt_path=ckpt_path)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 938, in _run
+[rank0]:     self.__setup_profiler()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1071, in __setup_profiler
+[rank0]:     self.profiler.setup(stage=self.state.fn, local_rank=local_rank, log_dir=self.log_dir)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1233, in log_dir
+[rank0]:     dirpath = self.strategy.broadcast(dirpath)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/ddp.py", line 307, in broadcast
+[rank0]:     torch.distributed.broadcast_object_list(obj, src, group=_group.WORLD)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/distributed/c10d_logger.py", line 83, in wrapper
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py", line 3129, in broadcast_object_list
+[rank0]:     broadcast(object_sizes_tensor, src=src, group=group)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/distributed/c10d_logger.py", line 83, in wrapper
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py", line 2417, in broadcast
+[rank0]:     work = default_pg.broadcast([tensor], opts)
+[rank0]: torch.distributed.DistBackendError: NCCL error in: ../torch/csrc/distributed/c10d/NCCLUtils.hpp:317, unhandled system error (run with NCCL_DEBUG=INFO for details), NCCL version 2.21.5
+[rank0]: ncclSystemError: System call (e.g. socket, malloc) or external library call failed or device error.
+[rank0]: Last error:
+[rank0]: nvmlInit_v2() failed: Driver/library version mismatch

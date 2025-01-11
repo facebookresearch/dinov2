@@ -1,0 +1,1 @@
+{"_wandb":{"runtime":408},"global_step":399,"_timestamp":1.7366078979521346e+09,"_step":39,"train_cosine_similarity":0.22539482,"train_loss":61.42845,"epoch":0,"train_spatial_loss":31.727829,"train_frequency_loss":28.913736,"_runtime":381.85885858}

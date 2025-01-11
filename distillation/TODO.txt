@@ -1,0 +1,16 @@
+class ScaleKD(nn.Module):
+    def __init__(self, ...):
+        # Add adaptive scaling parameters
+
+        
+    def get_spat_loss(self, preds_S, preds_T):
+        # Apply adaptive channel and spatial weighting
+        channel_weights = F.softmax(self.channel_weights, dim=0)
+        spatial_weights = F.softmax(self.spatial_weights.view(-1), dim=0).view(preds_T.shape[2:])
+        
+        # Weight features by importance
+        preds_S = preds_S * channel_weights.view(1, -1, 1, 1)
+        preds_T = preds_T * channel_weights.view(1, -1, 1, 1)
+        
+        preds_S = preds_S * spatial_weights.view(1, 1, *spatial_weights.shape)
+        preds_T = preds_T * spatial_weights.view(1, 1, *spatial_weights.shape)

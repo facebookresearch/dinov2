@@ -1,0 +1,1 @@
+{"epoch":3,"_runtime":6421.365531131,"_step":618,"train_loss":NaN,"train_mse_loss":1,"val_similarity":1,"_timestamp":1.7355894963951504e+09,"global_step":6099,"train_cosine_loss":NaN,"_wandb":{"runtime":6431},"val_loss":1,"train_similarity":1}

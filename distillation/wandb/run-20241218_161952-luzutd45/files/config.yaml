@@ -1,0 +1,5874 @@
+_wandb:
+    value:
+        cli_version: 0.19.1
+        m:
+            - "1": parameters/model.model.res2.0.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": trainer/global_step
+              "6":
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.shortcut.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.shortcut.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.stem.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.shortcut.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": epoch
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.shortcut.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": train/learning_rate
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.shortcut.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/feature_matchers.res5.matcher.0.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.shortcut.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.stem.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.shortcut.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/feature_matchers.res5.matcher.0.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.shortcut.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.shortcut.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.stem.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.shortcut.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/feature_matchers.res5.matcher.0.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.stem.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": train/global_step
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.shortcut.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.shortcut.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.shortcut.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.shortcut.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/feature_matchers.res5.matcher.0.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.stem.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": train/student_feat_norm
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.stem.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.stem.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.stem.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.shortcut.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.stem.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.shortcut.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.shortcut.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/feature_matchers.res5.matcher.0.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.shortcut.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.shortcut.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.shortcut.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.shortcut.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": train/epoch
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.shortcut.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.shortcut.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.shortcut.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.shortcut.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": train/cosine_loss
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.shortcut.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.shortcut.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.shortcut.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.shortcut.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.shortcut.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.shortcut.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.shortcut.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.shortcut.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.shortcut.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.shortcut.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.stem.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.shortcut.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.shortcut.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.shortcut.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.shortcut.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.shortcut.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.shortcut.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.shortcut.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.shortcut.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.shortcut.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": train/loss
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.shortcut.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.stem.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": train/teacher_feat_norm
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.shortcut.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.shortcut.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.shortcut.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.shortcut.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.shortcut.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.shortcut.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/feature_matchers.res5.matcher.0.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": train/similarity
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.stem.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.shortcut.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.stem.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.shortcut.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.shortcut.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.shortcut.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.shortcut.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.stem.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.stem.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": train/mse_loss
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.stem.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.shortcut.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.shortcut.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.shortcut.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.shortcut.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.shortcut.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.shortcut.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv2.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.shortcut.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.shortcut.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.shortcut.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.stem.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.shortcut.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.shortcut.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.3.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.5.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.shortcut.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv1.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv3.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.2.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.1.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.stem.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.shortcut.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.1.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.0.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.1.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.3.conv1.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv3.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.0.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.0.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv3.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.shortcut.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.1.conv3.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.2.conv2.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.3.conv2.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv1.norm.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.1.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.2.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.0.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv3.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv1.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv2.norm.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.1.conv1.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.2.conv1.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.shortcut.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.1.conv2.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv2.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv3.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res5.0.shortcut.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.2.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.0.conv2.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res2.2.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.4.conv2.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res5.0.conv3.norm.bias.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.2.conv1.norm.bias.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res2.2.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res4.1.conv1.norm.weight.values
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.4.conv3.weight.bins
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": gradients/model.model.res3.0.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv3.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res4.5.conv1.norm.bias._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": parameters/model.model.res3.3.conv2.weight._type
+              "5": 2
+              "6":
+                - 1
+                - 3
+              "7": []
+        python_version: 3.10.15
+        t:
+            "1":
+                - 1
+                - 41
+                - 55
+                - 106
+            "2":
+                - 1
+                - 41
+                - 55
+                - 106
+            "3":
+                - 1
+                - 7
+                - 13
+                - 15
+                - 23
+                - 55
+                - 66
+            "4": 3.10.15
+            "5": 0.19.1
+            "8":
+                - 5
+            "12": 0.19.1
+            "13": linux-x86_64
+checkpoints:
+    value: '{''dirpath'': ''checkpoints'', ''monitor'': ''val_similarity'', ''mode'': ''max'', ''save_top_k'': 3}'
+data_loader:
+    value: '{''data_dir'': ''/home/arda/data/train2017'', ''batch_size'': 32, ''num_workers'': 8}'
+data_transform:
+    value: '{''n_global_crops'': 2, ''n_local_crops'': 8, ''global_crops_scale'': [0.32, 1.0], ''local_crops_scale'': [0.05, 0.32], ''global_crops_size'': [224, 224], ''local_crops_size'': [224, 224]}'
+feature_matcher:
+    value: '{''out_channels'': 1536, ''kernel_size'': 1, ''stride'': 1, ''padding'': 0}'
+loss:
+    value: '{''alpha'': 1.0, ''beta'': 0.0}'
+optimizer:
+    value: '{''type'': ''AdamW'', ''kwargs'': {''lr'': 0.00025, ''betas'': [0.9, 0.999], ''weight_decay'': 0.05}, ''scheduler'': {''type'': ''CosineAnnealingLR'', ''kwargs'': {''T_max'': 30, ''eta_min'': 2.5e-05}, ''monitor'': ''val_loss'', ''interval'': ''epoch'', ''frequency'': 1}}'
+student:
+    value: '{''model_name'': ''resnet'', ''student_key'': ''res5'', ''pretrained'': True, ''kwargs'': {''depth'': 50, ''out_features'': [''res5''], ''freeze_at'': 0, ''norm_type'': ''BN''}}'
+teacher:
+    value: '{''model_name'': ''dinov2_vitg14'', ''teacher_key'': ''feature_map'', ''out_dim'': 1536, ''n_patches'': 256, ''feature_matcher'': {''out_channels'': 1536, ''kernel_size'': 1, ''stride'': 1, ''padding'': 0}}'
+train:
+    value: '{''name'': ''resnet50'', ''max_epochs'': 30, ''accelerator'': ''gpu'', ''devices'': [0, 1], ''num_nodes'': 1, ''strategy'': ''ddp''}'
+wandb:
+    value: '{''project'': ''dinov2-distillation'', ''name'': None, ''group'': ''resnet50'', ''tags'': [''distillation'', ''resnet'', ''dinov2''], ''log_model'': True, ''log_freq'': 100, ''viz_frequency'': 100, ''notes'': ''Knowledge distillation from DINOv2 to ResNet50'', ''track'': {''gradients'': True, ''parameters'': True, ''system'': True}}'

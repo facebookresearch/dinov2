@@ -1,0 +1,1 @@
+{"val_loss":236.35895,"epoch":1,"train_loss":238.77795,"_timestamp":1.7347672946700068e+09,"_step":192,"train_mse_loss":238.77795,"train_similarity":0.5336368,"train_cosine_loss":0.46636316,"_wandb":{"runtime":1409},"global_step":1899,"val_similarity":0.53836155,"_runtime":1381.24683903}

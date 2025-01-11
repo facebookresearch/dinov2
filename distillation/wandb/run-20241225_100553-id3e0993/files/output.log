@@ -1,0 +1,7 @@
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/2
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1]
+teacher_features: torch.Size([64, 1536, 256])
+student_features: torch.Size([64, 1536, 256])
+teacher_features: torch.Size([64, 256, 256])
+student_features: torch.Size([64, 256, 256])

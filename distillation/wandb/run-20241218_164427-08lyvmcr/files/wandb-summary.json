@@ -1,0 +1,1 @@
+{"hp_metric":-1,"_timestamp":1.7345406422735727e+09,"_runtime":377.96676332,"global_step":499,"train_mse_loss":291.16003,"train_loss":291.16003,"_wandb":{"runtime":384},"epoch":0,"_step":51,"train_cosine_loss":0.5686718,"train_similarity":0.43132812}

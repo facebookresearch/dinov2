@@ -1,0 +1,7 @@
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/2
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1]
+x dtype: torch.float16
+proj_student weight dtype: torch.float32
+pos_embed dtype: torch.float32
+proj_pos weight dtype: torch.float32

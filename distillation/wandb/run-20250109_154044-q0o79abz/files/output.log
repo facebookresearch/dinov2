@@ -1,0 +1,27 @@
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/2
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 2 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+
+  | Name    | Type         | Params | Mode
+-------------------------------------------------
+0 | student | ModelWrapper | 27.7 M | train
+1 | teacher | DINOv2ViT    | 1.1 B  | train
+2 | loss_fn | ScaleKD      | 141 M  | train
+-------------------------------------------------
+169 M     Trainable params
+1.1 B     Non-trainable params
+1.3 B     Total params
+5,224.217 Total estimated model params size (MB)
+789       Modules in train mode
+0         Modules in eval mode
+Epoch 0:   0%|                                                                                                                                                                          | 0/29 [00:00<?, ?it/s]
+[rank: 1] Child process with PID 4033110 terminated with code 1. Forcefully terminating all other processes to avoid zombies 🧟

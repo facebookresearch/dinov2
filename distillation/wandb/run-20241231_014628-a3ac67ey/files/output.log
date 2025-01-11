@@ -1,0 +1,29 @@
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/2
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 2 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+
+  | Name    | Type         | Params | Mode
+-------------------------------------------------
+0 | student | ModelWrapper | 27.7 M | train
+1 | teacher | DINOv2ViT    | 1.1 B  | train
+2 | scalekd | ScaleKD      | 141 M  | train
+-------------------------------------------------
+169 M     Trainable params
+1.1 B     Non-trainable params
+1.3 B     Total params
+5,224.217 Total estimated model params size (MB)
+789       Modules in train mode
+0         Modules in eval mode
+Epoch 4: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1830/1830 [34:35<00:00,  0.88it/s, v_num=69]
+Validation DataLoader 0:  53%|████████████████████████████████████████████████████████████                                                      | 10/19 [00:12<00:11,  0.81it/s]
+
+Detected KeyboardInterrupt, attempting graceful shutdown ...

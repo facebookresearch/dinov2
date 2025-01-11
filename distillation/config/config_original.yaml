@@ -1,0 +1,90 @@
+student:
+  model_name: resnet
+  student_key: res5
+  pretrained: true
+  checkpoint_path: /home/arda/dinov2/distillation/checkpoints/resnet50.pth
+  kwargs:
+    depth: 50
+    out_features: ['res5']
+    freeze_at: 0
+    norm_type: BN
+##Example for STDC
+# kwargs:
+#   base_channels: 64
+#   layers: [4, 5, 3]
+#   block_num: 4
+#   block_type: cat
+#   use_conv_last: false
+
+
+teacher:
+  model_name: dinov2_vitg14
+  teacher_key: feature_map
+  out_dim: 1536
+  n_patches: 256
+
+
+
+data_transform:
+  n_global_crops: 2
+  n_local_crops: 8
+  global_crops_scale: [0.32, 1.0]
+  local_crops_scale: [0.05, 0.32]
+  global_crops_size: [224, 224]
+  local_crops_size: [224, 224]
+
+
+
+
+optimizer:
+  type: AdamW
+  kwargs:
+    lr: 2.5e-4
+    betas: [0.9, 0.999]
+    weight_decay: 0.05
+  scheduler:
+    type: CosineAnnealingLR
+    kwargs:
+      T_max: 30
+      eta_min: 2.5e-5
+    monitor: val_loss
+    interval: epoch
+    frequency: 1
+
+loss:
+  alpha: 1.0
+  beta: 0.0 #second run
+
+
+train:
+  name: resnet50
+  max_epochs: 30
+  accelerator: gpu
+  devices: [0,1]
+  num_nodes: 1
+  strategy: ddp
+  # resume_from_checkpoint: "/path/to/your/checkpoint.ckpt"  # Add this line
+data_loader:
+  data_dir: /home/arda/data/train2017
+  batch_size: 32
+  num_workers: 8
+  
+
+
+feature_matcher:
+  out_channels: 2048
+  kernel_size: 1
+  stride: 1
+  padding: 0
+
+checkpoints:
+  dirpath: checkpoints
+  monitor: val_similarity
+  mode: max
+  save_top_k: 3
+
+wandb:
+  project: "dinov2-distillation"  # Project name in W&B
+  name: resnet50  # Run name (will use train.name if null)
+  tags: ["distillation", "resnet", "dinov2"]  # Searchable tags
+  notes: "Knowledge distillation from DINOv2 to ResNet50"  # Run description

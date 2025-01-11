@@ -28,9 +28,10 @@ class DINOv2ViT(nn.Module):
         # print(f" cls_token shape: {cls_token.shape}")
         # Convert patch embeddings to feature map format
         B, N, D = patch_embeddings.shape
-        P = int(math.sqrt(N))  # -1 for cls token
-        feature_map = patch_embeddings.reshape(B, P, P, D).permute(0, 3, 1, 2)  # [B, D, P, P]
-
+        H = x.shape[2]//14
+        W = x.shape[3]//14
+        feature_map = patch_embeddings.reshape(B, H, W, D).permute(0, 3, 1, 2)  # [B, D, P, P]
+        
         return {
             'patch_embeddings': patch_embeddings,  # Per-patch embeddings excluding CLS
             'embedding': cls_token,        # CLS token embedding

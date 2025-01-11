@@ -13,6 +13,7 @@ class ModelWrapper(nn.Module):
         n_patches: int = 256,
         target_feature: list[str] = ['res5'],
         feature_matcher_config: Optional[Dict[str, Any]] = None,
+        checkpoint_path: Optional[str] = None,
         **model_kwargs
     ):
         super().__init__()
@@ -24,6 +25,9 @@ class ModelWrapper(nn.Module):
             self.model = STDCWrapper(**model_kwargs)
         else:
             raise ValueError(f"Unsupported model type: {model_type}")
+        
+        if checkpoint_path:
+            self.load_checkpoint(checkpoint_path)
         
         self.n_patches = n_patches
         self.target_features = target_feature
@@ -43,7 +47,14 @@ class ModelWrapper(nn.Module):
                 self.feature_matchers[feat] = FeatureMatcher(**matcher_config)
         else:
             self.feature_matchers = nn.ModuleDict()
-    
+
+        # self.out_channels = feature_matcher_config['out_channels']
+        # self.batch_norm_layers = nn.ModuleDict({
+        #         feat: nn.BatchNorm2d(self.out_channels)
+        #         for feat in self.target_features
+        #     })
+
+
     def forward(self, x):
         # Get features from model
         features = self.model.get_features(x)
@@ -51,18 +62,29 @@ class ModelWrapper(nn.Module):
         # Process target features if matchers exist
         matched_features = {}
         if self.feature_matchers:
-            for feat in self.target_features:
-                if feat in features:
-                    target_feature = features[feat]
-                    
-                    # Interpolate to match patch size
-                    patch_size = int(np.sqrt(self.n_patches))
-                    interpolated = torch.nn.functional.interpolate(
-                        target_feature,
-                        size=(patch_size, patch_size),
-                        mode='bilinear',
-                        align_corners=False
-                    )
-                    matched_features[feat] = self.feature_matchers[feat](interpolated)
+                for feat in self.target_features:
+                    if feat in features:
+                        target_feature = features[feat]
+                        
+                        # Interpolate to match patch size
+                        patch_size = int(np.sqrt(self.n_patches))
+                        interpolated = torch.nn.functional.interpolate(
+                            target_feature,
+                            size=(patch_size, patch_size),
+                            mode='bilinear',
+                            align_corners=False
+                        )
+                        matched = self.feature_matchers[feat](interpolated)
+                        
+                        # # Apply the corresponding BatchNorm layer
+                        # bn = self.batch_norm_layers[feat]
+                        # matched = bn(matched)
+                        matched_features[feat] = matched
         
         return matched_features
+
+    def load_checkpoint(self, checkpoint_path: str):
+        """Load model checkpoint."""
+        checkpoint = torch.load(checkpoint_path)
+        print("Loading student checkpoint from: ", checkpoint_path)
+        self.load_state_dict(checkpoint)

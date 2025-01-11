@@ -19,7 +19,7 @@ teacher:
     kernel_size: 1
     stride: 1
     padding: 0
-    activation: ReLU
+    # activation: ReLU
 
 
 data_transform:
@@ -35,21 +35,21 @@ data_transform:
 optimizer:
   type: AdamW
   kwargs:
-    lr: 2.5e-4
+    lr: 0.00025
     betas: [0.9, 0.999]
     weight_decay: 0.05
   scheduler:
     type: CosineAnnealingLR
     kwargs:
       T_max: 30
-      eta_min: 1e-6
+      eta_min: 0.000025
     monitor: val_loss
     interval: epoch
     frequency: 1
 
 loss:
   alpha: 1.0
-  beta: 1.0
+  beta: 0.0
 
 
 train:
@@ -62,7 +62,7 @@ train:
 
 
 data_loader:
-  data_dir: /home/arda/data/train2017
+  data_dir: /home/arda/.cache/kagglehub/datasets/ardaerendoru/gtagta/versions/1/GTA5/GTA5/images
   batch_size: 32
   num_workers: 8
 

@@ -1,0 +1,1 @@
+{"train_loss":390.65787,"train_cosine_similarity":0.30933914,"_wandb":{"runtime":1624},"epoch":0,"_step":184,"val_cosine_similarity":0.31149054,"_timestamp":1.7364500315861297e+09,"global_step":1829,"train_spatial_loss":212.17104,"val_frequency_loss":177.31384,"val_loss":389.55066,"train_frequency_loss":177.76079,"_runtime":1624.247209703,"val_spatial_loss":211.51012}

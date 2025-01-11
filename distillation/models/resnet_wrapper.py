@@ -2,8 +2,8 @@ from typing import List, Optional
 import torch.nn as nn
 from .base import BaseModel
 from .resnet import ResNet, BasicStem, make_resnet_stages
-
-class ResNetWrapper(BaseModel):
+from torchvision import models
+class   ResNetWrapper(BaseModel):
     def __init__(
         self,
         depth: int = 50,
@@ -32,12 +32,14 @@ class ResNetWrapper(BaseModel):
             out_features=out_features,
             freeze_at=freeze_at
         )
-        
+        self.depth = 50
         self._feature_channels = self.model._out_feature_channels
-    
+
     def get_features(self, x):
         return self.model(x)
     
     @property
     def feature_channels(self):
         return self._feature_channels
+    
+    

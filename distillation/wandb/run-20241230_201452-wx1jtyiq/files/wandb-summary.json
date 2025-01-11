@@ -1,0 +1,1 @@
+{"_timestamp":1.7355928848916843e+09,"_wandb":{"runtime":3206},"_runtime":3194.82521173,"train_cosine_loss":NaN,"global_step":3249,"train_loss":NaN,"train_mse_loss":1,"train_similarity":1,"val_loss":1,"val_similarity":1,"_step":327,"epoch":1}
