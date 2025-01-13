@@ -1,0 +1,1 @@
+{"train_loss":34.809113,"train_frequency_loss":16.450983,"_step":44,"_runtime":427.034147653,"global_step":449,"_timestamp":1.736613124989345e+09,"train_spatial_loss":17.684322,"_wandb":{"runtime":432},"epoch":0,"train_cosine_similarity":0.5682538}

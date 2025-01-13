@@ -1,0 +1,1 @@
+{"train_loss_DinoiserLoss":0.67806387,"global_step":199,"train_loss":40.071526,"train_loss_ScaleKD":39.39346,"_step":27,"_wandb":{"runtime":241},"train_cosine_similarity":0.501941,"epoch":0,"_runtime":209.972834135,"_timestamp":1.736613369179304e+09,"train_frequency_loss":18.992962,"train_spatial_loss":20.400497}

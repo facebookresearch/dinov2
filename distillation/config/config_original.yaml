@@ -1,11 +1,11 @@
 student:
   model_name: resnet
-  student_key: res5
+  student_key: [res5, res4]
   pretrained: true
-  checkpoint_path: /home/arda/dinov2/distillation/checkpoints/resnet50.pth
+  checkpoint_path: /home/arda/dinov2/distillation/checkpoints/resnet50_distilled.pth
   kwargs:
     depth: 50
-    out_features: ['res5']
+    out_features: ['res4', 'res5']
     freeze_at: 0
     norm_type: BN
 ##Example for STDC
@@ -18,9 +18,9 @@ student:
 
 
 teacher:
-  model_name: dinov2_vitg14
+  model_name: dinov2_vitb14
   teacher_key: feature_map
-  out_dim: 1536
+  out_dim: 768
   n_patches: 256
 
 
@@ -52,8 +52,46 @@ optimizer:
     frequency: 1
 
 loss:
-  alpha: 1.0
-  beta: 0.0 #second run
+  losses:
+    - type: scalekd
+      weight: 1.0
+      kwargs:
+        alpha: [0.08, 0.06]
+        student_dims: 1024
+        teacher_dims: 768
+        query_hw: [16, 16]
+        pos_hw: [16, 16]
+        pos_dims: 768
+        window_shapes: [1, 1]
+        self_query: true
+        softmax_scale: [5.0, 5.0]
+        dis_freq: high
+        num_heads: 16
+        name: scalekd_n
+        use_this: true
+    - type: scalekd
+      weight: 1.0
+      kwargs:
+        alpha: [0.08, 0.06]
+        student_dims: 2048
+        teacher_dims: 768
+        query_hw: [16, 16]
+        pos_hw: [16, 16]
+        pos_dims: 768
+        window_shapes: [1, 1]
+        self_query: true
+        softmax_scale: [5.0, 5.0]
+        dis_freq: high
+        num_heads: 24
+        name: scalekd_last
+        use_this: true
+
+    # - type: dinoiser
+    #   weight: 1.0
+    #   kwargs:
+    #     student_dims: 2048
+    #     teacher_dims: 1536
+
 
 
 train:
@@ -62,7 +100,7 @@ train:
   accelerator: gpu
   devices: [0,1]
   num_nodes: 1
-  strategy: ddp
+  strategy: ddp_find_unused_parameters_true
   # resume_from_checkpoint: "/path/to/your/checkpoint.ckpt"  # Add this line
 data_loader:
   data_dir: /home/arda/data/train2017
@@ -72,14 +110,20 @@ data_loader:
 
 
 feature_matcher:
-  out_channels: 2048
-  kernel_size: 1
-  stride: 1
-  padding: 0
+  res5:
+    out_channels: 2048
+    kernel_size: 1
+    stride: 1
+    padding: 0
+  res4:
+    out_channels: 1024
+    kernel_size: 1
+    stride: 1
+    padding: 0
 
 checkpoints:
   dirpath: checkpoints
-  monitor: val_similarity
+  monitor: val_loss
   mode: max
   save_top_k: 3
 

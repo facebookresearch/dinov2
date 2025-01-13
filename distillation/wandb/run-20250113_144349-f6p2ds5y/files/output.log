@@ -1,0 +1,1866 @@
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/2
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 2 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+
+  | Name    | Type         | Params | Mode
+-------------------------------------------------
+0 | student | ModelWrapper | 28.8 M | train
+1 | teacher | DINOv2ViT    | 86.6 M | eval
+2 | losses  | ModuleList   | 132 M  | train
+-------------------------------------------------
+160 M     Trainable params
+86.6 M    Non-trainable params
+247 M     Total params
+990.041   Total estimated model params size (MB)
+232       Modules in train mode
+212       Modules in eval mode
+Epoch 0:   0%|                                                                                                                                | 0/1830 [00:00<?, ?it/s]=== Parameter Usage Debug ===
+Parameter: student.model.model.stem.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64, 3, 7, 7])
+Parameter: student.model.model.stem.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.stem.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.0.shortcut.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 64, 1, 1])
+Parameter: student.model.model.res2.0.shortcut.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res2.0.shortcut.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res2.0.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64, 64, 1, 1])
+Parameter: student.model.model.res2.0.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.0.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.0.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64, 64, 3, 3])
+Parameter: student.model.model.res2.0.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.0.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.0.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 64, 1, 1])
+Parameter: student.model.model.res2.0.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res2.0.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res2.1.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64, 256, 1, 1])
+Parameter: student.model.model.res2.1.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.1.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.1.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64, 64, 3, 3])
+Parameter: student.model.model.res2.1.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.1.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.1.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 64, 1, 1])
+Parameter: student.model.model.res2.1.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res2.1.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res2.2.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64, 256, 1, 1])
+Parameter: student.model.model.res2.2.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.2.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.2.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64, 64, 3, 3])
+Parameter: student.model.model.res2.2.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.2.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([64])
+Parameter: student.model.model.res2.2.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 64, 1, 1])
+Parameter: student.model.model.res2.2.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res2.2.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res3.0.shortcut.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512, 256, 1, 1])
+Parameter: student.model.model.res3.0.shortcut.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res3.0.shortcut.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res3.0.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128, 256, 1, 1])
+Parameter: student.model.model.res3.0.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.0.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.0.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128, 128, 3, 3])
+Parameter: student.model.model.res3.0.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.0.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.0.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512, 128, 1, 1])
+Parameter: student.model.model.res3.0.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res3.0.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res3.1.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128, 512, 1, 1])
+Parameter: student.model.model.res3.1.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.1.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.1.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128, 128, 3, 3])
+Parameter: student.model.model.res3.1.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.1.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.1.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512, 128, 1, 1])
+Parameter: student.model.model.res3.1.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res3.1.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res3.2.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128, 512, 1, 1])
+Parameter: student.model.model.res3.2.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.2.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.2.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128, 128, 3, 3])
+Parameter: student.model.model.res3.2.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.2.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.2.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512, 128, 1, 1])
+Parameter: student.model.model.res3.2.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res3.2.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res3.3.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128, 512, 1, 1])
+Parameter: student.model.model.res3.3.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.3.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.3.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128, 128, 3, 3])
+Parameter: student.model.model.res3.3.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.3.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([128])
+Parameter: student.model.model.res3.3.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512, 128, 1, 1])
+Parameter: student.model.model.res3.3.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res3.3.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res4.0.shortcut.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024, 512, 1, 1])
+Parameter: student.model.model.res4.0.shortcut.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.0.shortcut.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.0.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 512, 1, 1])
+Parameter: student.model.model.res4.0.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.0.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.0.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 256, 3, 3])
+Parameter: student.model.model.res4.0.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.0.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.0.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024, 256, 1, 1])
+Parameter: student.model.model.res4.0.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.0.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.1.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 1024, 1, 1])
+Parameter: student.model.model.res4.1.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.1.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.1.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 256, 3, 3])
+Parameter: student.model.model.res4.1.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.1.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.1.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024, 256, 1, 1])
+Parameter: student.model.model.res4.1.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.1.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.2.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 1024, 1, 1])
+Parameter: student.model.model.res4.2.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.2.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.2.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 256, 3, 3])
+Parameter: student.model.model.res4.2.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.2.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.2.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024, 256, 1, 1])
+Parameter: student.model.model.res4.2.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.2.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.3.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 1024, 1, 1])
+Parameter: student.model.model.res4.3.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.3.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.3.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 256, 3, 3])
+Parameter: student.model.model.res4.3.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.3.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.3.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024, 256, 1, 1])
+Parameter: student.model.model.res4.3.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.3.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.4.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 1024, 1, 1])
+Parameter: student.model.model.res4.4.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.4.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.4.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 256, 3, 3])
+Parameter: student.model.model.res4.4.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.4.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.4.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024, 256, 1, 1])
+Parameter: student.model.model.res4.4.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.4.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.5.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 1024, 1, 1])
+Parameter: student.model.model.res4.5.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.5.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.5.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 256, 3, 3])
+Parameter: student.model.model.res4.5.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.5.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256])
+Parameter: student.model.model.res4.5.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024, 256, 1, 1])
+Parameter: student.model.model.res4.5.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res4.5.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: student.model.model.res5.0.shortcut.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048, 1024, 1, 1])
+Parameter: student.model.model.res5.0.shortcut.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: student.model.model.res5.0.shortcut.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: student.model.model.res5.0.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512, 1024, 1, 1])
+Parameter: student.model.model.res5.0.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res5.0.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res5.0.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512, 512, 3, 3])
+Parameter: student.model.model.res5.0.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res5.0.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res5.0.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048, 512, 1, 1])
+Parameter: student.model.model.res5.0.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: student.model.model.res5.0.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: student.model.model.res5.1.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512, 2048, 1, 1])
+Parameter: student.model.model.res5.1.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res5.1.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res5.1.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512, 512, 3, 3])
+Parameter: student.model.model.res5.1.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res5.1.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res5.1.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048, 512, 1, 1])
+Parameter: student.model.model.res5.1.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: student.model.model.res5.1.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: student.model.model.res5.2.conv1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512, 2048, 1, 1])
+Parameter: student.model.model.res5.2.conv1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res5.2.conv1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res5.2.conv2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512, 512, 3, 3])
+Parameter: student.model.model.res5.2.conv2.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res5.2.conv2.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([512])
+Parameter: student.model.model.res5.2.conv3.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048, 512, 1, 1])
+Parameter: student.model.model.res5.2.conv3.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: student.model.model.res5.2.conv3.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: student.feature_matchers.res5.matcher.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048, 2048, 1, 1])
+Parameter: student.feature_matchers.res5.matcher.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: student.feature_matchers.res4.matcher.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024, 1024, 1, 1])
+Parameter: student.feature_matchers.res4.matcher.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: teacher.model.cls_token
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([1, 1, 768])
+Parameter: teacher.model.pos_embed
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([1, 1370, 768])
+Parameter: teacher.model.mask_token
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([1, 768])
+Parameter: teacher.model.patch_embed.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3, 14, 14])
+Parameter: teacher.model.patch_embed.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.0.norm1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.0.norm1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.0.attn.qkv.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304, 768])
+Parameter: teacher.model.blocks.0.attn.qkv.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304])
+Parameter: teacher.model.blocks.0.attn.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: teacher.model.blocks.0.attn.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.0.ls1.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.0.norm2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.0.norm2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.0.mlp.fc1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: teacher.model.blocks.0.mlp.fc1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: teacher.model.blocks.0.mlp.fc2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: teacher.model.blocks.0.mlp.fc2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.0.ls2.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.1.norm1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.1.norm1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.1.attn.qkv.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304, 768])
+Parameter: teacher.model.blocks.1.attn.qkv.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304])
+Parameter: teacher.model.blocks.1.attn.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: teacher.model.blocks.1.attn.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.1.ls1.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.1.norm2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.1.norm2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.1.mlp.fc1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: teacher.model.blocks.1.mlp.fc1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: teacher.model.blocks.1.mlp.fc2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: teacher.model.blocks.1.mlp.fc2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.1.ls2.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.2.norm1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.2.norm1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.2.attn.qkv.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304, 768])
+Parameter: teacher.model.blocks.2.attn.qkv.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304])
+Parameter: teacher.model.blocks.2.attn.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: teacher.model.blocks.2.attn.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.2.ls1.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.2.norm2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.2.norm2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.2.mlp.fc1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: teacher.model.blocks.2.mlp.fc1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: teacher.model.blocks.2.mlp.fc2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: teacher.model.blocks.2.mlp.fc2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.2.ls2.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.3.norm1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.3.norm1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.3.attn.qkv.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304, 768])
+Parameter: teacher.model.blocks.3.attn.qkv.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304])
+Parameter: teacher.model.blocks.3.attn.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: teacher.model.blocks.3.attn.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.3.ls1.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.3.norm2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.3.norm2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.3.mlp.fc1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: teacher.model.blocks.3.mlp.fc1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: teacher.model.blocks.3.mlp.fc2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: teacher.model.blocks.3.mlp.fc2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.3.ls2.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.4.norm1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.4.norm1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.4.attn.qkv.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304, 768])
+Parameter: teacher.model.blocks.4.attn.qkv.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304])
+Parameter: teacher.model.blocks.4.attn.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: teacher.model.blocks.4.attn.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.4.ls1.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.4.norm2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.4.norm2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.4.mlp.fc1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: teacher.model.blocks.4.mlp.fc1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: teacher.model.blocks.4.mlp.fc2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: teacher.model.blocks.4.mlp.fc2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.4.ls2.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.5.norm1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.5.norm1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.5.attn.qkv.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304, 768])
+Parameter: teacher.model.blocks.5.attn.qkv.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304])
+Parameter: teacher.model.blocks.5.attn.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: teacher.model.blocks.5.attn.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.5.ls1.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.5.norm2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.5.norm2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.5.mlp.fc1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: teacher.model.blocks.5.mlp.fc1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: teacher.model.blocks.5.mlp.fc2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: teacher.model.blocks.5.mlp.fc2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.5.ls2.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.6.norm1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.6.norm1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.6.attn.qkv.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304, 768])
+Parameter: teacher.model.blocks.6.attn.qkv.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304])
+Parameter: teacher.model.blocks.6.attn.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: teacher.model.blocks.6.attn.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.6.ls1.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.6.norm2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.6.norm2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.6.mlp.fc1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: teacher.model.blocks.6.mlp.fc1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: teacher.model.blocks.6.mlp.fc2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: teacher.model.blocks.6.mlp.fc2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.6.ls2.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.7.norm1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.7.norm1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.7.attn.qkv.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304, 768])
+Parameter: teacher.model.blocks.7.attn.qkv.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304])
+Parameter: teacher.model.blocks.7.attn.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: teacher.model.blocks.7.attn.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.7.ls1.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.7.norm2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.7.norm2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.7.mlp.fc1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: teacher.model.blocks.7.mlp.fc1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: teacher.model.blocks.7.mlp.fc2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: teacher.model.blocks.7.mlp.fc2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.7.ls2.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.8.norm1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.8.norm1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.8.attn.qkv.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304, 768])
+Parameter: teacher.model.blocks.8.attn.qkv.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304])
+Parameter: teacher.model.blocks.8.attn.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: teacher.model.blocks.8.attn.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.8.ls1.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.8.norm2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.8.norm2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.8.mlp.fc1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: teacher.model.blocks.8.mlp.fc1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: teacher.model.blocks.8.mlp.fc2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: teacher.model.blocks.8.mlp.fc2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.8.ls2.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.9.norm1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.9.norm1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.9.attn.qkv.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304, 768])
+Parameter: teacher.model.blocks.9.attn.qkv.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304])
+Parameter: teacher.model.blocks.9.attn.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: teacher.model.blocks.9.attn.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.9.ls1.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.9.norm2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.9.norm2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.9.mlp.fc1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: teacher.model.blocks.9.mlp.fc1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: teacher.model.blocks.9.mlp.fc2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: teacher.model.blocks.9.mlp.fc2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.9.ls2.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.10.norm1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.10.norm1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.10.attn.qkv.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304, 768])
+Parameter: teacher.model.blocks.10.attn.qkv.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304])
+Parameter: teacher.model.blocks.10.attn.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: teacher.model.blocks.10.attn.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.10.ls1.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.10.norm2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.10.norm2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.10.mlp.fc1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: teacher.model.blocks.10.mlp.fc1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: teacher.model.blocks.10.mlp.fc2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: teacher.model.blocks.10.mlp.fc2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.10.ls2.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.11.norm1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.11.norm1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.11.attn.qkv.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304, 768])
+Parameter: teacher.model.blocks.11.attn.qkv.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([2304])
+Parameter: teacher.model.blocks.11.attn.proj.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: teacher.model.blocks.11.attn.proj.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.11.ls1.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.11.norm2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.11.norm2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.11.mlp.fc1.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: teacher.model.blocks.11.mlp.fc1.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: teacher.model.blocks.11.mlp.fc2.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: teacher.model.blocks.11.mlp.fc2.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.blocks.11.ls2.gamma
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.norm.weight
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: teacher.model.norm.bias
+  - requires_grad: False
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_0.pos_embed
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1, 1024, 16, 16])
+Parameter: losses.0.projector_0.proj_pos.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 768, 1, 1])
+Parameter: losses.0.projector_0.proj_pos.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_0.proj_student.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024, 1024, 3, 3])
+Parameter: losses.0.projector_0.proj_student.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: losses.0.projector_0.proj_student.1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: losses.0.projector_0.proj_student.1.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: losses.0.projector_0.pos_attention.q.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: losses.0.projector_0.pos_attention.q.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_0.pos_attention.k.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 1024])
+Parameter: losses.0.projector_0.pos_attention.k.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_0.pos_attention.v.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 1024])
+Parameter: losses.0.projector_0.pos_attention.v.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_0.pos_attention.proj.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: losses.0.projector_0.pos_attention.proj.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_0.ffn.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: losses.0.projector_0.ffn.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: losses.0.projector_0.ffn.2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: losses.0.projector_0.ffn.2.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_0.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_0.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_0.query.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 768])
+Parameter: losses.0.projector_1.pos_embed
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1, 1024, 16, 16])
+Parameter: losses.0.projector_1.proj_pos.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 768, 1, 1])
+Parameter: losses.0.projector_1.proj_pos.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_1.proj_student.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024, 1024, 3, 3])
+Parameter: losses.0.projector_1.proj_student.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: losses.0.projector_1.proj_student.1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: losses.0.projector_1.proj_student.1.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1024])
+Parameter: losses.0.projector_1.pos_attention.q.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: losses.0.projector_1.pos_attention.q.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_1.pos_attention.k.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 1024])
+Parameter: losses.0.projector_1.pos_attention.k.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_1.pos_attention.v.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 1024])
+Parameter: losses.0.projector_1.pos_attention.v.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_1.pos_attention.proj.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: losses.0.projector_1.pos_attention.proj.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_1.ffn.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: losses.0.projector_1.ffn.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: losses.0.projector_1.ffn.2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: losses.0.projector_1.ffn.2.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.0.projector_1.query.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 768])
+Parameter: losses.1.projector_0.pos_embed
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1, 2048, 16, 16])
+Parameter: losses.1.projector_0.proj_pos.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 768, 1, 1])
+Parameter: losses.1.projector_0.proj_pos.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_0.proj_student.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048, 2048, 3, 3])
+Parameter: losses.1.projector_0.proj_student.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: losses.1.projector_0.proj_student.1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: losses.1.projector_0.proj_student.1.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: losses.1.projector_0.pos_attention.q.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: losses.1.projector_0.pos_attention.q.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_0.pos_attention.k.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 2048])
+Parameter: losses.1.projector_0.pos_attention.k.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_0.pos_attention.v.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 2048])
+Parameter: losses.1.projector_0.pos_attention.v.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_0.pos_attention.proj.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: losses.1.projector_0.pos_attention.proj.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_0.ffn.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: losses.1.projector_0.ffn.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: losses.1.projector_0.ffn.2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: losses.1.projector_0.ffn.2.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_0.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_0.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_0.query.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 768])
+Parameter: losses.1.projector_1.pos_embed
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([1, 2048, 16, 16])
+Parameter: losses.1.projector_1.proj_pos.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 768, 1, 1])
+Parameter: losses.1.projector_1.proj_pos.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_1.proj_student.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048, 2048, 3, 3])
+Parameter: losses.1.projector_1.proj_student.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: losses.1.projector_1.proj_student.1.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: losses.1.projector_1.proj_student.1.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([2048])
+Parameter: losses.1.projector_1.pos_attention.q.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: losses.1.projector_1.pos_attention.q.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_1.pos_attention.k.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 2048])
+Parameter: losses.1.projector_1.pos_attention.k.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_1.pos_attention.v.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 2048])
+Parameter: losses.1.projector_1.pos_attention.v.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_1.pos_attention.proj.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 768])
+Parameter: losses.1.projector_1.pos_attention.proj.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_1.ffn.0.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([3072, 768])
+Parameter: losses.1.projector_1.ffn.0.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([3072])
+Parameter: losses.1.projector_1.ffn.2.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768, 3072])
+Parameter: losses.1.projector_1.ffn.2.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_1.norm.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_1.norm.bias
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([768])
+Parameter: losses.1.projector_1.query.weight
+  - requires_grad: True
+  - has_grad: False
+  - shape: torch.Size([256, 768])
+Total parameters: 426
+Unused parameters: 426
+========================
+Epoch 0:   0%|                                                                                                            | 1/1830 [00:05<2:54:50,  0.17it/s, v_num=68]
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 200, in <module>
+[rank0]:     main()
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 196, in main
+[rank0]:     trainer.train()
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 157, in train
+[rank0]:     self.trainer.fit(self.distillation_module, self.data_module)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 538, in fit
+[rank0]:     call._call_and_handle_interrupt(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+[rank0]:     return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+[rank0]:     return function(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 574, in _fit_impl
+[rank0]:     self._run(model, ckpt_path=ckpt_path)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 981, in _run
+[rank0]:     results = self._run_stage()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1025, in _run_stage
+[rank0]:     self.fit_loop.run()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 205, in run
+[rank0]:     self.advance()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 363, in advance
+[rank0]:     self.epoch_loop.run(self._data_fetcher)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 140, in run
+[rank0]:     self.advance(data_fetcher)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 250, in advance
+[rank0]:     batch_output = self.automatic_optimization.run(trainer.optimizers[0], batch_idx, kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 190, in run
+[rank0]:     self._optimizer_step(batch_idx, closure)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 268, in _optimizer_step
+[rank0]:     call._call_lightning_module_hook(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 167, in _call_lightning_module_hook
+[rank0]:     output = fn(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/core/module.py", line 1306, in optimizer_step
+[rank0]:     optimizer.step(closure=optimizer_closure)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/core/optimizer.py", line 153, in step
+[rank0]:     step_output = self._strategy.optimizer_step(self._optimizer, closure, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/ddp.py", line 270, in optimizer_step
+[rank0]:     optimizer_output = super().optimizer_step(optimizer, closure, model, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 238, in optimizer_step
+[rank0]:     return self.precision_plugin.optimizer_step(optimizer, model=model, closure=closure, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/plugins/precision/amp.py", line 78, in optimizer_step
+[rank0]:     closure_result = closure()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 144, in __call__
+[rank0]:     self._result = self.closure(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 129, in closure
+[rank0]:     step_output = self._step_fn()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 317, in _training_step
+[rank0]:     training_step_output = call._call_strategy_hook(trainer, "training_step", *kwargs.values())
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 319, in _call_strategy_hook
+[rank0]:     output = fn(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 389, in training_step
+[rank0]:     return self._forward_redirection(self.model, self.lightning_module, "training_step", *args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 640, in __call__
+[rank0]:     wrapper_output = wrapper_module(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1639, in forward
+[rank0]:     inputs, kwargs = self._pre_forward(*inputs, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1528, in _pre_forward
+[rank0]:     if torch.is_grad_enabled() and self.reducer._rebuild_buckets():
+[rank0]: RuntimeError: It looks like your LightningModule has parameters that were not used in producing the loss returned by training_step. If this is intentional, you must enable the detection of unused parameters in DDP, either by setting the string value `strategy='ddp_find_unused_parameters_true'` or by setting the flag in the strategy with `strategy=DDPStrategy(find_unused_parameters=True)`.
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 200, in <module>
+[rank0]:     main()
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 196, in main
+[rank0]:     trainer.train()
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 157, in train
+[rank0]:     self.trainer.fit(self.distillation_module, self.data_module)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 538, in fit
+[rank0]:     call._call_and_handle_interrupt(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+[rank0]:     return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+[rank0]:     return function(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 574, in _fit_impl
+[rank0]:     self._run(model, ckpt_path=ckpt_path)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 981, in _run
+[rank0]:     results = self._run_stage()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1025, in _run_stage
+[rank0]:     self.fit_loop.run()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 205, in run
+[rank0]:     self.advance()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 363, in advance
+[rank0]:     self.epoch_loop.run(self._data_fetcher)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 140, in run
+[rank0]:     self.advance(data_fetcher)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 250, in advance
+[rank0]:     batch_output = self.automatic_optimization.run(trainer.optimizers[0], batch_idx, kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 190, in run
+[rank0]:     self._optimizer_step(batch_idx, closure)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 268, in _optimizer_step
+[rank0]:     call._call_lightning_module_hook(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 167, in _call_lightning_module_hook
+[rank0]:     output = fn(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/core/module.py", line 1306, in optimizer_step
+[rank0]:     optimizer.step(closure=optimizer_closure)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/core/optimizer.py", line 153, in step
+[rank0]:     step_output = self._strategy.optimizer_step(self._optimizer, closure, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/ddp.py", line 270, in optimizer_step
+[rank0]:     optimizer_output = super().optimizer_step(optimizer, closure, model, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 238, in optimizer_step
+[rank0]:     return self.precision_plugin.optimizer_step(optimizer, model=model, closure=closure, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/plugins/precision/amp.py", line 78, in optimizer_step
+[rank0]:     closure_result = closure()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 144, in __call__
+[rank0]:     self._result = self.closure(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 129, in closure
+[rank0]:     step_output = self._step_fn()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 317, in _training_step
+[rank0]:     training_step_output = call._call_strategy_hook(trainer, "training_step", *kwargs.values())
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 319, in _call_strategy_hook
+[rank0]:     output = fn(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 389, in training_step
+[rank0]:     return self._forward_redirection(self.model, self.lightning_module, "training_step", *args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 640, in __call__
+[rank0]:     wrapper_output = wrapper_module(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1639, in forward
+[rank0]:     inputs, kwargs = self._pre_forward(*inputs, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1528, in _pre_forward
+[rank0]:     if torch.is_grad_enabled() and self.reducer._rebuild_buckets():
+[rank0]: RuntimeError: It looks like your LightningModule has parameters that were not used in producing the loss returned by training_step. If this is intentional, you must enable the detection of unused parameters in DDP, either by setting the string value `strategy='ddp_find_unused_parameters_true'` or by setting the flag in the strategy with `strategy=DDPStrategy(find_unused_parameters=True)`.

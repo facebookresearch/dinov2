@@ -1,0 +1,23 @@
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/2
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1]
+Input requires_grad: False
+Student res5 requires_grad: True
+Student res5 shape: torch.Size([64, 2048, 16, 16])
+Student res4 requires_grad: True
+Student res4 shape: torch.Size([64, 1024, 16, 16])
+Teacher features requires_grad: False
+Teacher features shape: torch.Size([64, 768, 16, 16])
+
+Feature gradients in loss computation:
+student_features_s3 requires_grad: True
+student_features requires_grad: True
+teacher_features requires_grad: False
+
+Projected feature gradients:
+feat_S_s3_spat requires_grad: True
+feat_S_s3_freq requires_grad: True
+
+Individual loss gradients:
+scalekd_n_spat requires_grad: False
+scalekd_n_freq requires_grad: False

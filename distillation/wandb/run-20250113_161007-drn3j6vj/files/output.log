@@ -1,0 +1,382 @@
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/2
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 2 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+
+  | Name         | Type         | Params | Mode
+------------------------------------------------------
+0 | student      | ModelWrapper | 28.8 M | train
+1 | teacher      | DINOv2ViT    | 86.6 M | eval
+2 | losses       | ModuleDict   | 132 M  | train
+3 | scalekd_n    | ScaleKD      | 35.9 M | train
+4 | scalekd_last | ScaleKD      | 96.2 M | train
+------------------------------------------------------
+160 M     Trainable params
+86.6 M    Non-trainable params
+247 M     Total params
+990.041   Total estimated model params size (MB)
+232       Modules in train mode
+212       Modules in eval mode
+Epoch 0:   0%|                                                                                                                                    | 0/1830 [00:00<?, ?it/s]Parameter with no grad: student.feature_matchers.res4.matcher.0.weight
+Parameter with no grad: student.feature_matchers.res4.matcher.0.bias
+Parameter with no grad: teacher.model.cls_token
+Parameter with no grad: teacher.model.pos_embed
+Parameter with no grad: teacher.model.mask_token
+Parameter with no grad: teacher.model.patch_embed.proj.weight
+Parameter with no grad: teacher.model.patch_embed.proj.bias
+Parameter with no grad: teacher.model.blocks.0.norm1.weight
+Parameter with no grad: teacher.model.blocks.0.norm1.bias
+Parameter with no grad: teacher.model.blocks.0.attn.qkv.weight
+Parameter with no grad: teacher.model.blocks.0.attn.qkv.bias
+Parameter with no grad: teacher.model.blocks.0.attn.proj.weight
+Parameter with no grad: teacher.model.blocks.0.attn.proj.bias
+Parameter with no grad: teacher.model.blocks.0.ls1.gamma
+Parameter with no grad: teacher.model.blocks.0.norm2.weight
+Parameter with no grad: teacher.model.blocks.0.norm2.bias
+Parameter with no grad: teacher.model.blocks.0.mlp.fc1.weight
+Parameter with no grad: teacher.model.blocks.0.mlp.fc1.bias
+Parameter with no grad: teacher.model.blocks.0.mlp.fc2.weight
+Parameter with no grad: teacher.model.blocks.0.mlp.fc2.bias
+Parameter with no grad: teacher.model.blocks.0.ls2.gamma
+Parameter with no grad: teacher.model.blocks.1.norm1.weight
+Parameter with no grad: teacher.model.blocks.1.norm1.bias
+Parameter with no grad: teacher.model.blocks.1.attn.qkv.weight
+Parameter with no grad: teacher.model.blocks.1.attn.qkv.bias
+Parameter with no grad: teacher.model.blocks.1.attn.proj.weight
+Parameter with no grad: teacher.model.blocks.1.attn.proj.bias
+Parameter with no grad: teacher.model.blocks.1.ls1.gamma
+Parameter with no grad: teacher.model.blocks.1.norm2.weight
+Parameter with no grad: teacher.model.blocks.1.norm2.bias
+Parameter with no grad: teacher.model.blocks.1.mlp.fc1.weight
+Parameter with no grad: teacher.model.blocks.1.mlp.fc1.bias
+Parameter with no grad: teacher.model.blocks.1.mlp.fc2.weight
+Parameter with no grad: teacher.model.blocks.1.mlp.fc2.bias
+Parameter with no grad: teacher.model.blocks.1.ls2.gamma
+Parameter with no grad: teacher.model.blocks.2.norm1.weight
+Parameter with no grad: teacher.model.blocks.2.norm1.bias
+Parameter with no grad: teacher.model.blocks.2.attn.qkv.weight
+Parameter with no grad: teacher.model.blocks.2.attn.qkv.bias
+Parameter with no grad: teacher.model.blocks.2.attn.proj.weight
+Parameter with no grad: teacher.model.blocks.2.attn.proj.bias
+Parameter with no grad: teacher.model.blocks.2.ls1.gamma
+Parameter with no grad: teacher.model.blocks.2.norm2.weight
+Parameter with no grad: teacher.model.blocks.2.norm2.bias
+Parameter with no grad: teacher.model.blocks.2.mlp.fc1.weight
+Parameter with no grad: teacher.model.blocks.2.mlp.fc1.bias
+Parameter with no grad: teacher.model.blocks.2.mlp.fc2.weight
+Parameter with no grad: teacher.model.blocks.2.mlp.fc2.bias
+Parameter with no grad: teacher.model.blocks.2.ls2.gamma
+Parameter with no grad: teacher.model.blocks.3.norm1.weight
+Parameter with no grad: teacher.model.blocks.3.norm1.bias
+Parameter with no grad: teacher.model.blocks.3.attn.qkv.weight
+Parameter with no grad: teacher.model.blocks.3.attn.qkv.bias
+Parameter with no grad: teacher.model.blocks.3.attn.proj.weight
+Parameter with no grad: teacher.model.blocks.3.attn.proj.bias
+Parameter with no grad: teacher.model.blocks.3.ls1.gamma
+Parameter with no grad: teacher.model.blocks.3.norm2.weight
+Parameter with no grad: teacher.model.blocks.3.norm2.bias
+Parameter with no grad: teacher.model.blocks.3.mlp.fc1.weight
+Parameter with no grad: teacher.model.blocks.3.mlp.fc1.bias
+Parameter with no grad: teacher.model.blocks.3.mlp.fc2.weight
+Parameter with no grad: teacher.model.blocks.3.mlp.fc2.bias
+Parameter with no grad: teacher.model.blocks.3.ls2.gamma
+Parameter with no grad: teacher.model.blocks.4.norm1.weight
+Parameter with no grad: teacher.model.blocks.4.norm1.bias
+Parameter with no grad: teacher.model.blocks.4.attn.qkv.weight
+Parameter with no grad: teacher.model.blocks.4.attn.qkv.bias
+Parameter with no grad: teacher.model.blocks.4.attn.proj.weight
+Parameter with no grad: teacher.model.blocks.4.attn.proj.bias
+Parameter with no grad: teacher.model.blocks.4.ls1.gamma
+Parameter with no grad: teacher.model.blocks.4.norm2.weight
+Parameter with no grad: teacher.model.blocks.4.norm2.bias
+Parameter with no grad: teacher.model.blocks.4.mlp.fc1.weight
+Parameter with no grad: teacher.model.blocks.4.mlp.fc1.bias
+Parameter with no grad: teacher.model.blocks.4.mlp.fc2.weight
+Parameter with no grad: teacher.model.blocks.4.mlp.fc2.bias
+Parameter with no grad: teacher.model.blocks.4.ls2.gamma
+Parameter with no grad: teacher.model.blocks.5.norm1.weight
+Parameter with no grad: teacher.model.blocks.5.norm1.bias
+Parameter with no grad: teacher.model.blocks.5.attn.qkv.weight
+Parameter with no grad: teacher.model.blocks.5.attn.qkv.bias
+Parameter with no grad: teacher.model.blocks.5.attn.proj.weight
+Parameter with no grad: teacher.model.blocks.5.attn.proj.bias
+Parameter with no grad: teacher.model.blocks.5.ls1.gamma
+Parameter with no grad: teacher.model.blocks.5.norm2.weight
+Parameter with no grad: teacher.model.blocks.5.norm2.bias
+Parameter with no grad: teacher.model.blocks.5.mlp.fc1.weight
+Parameter with no grad: teacher.model.blocks.5.mlp.fc1.bias
+Parameter with no grad: teacher.model.blocks.5.mlp.fc2.weight
+Parameter with no grad: teacher.model.blocks.5.mlp.fc2.bias
+Parameter with no grad: teacher.model.blocks.5.ls2.gamma
+Parameter with no grad: teacher.model.blocks.6.norm1.weight
+Parameter with no grad: teacher.model.blocks.6.norm1.bias
+Parameter with no grad: teacher.model.blocks.6.attn.qkv.weight
+Parameter with no grad: teacher.model.blocks.6.attn.qkv.bias
+Parameter with no grad: teacher.model.blocks.6.attn.proj.weight
+Parameter with no grad: teacher.model.blocks.6.attn.proj.bias
+Parameter with no grad: teacher.model.blocks.6.ls1.gamma
+Parameter with no grad: teacher.model.blocks.6.norm2.weight
+Parameter with no grad: teacher.model.blocks.6.norm2.bias
+Parameter with no grad: teacher.model.blocks.6.mlp.fc1.weight
+Parameter with no grad: teacher.model.blocks.6.mlp.fc1.bias
+Parameter with no grad: teacher.model.blocks.6.mlp.fc2.weight
+Parameter with no grad: teacher.model.blocks.6.mlp.fc2.bias
+Parameter with no grad: teacher.model.blocks.6.ls2.gamma
+Parameter with no grad: teacher.model.blocks.7.norm1.weight
+Parameter with no grad: teacher.model.blocks.7.norm1.bias
+Parameter with no grad: teacher.model.blocks.7.attn.qkv.weight
+Parameter with no grad: teacher.model.blocks.7.attn.qkv.bias
+Parameter with no grad: teacher.model.blocks.7.attn.proj.weight
+Parameter with no grad: teacher.model.blocks.7.attn.proj.bias
+Parameter with no grad: teacher.model.blocks.7.ls1.gamma
+Parameter with no grad: teacher.model.blocks.7.norm2.weight
+Parameter with no grad: teacher.model.blocks.7.norm2.bias
+Parameter with no grad: teacher.model.blocks.7.mlp.fc1.weight
+Parameter with no grad: teacher.model.blocks.7.mlp.fc1.bias
+Parameter with no grad: teacher.model.blocks.7.mlp.fc2.weight
+Parameter with no grad: teacher.model.blocks.7.mlp.fc2.bias
+Parameter with no grad: teacher.model.blocks.7.ls2.gamma
+Parameter with no grad: teacher.model.blocks.8.norm1.weight
+Parameter with no grad: teacher.model.blocks.8.norm1.bias
+Parameter with no grad: teacher.model.blocks.8.attn.qkv.weight
+Parameter with no grad: teacher.model.blocks.8.attn.qkv.bias
+Parameter with no grad: teacher.model.blocks.8.attn.proj.weight
+Parameter with no grad: teacher.model.blocks.8.attn.proj.bias
+Parameter with no grad: teacher.model.blocks.8.ls1.gamma
+Parameter with no grad: teacher.model.blocks.8.norm2.weight
+Parameter with no grad: teacher.model.blocks.8.norm2.bias
+Parameter with no grad: teacher.model.blocks.8.mlp.fc1.weight
+Parameter with no grad: teacher.model.blocks.8.mlp.fc1.bias
+Parameter with no grad: teacher.model.blocks.8.mlp.fc2.weight
+Parameter with no grad: teacher.model.blocks.8.mlp.fc2.bias
+Parameter with no grad: teacher.model.blocks.8.ls2.gamma
+Parameter with no grad: teacher.model.blocks.9.norm1.weight
+Parameter with no grad: teacher.model.blocks.9.norm1.bias
+Parameter with no grad: teacher.model.blocks.9.attn.qkv.weight
+Parameter with no grad: teacher.model.blocks.9.attn.qkv.bias
+Parameter with no grad: teacher.model.blocks.9.attn.proj.weight
+Parameter with no grad: teacher.model.blocks.9.attn.proj.bias
+Parameter with no grad: teacher.model.blocks.9.ls1.gamma
+Parameter with no grad: teacher.model.blocks.9.norm2.weight
+Parameter with no grad: teacher.model.blocks.9.norm2.bias
+Parameter with no grad: teacher.model.blocks.9.mlp.fc1.weight
+Parameter with no grad: teacher.model.blocks.9.mlp.fc1.bias
+Parameter with no grad: teacher.model.blocks.9.mlp.fc2.weight
+Parameter with no grad: teacher.model.blocks.9.mlp.fc2.bias
+Parameter with no grad: teacher.model.blocks.9.ls2.gamma
+Parameter with no grad: teacher.model.blocks.10.norm1.weight
+Parameter with no grad: teacher.model.blocks.10.norm1.bias
+Parameter with no grad: teacher.model.blocks.10.attn.qkv.weight
+Parameter with no grad: teacher.model.blocks.10.attn.qkv.bias
+Parameter with no grad: teacher.model.blocks.10.attn.proj.weight
+Parameter with no grad: teacher.model.blocks.10.attn.proj.bias
+Parameter with no grad: teacher.model.blocks.10.ls1.gamma
+Parameter with no grad: teacher.model.blocks.10.norm2.weight
+Parameter with no grad: teacher.model.blocks.10.norm2.bias
+Parameter with no grad: teacher.model.blocks.10.mlp.fc1.weight
+Parameter with no grad: teacher.model.blocks.10.mlp.fc1.bias
+Parameter with no grad: teacher.model.blocks.10.mlp.fc2.weight
+Parameter with no grad: teacher.model.blocks.10.mlp.fc2.bias
+Parameter with no grad: teacher.model.blocks.10.ls2.gamma
+Parameter with no grad: teacher.model.blocks.11.norm1.weight
+Parameter with no grad: teacher.model.blocks.11.norm1.bias
+Parameter with no grad: teacher.model.blocks.11.attn.qkv.weight
+Parameter with no grad: teacher.model.blocks.11.attn.qkv.bias
+Parameter with no grad: teacher.model.blocks.11.attn.proj.weight
+Parameter with no grad: teacher.model.blocks.11.attn.proj.bias
+Parameter with no grad: teacher.model.blocks.11.ls1.gamma
+Parameter with no grad: teacher.model.blocks.11.norm2.weight
+Parameter with no grad: teacher.model.blocks.11.norm2.bias
+Parameter with no grad: teacher.model.blocks.11.mlp.fc1.weight
+Parameter with no grad: teacher.model.blocks.11.mlp.fc1.bias
+Parameter with no grad: teacher.model.blocks.11.mlp.fc2.weight
+Parameter with no grad: teacher.model.blocks.11.mlp.fc2.bias
+Parameter with no grad: teacher.model.blocks.11.ls2.gamma
+Parameter with no grad: teacher.model.norm.weight
+Parameter with no grad: teacher.model.norm.bias
+Parameter with no grad: losses.scalekd_n.projector_0.pos_embed
+Parameter with no grad: losses.scalekd_n.projector_0.proj_pos.0.weight
+Parameter with no grad: losses.scalekd_n.projector_0.proj_pos.0.bias
+Parameter with no grad: losses.scalekd_n.projector_0.proj_student.0.weight
+Parameter with no grad: losses.scalekd_n.projector_0.proj_student.0.bias
+Parameter with no grad: losses.scalekd_n.projector_0.proj_student.1.weight
+Parameter with no grad: losses.scalekd_n.projector_0.proj_student.1.bias
+Parameter with no grad: losses.scalekd_n.projector_0.pos_attention.q.weight
+Parameter with no grad: losses.scalekd_n.projector_0.pos_attention.q.bias
+Parameter with no grad: losses.scalekd_n.projector_0.pos_attention.k.weight
+Parameter with no grad: losses.scalekd_n.projector_0.pos_attention.k.bias
+Parameter with no grad: losses.scalekd_n.projector_0.pos_attention.v.weight
+Parameter with no grad: losses.scalekd_n.projector_0.pos_attention.v.bias
+Parameter with no grad: losses.scalekd_n.projector_0.pos_attention.proj.weight
+Parameter with no grad: losses.scalekd_n.projector_0.pos_attention.proj.bias
+Parameter with no grad: losses.scalekd_n.projector_0.ffn.0.weight
+Parameter with no grad: losses.scalekd_n.projector_0.ffn.0.bias
+Parameter with no grad: losses.scalekd_n.projector_0.ffn.2.weight
+Parameter with no grad: losses.scalekd_n.projector_0.ffn.2.bias
+Parameter with no grad: losses.scalekd_n.projector_0.norm.weight
+Parameter with no grad: losses.scalekd_n.projector_0.norm.bias
+Parameter with no grad: losses.scalekd_n.projector_0.query.weight
+Parameter with no grad: losses.scalekd_n.projector_1.pos_embed
+Parameter with no grad: losses.scalekd_n.projector_1.proj_pos.0.weight
+Parameter with no grad: losses.scalekd_n.projector_1.proj_pos.0.bias
+Parameter with no grad: losses.scalekd_n.projector_1.proj_student.0.weight
+Parameter with no grad: losses.scalekd_n.projector_1.proj_student.0.bias
+Parameter with no grad: losses.scalekd_n.projector_1.proj_student.1.weight
+Parameter with no grad: losses.scalekd_n.projector_1.proj_student.1.bias
+Parameter with no grad: losses.scalekd_n.projector_1.pos_attention.q.weight
+Parameter with no grad: losses.scalekd_n.projector_1.pos_attention.q.bias
+Parameter with no grad: losses.scalekd_n.projector_1.pos_attention.k.weight
+Parameter with no grad: losses.scalekd_n.projector_1.pos_attention.k.bias
+Parameter with no grad: losses.scalekd_n.projector_1.pos_attention.v.weight
+Parameter with no grad: losses.scalekd_n.projector_1.pos_attention.v.bias
+Parameter with no grad: losses.scalekd_n.projector_1.pos_attention.proj.weight
+Parameter with no grad: losses.scalekd_n.projector_1.pos_attention.proj.bias
+Parameter with no grad: losses.scalekd_n.projector_1.ffn.0.weight
+Parameter with no grad: losses.scalekd_n.projector_1.ffn.0.bias
+Parameter with no grad: losses.scalekd_n.projector_1.ffn.2.weight
+Parameter with no grad: losses.scalekd_n.projector_1.ffn.2.bias
+Parameter with no grad: losses.scalekd_n.projector_1.norm.weight
+Parameter with no grad: losses.scalekd_n.projector_1.norm.bias
+Parameter with no grad: losses.scalekd_n.projector_1.query.weight
+Parameter with no grad: losses.scalekd_last.projector_0.query.weight
+Parameter with no grad: losses.scalekd_last.projector_1.query.weight
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 200, in <module>
+[rank0]:     main()
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 196, in main
+[rank0]:     trainer.train()
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 157, in train
+[rank0]:     self.trainer.fit(self.distillation_module, self.data_module)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 538, in fit
+[rank0]:     call._call_and_handle_interrupt(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+[rank0]:     return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+[rank0]:     return function(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 574, in _fit_impl
+[rank0]:     self._run(model, ckpt_path=ckpt_path)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 981, in _run
+[rank0]:     results = self._run_stage()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1025, in _run_stage
+[rank0]:     self.fit_loop.run()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 205, in run
+[rank0]:     self.advance()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 363, in advance
+[rank0]:     self.epoch_loop.run(self._data_fetcher)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 140, in run
+[rank0]:     self.advance(data_fetcher)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 250, in advance
+[rank0]:     batch_output = self.automatic_optimization.run(trainer.optimizers[0], batch_idx, kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 190, in run
+[rank0]:     self._optimizer_step(batch_idx, closure)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 268, in _optimizer_step
+[rank0]:     call._call_lightning_module_hook(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 167, in _call_lightning_module_hook
+[rank0]:     output = fn(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/core/module.py", line 1306, in optimizer_step
+[rank0]:     optimizer.step(closure=optimizer_closure)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/core/optimizer.py", line 153, in step
+[rank0]:     step_output = self._strategy.optimizer_step(self._optimizer, closure, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/ddp.py", line 270, in optimizer_step
+[rank0]:     optimizer_output = super().optimizer_step(optimizer, closure, model, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 238, in optimizer_step
+[rank0]:     return self.precision_plugin.optimizer_step(optimizer, model=model, closure=closure, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/plugins/precision/amp.py", line 78, in optimizer_step
+[rank0]:     closure_result = closure()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 144, in __call__
+[rank0]:     self._result = self.closure(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 138, in closure
+[rank0]:     self._backward_fn(step_output.closure_loss)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 239, in backward_fn
+[rank0]:     call._call_strategy_hook(self.trainer, "backward", loss, optimizer)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 319, in _call_strategy_hook
+[rank0]:     output = fn(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 212, in backward
+[rank0]:     self.precision_plugin.backward(closure_loss, self.lightning_module, optimizer, *args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/plugins/precision/precision.py", line 72, in backward
+[rank0]:     model.backward(tensor, *args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/core/module.py", line 1101, in backward
+[rank0]:     loss.backward(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/_tensor.py", line 581, in backward
+[rank0]:     torch.autograd.backward(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/autograd/__init__.py", line 347, in backward
+[rank0]:     _engine_run_backward(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/autograd/graph.py", line 825, in _engine_run_backward
+[rank0]:     return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+[rank0]: RuntimeError: Trying to backward through the graph a second time (or directly access saved tensors after they have already been freed). Saved intermediate values of the graph are freed when you call .backward() or autograd.grad(). Specify retain_graph=True if you need to backward through the graph a second time or if you need to access saved tensors after calling backward.
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 200, in <module>
+[rank0]:     main()
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 196, in main
+[rank0]:     trainer.train()
+[rank0]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 157, in train
+[rank0]:     self.trainer.fit(self.distillation_module, self.data_module)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 538, in fit
+[rank0]:     call._call_and_handle_interrupt(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+[rank0]:     return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+[rank0]:     return function(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 574, in _fit_impl
+[rank0]:     self._run(model, ckpt_path=ckpt_path)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 981, in _run
+[rank0]:     results = self._run_stage()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1025, in _run_stage
+[rank0]:     self.fit_loop.run()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 205, in run
+[rank0]:     self.advance()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 363, in advance
+[rank0]:     self.epoch_loop.run(self._data_fetcher)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 140, in run
+[rank0]:     self.advance(data_fetcher)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 250, in advance
+[rank0]:     batch_output = self.automatic_optimization.run(trainer.optimizers[0], batch_idx, kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 190, in run
+[rank0]:     self._optimizer_step(batch_idx, closure)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 268, in _optimizer_step
+[rank0]:     call._call_lightning_module_hook(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 167, in _call_lightning_module_hook
+[rank0]:     output = fn(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/core/module.py", line 1306, in optimizer_step
+[rank0]:     optimizer.step(closure=optimizer_closure)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/core/optimizer.py", line 153, in step
+[rank0]:     step_output = self._strategy.optimizer_step(self._optimizer, closure, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/ddp.py", line 270, in optimizer_step
+[rank0]:     optimizer_output = super().optimizer_step(optimizer, closure, model, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 238, in optimizer_step
+[rank0]:     return self.precision_plugin.optimizer_step(optimizer, model=model, closure=closure, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/plugins/precision/amp.py", line 78, in optimizer_step
+[rank0]:     closure_result = closure()
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 144, in __call__
+[rank0]:     self._result = self.closure(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 138, in closure
+[rank0]:     self._backward_fn(step_output.closure_loss)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 239, in backward_fn
+[rank0]:     call._call_strategy_hook(self.trainer, "backward", loss, optimizer)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 319, in _call_strategy_hook
+[rank0]:     output = fn(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 212, in backward
+[rank0]:     self.precision_plugin.backward(closure_loss, self.lightning_module, optimizer, *args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/plugins/precision/precision.py", line 72, in backward
+[rank0]:     model.backward(tensor, *args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/core/module.py", line 1101, in backward
+[rank0]:     loss.backward(*args, **kwargs)
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/_tensor.py", line 581, in backward
+[rank0]:     torch.autograd.backward(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/autograd/__init__.py", line 347, in backward
+[rank0]:     _engine_run_backward(
+[rank0]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/autograd/graph.py", line 825, in _engine_run_backward
+[rank0]:     return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+[rank0]: RuntimeError: Trying to backward through the graph a second time (or directly access saved tensors after they have already been freed). Saved intermediate values of the graph are freed when you call .backward() or autograd.grad(). Specify retain_graph=True if you need to backward through the graph a second time or if you need to access saved tensors after calling backward.

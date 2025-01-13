@@ -1,0 +1,41 @@
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/2
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 2 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+
+  | Name    | Type         | Params | Mode
+-------------------------------------------------
+0 | student | ModelWrapper | 27.7 M | train
+1 | teacher | DINOv2ViT    | 1.1 B  | train
+2 | loss_fn | CompoundLoss | 0      | train
+3 | loss_0  | ScaleKD      | 141 M  | train
+4 | loss_1  | DinoiserLoss | 28.3 M | train
+-------------------------------------------------
+197 M     Trainable params
+1.1 B     Non-trainable params
+1.3 B     Total params
+5,337.469 Total estimated model params size (MB)
+793       Modules in train mode
+0         Modules in eval mode
+Epoch 0:   0%|                                                                                                        | 0/1830 [00:00<?, ?it/s]torch.Size([64, 2048, 16, 16])
+Epoch 0:   0%|                                                                                    | 1/1830 [00:06<3:12:23,  0.16it/s, v_num=18]torch.Size([64, 2048, 16, 16])
+Epoch 0:   0%|                                                                                    | 2/1830 [00:07<1:49:30,  0.28it/s, v_num=18]torch.Size([64, 2048, 16, 16])
+Epoch 0:   0%|▏                                                                                   | 3/1830 [00:08<1:21:29,  0.37it/s, v_num=18]torch.Size([64, 2048, 16, 16])
+Epoch 0:   0%|▏                                                                                   | 4/1830 [00:08<1:07:21,  0.45it/s, v_num=18]torch.Size([64, 2048, 16, 16])
+Epoch 0:   0%|▏                                                                                     | 5/1830 [00:09<58:53,  0.52it/s, v_num=18]torch.Size([64, 2048, 16, 16])
+Epoch 0:   0%|▎                                                                                     | 6/1830 [00:10<53:12,  0.57it/s, v_num=18]torch.Size([64, 2048, 16, 16])
+Epoch 0:   0%|▎                                                                                     | 7/1830 [00:11<49:07,  0.62it/s, v_num=18]torch.Size([64, 2048, 16, 16])
+Epoch 0:   0%|▍                                                                                     | 8/1830 [00:12<46:04,  0.66it/s, v_num=18]torch.Size([64, 2048, 16, 16])
+Epoch 0:   0%|▍                                                                                     | 9/1830 [00:12<43:43,  0.69it/s, v_num=18]torch.Size([64, 2048, 16, 16])
+Epoch 0:   1%|▍                                                                                    | 10/1830 [00:13<41:49,  0.73it/s, v_num=18]torch.Size([64, 2048, 16, 16])
+
+Detected KeyboardInterrupt, attempting graceful shutdown ...
+[rank: 1] Child process with PID 402953 terminated with code -9. Forcefully terminating all other processes to avoid zombies 🧟

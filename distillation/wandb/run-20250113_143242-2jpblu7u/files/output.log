@@ -1,0 +1,732 @@
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/2
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1]
+Input requires_grad: False
+Student res5 requires_grad: True
+Student res5 shape: torch.Size([64, 2048, 16, 16])
+Student res4 requires_grad: True
+Student res4 shape: torch.Size([64, 1024, 16, 16])
+Teacher features requires_grad: False
+Teacher features shape: torch.Size([64, 768, 16, 16])
+Total loss value: 141.14328002929688
+Loss requires_grad: True
+
+Model parameter check:
+model.model.stem.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64, 3, 7, 7])
+model.model.stem.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.stem.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.0.shortcut.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 64, 1, 1])
+model.model.res2.0.shortcut.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res2.0.shortcut.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res2.0.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64, 64, 1, 1])
+model.model.res2.0.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.0.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.0.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64, 64, 3, 3])
+model.model.res2.0.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.0.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.0.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 64, 1, 1])
+model.model.res2.0.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res2.0.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res2.1.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64, 256, 1, 1])
+model.model.res2.1.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.1.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.1.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64, 64, 3, 3])
+model.model.res2.1.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.1.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.1.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 64, 1, 1])
+model.model.res2.1.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res2.1.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res2.2.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64, 256, 1, 1])
+model.model.res2.2.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.2.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.2.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64, 64, 3, 3])
+model.model.res2.2.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.2.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([64])
+model.model.res2.2.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 64, 1, 1])
+model.model.res2.2.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res2.2.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res3.0.shortcut.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512, 256, 1, 1])
+model.model.res3.0.shortcut.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res3.0.shortcut.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res3.0.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128, 256, 1, 1])
+model.model.res3.0.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.0.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.0.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128, 128, 3, 3])
+model.model.res3.0.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.0.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.0.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512, 128, 1, 1])
+model.model.res3.0.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res3.0.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res3.1.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128, 512, 1, 1])
+model.model.res3.1.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.1.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.1.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128, 128, 3, 3])
+model.model.res3.1.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.1.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.1.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512, 128, 1, 1])
+model.model.res3.1.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res3.1.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res3.2.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128, 512, 1, 1])
+model.model.res3.2.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.2.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.2.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128, 128, 3, 3])
+model.model.res3.2.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.2.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.2.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512, 128, 1, 1])
+model.model.res3.2.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res3.2.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res3.3.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128, 512, 1, 1])
+model.model.res3.3.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.3.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.3.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128, 128, 3, 3])
+model.model.res3.3.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.3.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([128])
+model.model.res3.3.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512, 128, 1, 1])
+model.model.res3.3.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res3.3.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res4.0.shortcut.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024, 512, 1, 1])
+model.model.res4.0.shortcut.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.0.shortcut.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.0.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 512, 1, 1])
+model.model.res4.0.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.0.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.0.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 256, 3, 3])
+model.model.res4.0.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.0.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.0.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024, 256, 1, 1])
+model.model.res4.0.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.0.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.1.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 1024, 1, 1])
+model.model.res4.1.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.1.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.1.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 256, 3, 3])
+model.model.res4.1.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.1.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.1.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024, 256, 1, 1])
+model.model.res4.1.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.1.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.2.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 1024, 1, 1])
+model.model.res4.2.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.2.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.2.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 256, 3, 3])
+model.model.res4.2.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.2.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.2.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024, 256, 1, 1])
+model.model.res4.2.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.2.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.3.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 1024, 1, 1])
+model.model.res4.3.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.3.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.3.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 256, 3, 3])
+model.model.res4.3.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.3.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.3.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024, 256, 1, 1])
+model.model.res4.3.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.3.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.4.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 1024, 1, 1])
+model.model.res4.4.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.4.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.4.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 256, 3, 3])
+model.model.res4.4.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.4.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.4.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024, 256, 1, 1])
+model.model.res4.4.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.4.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.5.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 1024, 1, 1])
+model.model.res4.5.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.5.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.5.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256, 256, 3, 3])
+model.model.res4.5.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.5.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([256])
+model.model.res4.5.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024, 256, 1, 1])
+model.model.res4.5.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res4.5.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+model.model.res5.0.shortcut.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048, 1024, 1, 1])
+model.model.res5.0.shortcut.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048])
+model.model.res5.0.shortcut.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048])
+model.model.res5.0.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512, 1024, 1, 1])
+model.model.res5.0.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res5.0.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res5.0.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512, 512, 3, 3])
+model.model.res5.0.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res5.0.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res5.0.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048, 512, 1, 1])
+model.model.res5.0.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048])
+model.model.res5.0.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048])
+model.model.res5.1.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512, 2048, 1, 1])
+model.model.res5.1.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res5.1.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res5.1.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512, 512, 3, 3])
+model.model.res5.1.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res5.1.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res5.1.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048, 512, 1, 1])
+model.model.res5.1.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048])
+model.model.res5.1.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048])
+model.model.res5.2.conv1.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512, 2048, 1, 1])
+model.model.res5.2.conv1.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res5.2.conv1.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res5.2.conv2.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512, 512, 3, 3])
+model.model.res5.2.conv2.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res5.2.conv2.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([512])
+model.model.res5.2.conv3.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048, 512, 1, 1])
+model.model.res5.2.conv3.norm.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048])
+model.model.res5.2.conv3.norm.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048])
+feature_matchers.res5.matcher.0.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048, 2048, 1, 1])
+feature_matchers.res5.matcher.0.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([2048])
+feature_matchers.res4.matcher.0.weight:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024, 1024, 1, 1])
+feature_matchers.res4.matcher.0.bias:
+  requires_grad: True
+  is_leaf: True
+  shape: torch.Size([1024])
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 200, in <module>
+[rank1]:     main()
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 196, in main
+[rank1]:     trainer.train()
+[rank1]:   File "/storage/disk0/arda/dinov2/distillation/train.py", line 157, in train
+[rank1]:     self.trainer.fit(self.distillation_module, self.data_module)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 538, in fit
+[rank1]:     call._call_and_handle_interrupt(
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 46, in _call_and_handle_interrupt
+[rank1]:     return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/launchers/subprocess_script.py", line 105, in launch
+[rank1]:     return function(*args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 574, in _fit_impl
+[rank1]:     self._run(model, ckpt_path=ckpt_path)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 981, in _run
+[rank1]:     results = self._run_stage()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1025, in _run_stage
+[rank1]:     self.fit_loop.run()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 205, in run
+[rank1]:     self.advance()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 363, in advance
+[rank1]:     self.epoch_loop.run(self._data_fetcher)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 140, in run
+[rank1]:     self.advance(data_fetcher)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 250, in advance
+[rank1]:     batch_output = self.automatic_optimization.run(trainer.optimizers[0], batch_idx, kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 190, in run
+[rank1]:     self._optimizer_step(batch_idx, closure)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 268, in _optimizer_step
+[rank1]:     call._call_lightning_module_hook(
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 167, in _call_lightning_module_hook
+[rank1]:     output = fn(*args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/core/module.py", line 1306, in optimizer_step
+[rank1]:     optimizer.step(closure=optimizer_closure)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/core/optimizer.py", line 153, in step
+[rank1]:     step_output = self._strategy.optimizer_step(self._optimizer, closure, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/ddp.py", line 270, in optimizer_step
+[rank1]:     optimizer_output = super().optimizer_step(optimizer, closure, model, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 238, in optimizer_step
+[rank1]:     return self.precision_plugin.optimizer_step(optimizer, model=model, closure=closure, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/plugins/precision/amp.py", line 78, in optimizer_step
+[rank1]:     closure_result = closure()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 144, in __call__
+[rank1]:     self._result = self.closure(*args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+[rank1]:     return func(*args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 129, in closure
+[rank1]:     step_output = self._step_fn()
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 317, in _training_step
+[rank1]:     training_step_output = call._call_strategy_hook(trainer, "training_step", *kwargs.values())
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 319, in _call_strategy_hook
+[rank1]:     output = fn(*args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 389, in training_step
+[rank1]:     return self._forward_redirection(self.model, self.lightning_module, "training_step", *args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/strategies/strategy.py", line 640, in __call__
+[rank1]:     wrapper_output = wrapper_module(*args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+[rank1]:     return self._call_impl(*args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+[rank1]:     return forward_call(*args, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1639, in forward
+[rank1]:     inputs, kwargs = self._pre_forward(*inputs, **kwargs)
+[rank1]:   File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1528, in _pre_forward
+[rank1]:     if torch.is_grad_enabled() and self.reducer._rebuild_buckets():
+[rank1]: RuntimeError: It looks like your LightningModule has parameters that were not used in producing the loss returned by training_step. If this is intentional, you must enable the detection of unused parameters in DDP, either by setting the string value `strategy='ddp_find_unused_parameters_true'` or by setting the flag in the strategy with `strategy=DDPStrategy(find_unused_parameters=True)`.

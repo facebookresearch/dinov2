@@ -1,0 +1,36 @@
+Traceback (most recent call last):
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 200, in <module>
+    main()
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 195, in main
+    trainer = DistillationTrainer(config=config)
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 53, in __init__
+    self.trainer = self._create_trainer()
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 135, in _create_trainer
+    return L.Trainer(
+  File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/utilities/argparse.py", line 70, in insert_env_defaults
+    return fn(self, **kwargs)
+  File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 395, in __init__
+    self._accelerator_connector = _AcceleratorConnector(
+  File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/accelerator_connector.py", line 130, in __init__
+    self._check_config_and_set_final_flags(
+  File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/accelerator_connector.py", line 193, in _check_config_and_set_final_flags
+    raise ValueError(
+ValueError: You selected an invalid strategy name: `strategy='ddp_find_unused_parameters'`. It must be either a string or an instance of `lightning.pytorch.strategies.Strategy`. Example choices: auto, ddp, ddp_spawn, deepspeed, ... Find a complete list of options in our documentation at https://lightning.ai
+Traceback (most recent call last):
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 200, in <module>
+    main()
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 195, in main
+    trainer = DistillationTrainer(config=config)
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 53, in __init__
+    self.trainer = self._create_trainer()
+  File "/storage/disk0/arda/dinov2/distillation/train.py", line 135, in _create_trainer
+    return L.Trainer(
+  File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/utilities/argparse.py", line 70, in insert_env_defaults
+    return fn(self, **kwargs)
+  File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 395, in __init__
+    self._accelerator_connector = _AcceleratorConnector(
+  File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/accelerator_connector.py", line 130, in __init__
+    self._check_config_and_set_final_flags(
+  File "/home/arda/miniconda3/envs/distillation/lib/python3.10/site-packages/lightning/pytorch/trainer/connectors/accelerator_connector.py", line 193, in _check_config_and_set_final_flags
+    raise ValueError(
+ValueError: You selected an invalid strategy name: `strategy='ddp_find_unused_parameters'`. It must be either a string or an instance of `lightning.pytorch.strategies.Strategy`. Example choices: auto, ddp, ddp_spawn, deepspeed, ... Find a complete list of options in our documentation at https://lightning.ai

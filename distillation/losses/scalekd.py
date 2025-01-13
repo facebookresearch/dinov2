@@ -44,7 +44,10 @@ class ScaleKD(nn.Module):
 
         spat_loss, similarity = self.get_spat_loss(preds_S_spat, preds_T)
         freq_loss = self.get_freq_loss(preds_S_freq, preds_T)
-        return spat_loss, freq_loss, similarity
+        return {'spatial_loss': spat_loss, 
+                'frequency_loss': freq_loss, 
+                'cosine_similarity': similarity, 
+                'loss': spat_loss + freq_loss}
     
     def project_feat_spat(self, preds_S, query=None):
         preds_S = self.projector_0(preds_S, query=query)
@@ -155,15 +158,14 @@ class AttentionProjector(nn.Module):
     def forward(self, x, query=None):
         H, W = self.hw_dims
         N = x.shape[0]
-
         if query is not None:
             pos_emb = query.permute(0,2,1).reshape(N, -1, H, W).contiguous()
         elif self.query is not None:
             pos_emb = self.query.weight.view(1,H,W,self.teacher_dims).permute(0,3,1,2).repeat(N,1,1,1)
         else:
             raise NotImplementedError("There is no query!")
-
-        preds_S = self.proj_student(x) + self.pos_embed.to(x.device)
+       
+        preds_S = self.proj_student(x) + self.pos_embed
         pos_emb = self.proj_pos(pos_emb)
         pos_emb = torch.flatten(pos_emb.permute(0, 2, 3, 1), 1, 2)
 

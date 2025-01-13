@@ -1,0 +1,14 @@
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/2
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1]
+torch.Size([64, 2048, 16, 16])
+torch.Size([64, 2048, 16, 16])
+torch.Size([64, 2048, 16, 16])
+torch.Size([64, 2048, 16, 16])
+torch.Size([64, 2048, 16, 16])
+torch.Size([64, 2048, 16, 16])
+torch.Size([64, 2048, 16, 16])
+torch.Size([64, 2048, 16, 16])
+torch.Size([64, 2048, 16, 16])
+torch.Size([64, 2048, 16, 16])
+torch.Size([64, 2048, 16, 16])

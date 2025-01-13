@@ -1,0 +1,1 @@
+{"_runtime":804.758498442,"train_scalekd_last_cosine_similarity":0.25918528,"_timestamp":1.7367824529153924e+09,"_wandb":{"runtime":811},"train_loss_scalekd_last":57.34269,"train_scalekd_last_spatial_loss":30.343773,"global_step":1599,"train_scalekd_last_frequency_loss":26.998919,"epoch":0,"train_loss":57.34269,"_step":191}

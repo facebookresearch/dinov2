@@ -1,0 +1,5 @@
+Starting training from scratch.
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/2
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1]
+Added 44 parameters from scalekd_n loss
+Added 44 parameters from scalekd_last loss

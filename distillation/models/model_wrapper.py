@@ -40,11 +40,15 @@ class ModelWrapper(nn.Module):
                 # Get correct input channels from model
                 in_channels = self.model.feature_channels[feat]
                 
-                # Create new config with correct in_channels
-                matcher_config = {**feature_matcher_config}
-                matcher_config['in_channels'] = in_channels
+                # Get layer-specific config or use default if not specified
+                matcher_config = feature_matcher_config.get(feat, feature_matcher_config.get('default', {}))
                 
-                self.feature_matchers[feat] = FeatureMatcher(**matcher_config)
+                # Create new config with correct in_channels
+                layer_config = {**matcher_config}
+                layer_config['in_channels'] = in_channels
+                
+                print(f"Feature matcher config for {feat}: {layer_config}")  # Debug print
+                self.feature_matchers[feat] = FeatureMatcher(**layer_config)
         else:
             self.feature_matchers = nn.ModuleDict()
 

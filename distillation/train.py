@@ -36,8 +36,6 @@ class TrainingConfig:
     max_epochs: int
     precision: int
     learning_rate: float
-    alpha: float
-    beta: float
 
 
 class DistillationTrainer:
@@ -54,15 +52,13 @@ class DistillationTrainer:
         self.distillation_module = self._create_distillation_module()
         self.trainer = self._create_trainer()
         self.checkpoint_path = self.cfg.train.get('resume_from_checkpoint', None)
-
+    
     def _setup_training_config(self) -> TrainingConfig:
         """Setup training configuration."""
         return TrainingConfig(
             max_epochs=self.cfg['train']['max_epochs'],
             precision=self.cfg.get('precision', 16),
             learning_rate=self.cfg['optimizer']['kwargs']['lr'],
-            alpha=self.cfg['loss']['alpha'],
-            beta=self.cfg['loss']['beta']
         )
 
     def _create_transform(self) -> DataAugmentationDINO:
@@ -92,7 +88,7 @@ class DistillationTrainer:
         student = ModelWrapper(
             model_type=self.cfg['student']['model_name'],
             n_patches=self.cfg.teacher.n_patches,
-            target_feature=[self.cfg['student']['student_key']],
+            target_feature=self.cfg['student']['student_key'],
             feature_matcher_config=self.cfg['feature_matcher'],
             **self.cfg['student']['kwargs']
         )
@@ -129,7 +125,7 @@ class DistillationTrainer:
         # Set up checkpoint callback to save in the same experiment directory
         checkpoint_callback = ModelCheckpoint(
             dirpath=os.path.join(logger.log_dir, "checkpoints"),
-            filename="{epoch}-{val_similarity:.2f}",
+            filename="{epoch}-{val_cosine_similarity:.2f}",
             monitor=self.cfg.checkpoints.monitor,
             mode=self.cfg.checkpoints.mode,
             save_top_k=self.cfg.checkpoints.save_top_k,

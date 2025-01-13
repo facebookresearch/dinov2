@@ -12,3 +12,7 @@ dist/
 **/logs/
 **/checkpoints/
 distillation_old/
+
+*.pth
+*.zip
+*.pkl

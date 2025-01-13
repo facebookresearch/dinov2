@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-
+import wandb
 class DinoiserLoss(nn.Module):
     def __init__(self,student_dims, teacher_dims):
         super().__init__()
