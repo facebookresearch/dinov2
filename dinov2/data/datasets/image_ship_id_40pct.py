@@ -21,9 +21,9 @@ class _Split(Enum):
     @property
     def length(self) -> int:
         split_lengths = {
-            _Split.TRAIN: 11_168,
-            _Split.VAL: 400,
-            _Split.TEST: 400,
+            _Split.TRAIN: 1_073_360,
+            _Split.VAL: 1_700,
+            _Split.TEST: 1_700,
         }
         return split_lengths[self]
 
@@ -43,14 +43,14 @@ class _Split(Enum):
         return class_id, actual_index
 
 
-class ImageShipSet2(ExtendedVisionDataset):
+class ImageShipID_40P(ExtendedVisionDataset):
     Target = Union[_Target]
     Split = Union[_Split]
 
     def __init__(
         self,
         *,
-        split: "ImageShipSet2.Split",
+        split: "ImageShipID_40P.Split",
         root: str,
         extra: str,
         transforms: Optional[Callable] = None,
@@ -66,7 +66,7 @@ class ImageShipSet2(ExtendedVisionDataset):
         self._class_names = None
 
     @property
-    def split(self) -> "ImageShipSet2.Split":
+    def split(self) -> "ImageShipID_40P.Split":
         return self._split
 
     def _get_extra_full_path(self, extra_path: str) -> str:
@@ -176,7 +176,7 @@ class ImageShipSet2(ExtendedVisionDataset):
 
     def _dump_entries(self) -> None:
         split = self.split
-        if split == ImageShipSet2.Split.TEST:
+        if split == ImageShipID_40P.Split.TEST:
             dataset = None
             sample_count = split.length
             max_class_id_length, max_class_name_length = 0, 0
@@ -208,7 +208,7 @@ class ImageShipSet2(ExtendedVisionDataset):
         )
         entries_array = np.empty(sample_count, dtype=dtype)
 
-        if split == ImageShipSet2.Split.TEST:
+        if split == ImageShipID_40P.Split.TEST:
             old_percent = -1
             for index in range(sample_count):
                 percent = 100 * (index + 1) // sample_count
@@ -242,7 +242,7 @@ class ImageShipSet2(ExtendedVisionDataset):
 
     def _dump_class_ids_and_names(self) -> None:
         split = self.split
-        if split == ImageShipSet2.Split.TEST:
+        if split == ImageShipID_40P.Split.TEST:
             return
 
         entries_array = self._load_extra(self._entries_path)

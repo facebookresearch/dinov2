@@ -21,7 +21,7 @@ class _Split(Enum):
     @property
     def length(self) -> int:
         split_lengths = {
-            _Split.TRAIN: 536_680,
+            _Split.TRAIN: 2_146_720,
             _Split.VAL: 1_700,
             _Split.TEST: 1_700,
         }
@@ -43,14 +43,14 @@ class _Split(Enum):
         return class_id, actual_index
 
 
-class ImageShipSet1_20P(ExtendedVisionDataset):
+class ImageShipID_80P(ExtendedVisionDataset):
     Target = Union[_Target]
     Split = Union[_Split]
 
     def __init__(
         self,
         *,
-        split: "ImageShipSet1_20P.Split",
+        split: "ImageShipID_80P.Split",
         root: str,
         extra: str,
         transforms: Optional[Callable] = None,
@@ -66,7 +66,7 @@ class ImageShipSet1_20P(ExtendedVisionDataset):
         self._class_names = None
 
     @property
-    def split(self) -> "ImageShipSet1_20P.Split":
+    def split(self) -> "ImageShipID_80P.Split":
         return self._split
 
     def _get_extra_full_path(self, extra_path: str) -> str:
@@ -176,7 +176,7 @@ class ImageShipSet1_20P(ExtendedVisionDataset):
 
     def _dump_entries(self) -> None:
         split = self.split
-        if split == ImageShipSet1_20P.Split.TEST:
+        if split == ImageShipID_80P.Split.TEST:
             dataset = None
             sample_count = split.length
             max_class_id_length, max_class_name_length = 0, 0
@@ -208,7 +208,7 @@ class ImageShipSet1_20P(ExtendedVisionDataset):
         )
         entries_array = np.empty(sample_count, dtype=dtype)
 
-        if split == ImageShipSet1_20P.Split.TEST:
+        if split == ImageShipID_80P.Split.TEST:
             old_percent = -1
             for index in range(sample_count):
                 percent = 100 * (index + 1) // sample_count
@@ -242,7 +242,7 @@ class ImageShipSet1_20P(ExtendedVisionDataset):
 
     def _dump_class_ids_and_names(self) -> None:
         split = self.split
-        if split == ImageShipSet1_20P.Split.TEST:
+        if split == ImageShipID_80P.Split.TEST:
             return
 
         entries_array = self._load_extra(self._entries_path)

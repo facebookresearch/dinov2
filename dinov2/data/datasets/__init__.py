@@ -5,10 +5,10 @@
 
 from .image_net import ImageNet
 from .image_net_22k import ImageNet22k
-from .image_ship_set_1 import ImageShipSet1
-from .image_ship_set_1_extra import ImageShipSet1Extra
-from .image_ship_set_1_20percent import ImageShipSet1_20P
-from .image_ship_set_1_40percent import ImageShipSet1_40P
-from .image_ship_set_1_60percent import ImageShipSet1_60P
-from .image_ship_set_1_80percent import ImageShipSet1_80P
-from .image_ship_set_2 import ImageShipSet2
+from .image_ship_id import ImageShipID
+from .image_ship_id_extra import ImageShipID_Extra
+from .image_ship_id_20pct import ImageShipID_20P
+from .image_ship_id_40pct import ImageShipID_40P
+from .image_ship_id_60pct import ImageShipID_60P
+from .image_ship_id_80pct import ImageShipID_80P
+from .image_ship_ood import ImageShipOOD
