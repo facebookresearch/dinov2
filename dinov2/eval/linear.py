@@ -4,6 +4,7 @@
 # found in the LICENSE file in the root directory of this source tree.
 
 import argparse
+from collections import defaultdict
 from functools import partial
 import json
 import logging
@@ -14,6 +15,7 @@ from typing import List, Optional
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torch.nn.parallel import DistributedDataParallel
 from fvcore.common.checkpoint import Checkpointer, PeriodicCheckpointer
 
@@ -310,6 +312,29 @@ def evaluate_linear_classifiers(
     return results_dict
 
 
+def get_cls_num_list(labels):
+    counter = defaultdict(int)
+    for label in labels:
+        counter[label] += 1
+    labels = list(counter.keys())
+    labels.sort()
+    cls_num_list = [counter[label] for label in labels]
+    return cls_num_list
+
+
+class LogitAdjustedLoss(nn.Module):
+    def __init__(self, cls_num_list, tau=1.0):
+        super().__init__()
+        cls_num_ratio = cls_num_list / torch.sum(cls_num_list)
+        log_cls_num = torch.log(cls_num_ratio)
+        self.log_cls_num = log_cls_num
+        self.tau = tau
+
+    def forward(self, logit, target):
+        logit_adjusted = logit + self.tau * self.log_cls_num.unsqueeze(0)
+        return F.cross_entropy(logit_adjusted, target)
+
+
 def eval_linear(
     *,
     feature_model,
@@ -329,6 +354,7 @@ def eval_linear(
     resume=True,
     classifier_fpath=None,
     val_class_mapping=None,
+    **kwargs,
 ):
     checkpointer = Checkpointer(linear_classifiers, output_dir, optimizer=optimizer, scheduler=scheduler)
     start_iter = checkpointer.resume_or_load(classifier_fpath or "", resume=resume).get("iteration", -1) + 1
@@ -338,6 +364,13 @@ def eval_linear(
     logger.info("Starting training from iteration {}".format(start_iter))
     metric_logger = MetricLogger(delimiter="  ")
     header = "Training"
+
+    if kwargs.get('logit_adjusted_loss', False):
+        cls_num_list = get_cls_num_list(train_data_loader.dataset.get_targets())
+        cls_num_list = torch.Tensor(cls_num_list).to("cuda")
+        train_loss_fn = LogitAdjustedLoss(cls_num_list)   
+    else:
+        train_loss_fn = nn.CrossEntropyLoss() 
 
     for data, labels in metric_logger.log_every(
         train_data_loader,
@@ -352,7 +385,7 @@ def eval_linear(
         features = feature_model(data)
         outputs = linear_classifiers(features)
 
-        losses = {f"loss_{k}": nn.CrossEntropyLoss()(v, labels) for k, v in outputs.items()}
+        losses = {f"loss_{k}": train_loss_fn(v, labels) for k, v in outputs.items()}
         loss = sum(losses.values())
 
         # compute the gradients
@@ -480,6 +513,7 @@ def run_eval_linear(
     test_class_mapping_fpaths=[None],
     val_metric_type=MetricType.MEAN_ACCURACY,
     test_metric_types=None,
+    **kwargs,
 ):
     seed = 0
 
@@ -497,8 +531,13 @@ def run_eval_linear(
         transform=train_transform,
     )
     training_num_classes = len(torch.unique(torch.Tensor(train_dataset.get_targets().astype(int))))
-    sampler_type = SamplerType.SHARDED_INFINITE
-    # sampler_type = SamplerType.INFINITE
+    if kwargs.get('balanced_sampler', False):
+        sampler_type = SamplerType.SHARDED_INFINITE_BALANCED
+        balanced_sampler_mode = kwargs['balanced_sampler_mode']
+    else:
+        balanced_sampler_mode = None
+        sampler_type = SamplerType.SHARDED_INFINITE
+        # sampler_type = SamplerType.INFINITE
 
     n_last_blocks_list = [1, 4]
     n_last_blocks = max(n_last_blocks_list)
@@ -529,6 +568,7 @@ def run_eval_linear(
         sampler_advance=start_iter,
         drop_last=True,
         persistent_workers=True,
+        balanced_sampler_mode=balanced_sampler_mode,
     )
     val_data_loader = make_eval_data_loader(val_dataset_str, batch_size, num_workers, val_metric_type)
 
@@ -568,6 +608,7 @@ def run_eval_linear(
         resume=resume,
         val_class_mapping=val_class_mapping,
         classifier_fpath=classifier_fpath,
+        **kwargs,
     )
     results_dict = {}
     if len(test_dataset_strs) > 1 or test_dataset_strs[0] != val_dataset_str:
@@ -614,6 +655,9 @@ def main(args):
         test_metric_types=args.test_metric_types,
         val_class_mapping_fpath=args.val_class_mapping_fpath,
         test_class_mapping_fpaths=args.test_class_mapping_fpaths,
+        logit_adjusted_loss=args.logit_adjusted_loss,
+        balanced_sampler=args.balanced_sampler,
+        balanced_sampler_mode=args.balanced_sampler_mode,
     )
     return 0
 

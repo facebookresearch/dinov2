@@ -11,7 +11,7 @@ import torch
 from torch.utils.data import Sampler
 
 from .datasets import ImageNet, ImageNet22k, ImageShipID, ImageShipID_Extra, ImageShipID_20P, ImageShipID_40P, ImageShipID_60P, ImageShipID_80P, ImageShipOOD
-from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler
+from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler, ShardedInfiniteBalancedSampler
 
 
 logger = logging.getLogger("dinov2")
@@ -23,6 +23,7 @@ class SamplerType(Enum):
     INFINITE = 2
     SHARDED_INFINITE = 3
     SHARDED_INFINITE_NEW = 4
+    SHARDED_INFINITE_BALANCED = 5
 
 
 def _make_bool_str(b: bool) -> str:
@@ -133,6 +134,7 @@ def _make_sampler(
     seed: int = 0,
     size: int = -1,
     advance: int = 0,
+    **kwargs,
 ) -> Optional[Sampler]:
     sample_count = len(dataset)
 
@@ -183,6 +185,17 @@ def _make_sampler(
             seed=seed,
             drop_last=False,
         )
+    elif type == SamplerType.SHARDED_INFINITE_BALANCED:
+        logger.info("sampler: sharded infinite balanced")
+        if size > 0:
+            raise ValueError("sampler size > 0 is invalid")
+        return ShardedInfiniteBalancedSampler(
+            labels=dataset.get_targets(),
+            mode=kwargs["balanced_sampler_mode"],
+            shuffle=shuffle,
+            seed=seed,
+            advance=advance,
+        )
 
     logger.info("sampler: none")
     return None
@@ -204,6 +217,7 @@ def make_data_loader(
     drop_last: bool = True,
     persistent_workers: bool = False,
     collate_fn: Optional[Callable[[List[T]], Any]] = None,
+    **kwargs,
 ):
     """
     Creates a data loader with the specified parameters.
@@ -229,6 +243,7 @@ def make_data_loader(
         seed=seed,
         size=sampler_size,
         advance=sampler_advance,
+        **kwargs,
     )
 
     logger.info("using PyTorch data loader")

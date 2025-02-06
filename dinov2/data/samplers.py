@@ -4,7 +4,7 @@
 # found in the LICENSE file in the root directory of this source tree.
 
 import itertools
-from typing import Any, Optional
+from typing import Any, Optional, List, Union, Iterator
 import warnings
 
 import numpy as np
@@ -227,3 +227,147 @@ class ShardedInfiniteSampler(Sampler):
             )
             yield from iterable
             self._iter_count += 1
+
+
+class ShardedInfiniteBalancedSampler(Sampler):
+    def __init__(
+        self,
+        labels: List[int],
+        mode: Union[str, int] = "downsampling",
+        shuffle: bool = False,
+        seed: int = 0,
+        start: Optional[int] = None,
+        step: Optional[int] = None,
+        advance: int = 0,
+        use_new_shuffle_tensor_slice: bool = False,
+    ):
+        """
+        A sharded infinite sampler that can optionally perform balanced (stratified) class sampling.
+
+        Args:
+            labels: List of class labels for the dataset.
+            mode: "downsampling", "upsampling", or an integer specifying the number of samples per class per cycle.
+                  - "downsampling": each class is sampled using the count equal to the minimum available samples.
+                  - "upsampling": each class is sampled using the count equal to the maximum available samples.
+            shuffle: Whether to shuffle the balanced samples each cycle.
+            seed: Random seed for shuffling.
+            start: Shard start index (defaults to global rank).
+            step: Shard step (defaults to global size).
+            advance: Number of initial samples to skip.
+            use_new_shuffle_tensor_slice: Switch to the alternate shuffle slice function.
+        """
+        super().__init__(labels)
+        self._labels = np.array(labels)
+        self._seed = seed
+        self._shuffle = shuffle
+
+        # Sharding info.
+        self._start = distributed.get_global_rank() if start is None else start
+        self._step = distributed.get_global_size() if step is None else step
+        self._advance = advance
+
+        # Choose the slice function.
+        self._shuffle_tensor_slice_fn = (
+            _new_shuffle_tensor_slice if use_new_shuffle_tensor_slice else _shuffle_tensor_slice
+        )
+
+        # Cycle count.
+        self._iter_count = 0
+
+        # Balanced sampling configuration.
+        self._unique_labels = np.unique(self._labels)
+        self._lbl2idx = {lbl: np.where(self._labels == lbl)[0] for lbl in self._unique_labels}
+        self._sorted_labels = sorted(self._unique_labels)
+
+        # Determine samples per class.
+        if isinstance(mode, str):
+            if mode == "downsampling":
+                self._samples_per_class = min(len(idxs) for idxs in self._lbl2idx.values())
+            elif mode == "upsampling":
+                self._samples_per_class = max(len(idxs) for idxs in self._lbl2idx.values())
+            else:
+                raise ValueError(f"mode='{mode}' must be 'downsampling', 'upsampling', or an integer.")
+        elif isinstance(mode, int):
+            self._samples_per_class = mode
+        else:
+            raise ValueError(f"mode must be str or int, got {type(mode)}.")
+
+        # The size of one balanced "cycle" (nominal epoch length).
+        self._sample_count = self._samples_per_class * len(self._sorted_labels)
+
+    def __iter__(self) -> Iterator[int]:
+        """
+        Main entry point for iteration.
+        - Possibly skips entire cycles if 'advance' is large.
+        - Then yields from either _iterator() or _shuffled_iterator(),
+          slicing off the first 'advance' items.
+        """
+        # Skip entire cycles if _advance is large.
+        iter_count = self._advance // self._sample_count
+        if iter_count > 0:
+            self._advance -= iter_count * self._sample_count
+            self._iter_count += iter_count
+
+        if self._shuffle:
+            iterator = self._shuffled_iterator()
+        else:
+            iterator = self._iterator()
+
+        yield from itertools.islice(iterator, self._advance, None)
+
+    def _iterator(self) -> Iterator[int]:
+        """
+        Non-shuffling infinite iterator.
+        Builds a balanced set each cycle (down/up sample) without final shuffling, then shards it.
+        """
+        rng = np.random.default_rng(self._seed)
+        while True:
+            indices = []
+            for lbl in self._sorted_labels:
+                idxs = self._lbl2idx[lbl]
+                replace = (self._samples_per_class > len(idxs))
+                chosen = rng.choice(idxs, self._samples_per_class, replace=replace)
+                indices.extend(chosen)
+            # Shard for this rank.
+            for idx in indices[self._start::self._step]:
+                yield int(idx)
+            self._iter_count += 1
+
+    def _shuffled_iterator(self) -> Iterator[int]:
+        """
+        Shuffling infinite iterator.
+        Each cycle picks new balanced subsets from each class, shuffles them,
+        and shards them.
+        """
+        # Torch generator for slicing.
+        generator = torch.Generator()
+        while True:
+            seed = _make_seed(self._seed, self._start, self._iter_count)
+            generator.manual_seed(seed)
+            # Create a single NumPy RNG for the entire cycle.
+            rng = np.random.RandomState(seed)
+            indices_np = []
+            for lbl in self._sorted_labels:
+                idxs = self._lbl2idx[lbl]
+                replace = (self._samples_per_class > len(idxs))
+                chosen = rng.choice(idxs, self._samples_per_class, replace=replace)
+                indices_np.extend(chosen)
+            # Convert to torch tensor.
+            cycle_size = len(indices_np)
+            dtype = _get_torch_dtype(cycle_size)
+            indices_tensor = torch.tensor(indices_np, dtype=dtype)
+            # Final shuffle and shard using the slice function.
+            iterable = self._shuffle_tensor_slice_fn(
+                tensor=indices_tensor,
+                start=self._start,
+                step=self._step,
+                generator=generator
+            )
+            yield from iterable
+            self._iter_count += 1
+
+    def __len__(self) -> int:
+        """
+        Returns the nominal size of one 'cycle': samples_per_class * number of classes.
+        """
+        return self._sample_count
