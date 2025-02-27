@@ -10,7 +10,7 @@ from typing import Any, Callable, List, Optional, TypeVar
 import torch
 from torch.utils.data import Sampler
 
-from .datasets import ImageNet, ImageNet22k, ImageShipID, ImageShipID_Extra, ImageShipID_20P, ImageShipID_40P, ImageShipID_60P, ImageShipID_80P, ImageShipOOD
+from .datasets import ImageNet, ImageNet22k, ImageShipID, ImageShipID_Extra, ImageShipID_20P, ImageShipID_40P, ImageShipID_60P, ImageShipID_80P, ImageShipOOD, ImageShipID_100I, ImageShipID_500I, ImageShipID_1000I, ImageShipID_5000I, ImageShipID_10000I
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler, ShardedInfiniteBalancedSampler
 
 
@@ -63,7 +63,7 @@ def _parse_dataset_str(dataset_str: str):
         class_ = ImageShipID
         if "split" in kwargs:
             kwargs["split"] = ImageShipID.Split[kwargs["split"]]
-    elif name == "ImageShipIDExtra":
+    elif name == "ImageShipID_Extra":
         class_ = ImageShipID_Extra
         if "split" in kwargs:
             kwargs["split"] = ImageShipID_Extra.Split[kwargs["split"]]
@@ -83,6 +83,26 @@ def _parse_dataset_str(dataset_str: str):
         class_ = ImageShipID_80P
         if "split" in kwargs:
             kwargs["split"] = ImageShipID_80P.Split[kwargs["split"]]
+    elif name == "ImageShipID_100I":
+        class_ = ImageShipID_100I
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipID_100I.Split[kwargs["split"]]
+    elif name == "ImageShipID_500I":
+        class_ = ImageShipID_500I
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipID_500I.Split[kwargs["split"]]
+    elif name == "ImageShipID_1000I":
+        class_ = ImageShipID_1000I
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipID_1000I.Split[kwargs["split"]]
+    elif name == "ImageShipID_5000I":
+        class_ = ImageShipID_5000I
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipID_5000I.Split[kwargs["split"]]
+    elif name == "ImageShipID_10000I":
+        class_ = ImageShipID_10000I
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipID_10000I.Split[kwargs["split"]]
     elif name == "ImageShipOOD":
         class_ = ImageShipOOD
         if "split" in kwargs:

@@ -11,4 +11,9 @@ from .image_ship_id_20pct import ImageShipID_20P
 from .image_ship_id_40pct import ImageShipID_40P
 from .image_ship_id_60pct import ImageShipID_60P
 from .image_ship_id_80pct import ImageShipID_80P
+from .image_ship_id_100imgs import ImageShipID_100I
+from .image_ship_id_500imgs import ImageShipID_500I
+from .image_ship_id_1000imgs import ImageShipID_1000I
+from .image_ship_id_5000imgs import ImageShipID_5000I
+from .image_ship_id_10000imgs import ImageShipID_10000I
 from .image_ship_ood import ImageShipOOD
