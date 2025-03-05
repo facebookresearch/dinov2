@@ -18,7 +18,8 @@ import torch.utils.checkpoint
 from torch.nn.init import trunc_normal_
 
 from dinov2.layers import Mlp, PatchEmbed, SwiGLUFFNFused, MemEffAttention, NestedTensorBlock as Block
-
+from dinov2.models.help import Merge_block, Model_level_Adapeter
+from dinov2.models.help  import VitInputLevelAdapter as Input_level_Adapeter
 
 logger = logging.getLogger("dinov2")
 
@@ -65,6 +66,17 @@ class DinoVisionTransformer(nn.Module):
         num_register_tokens=0,
         interpolate_antialias=False,
         interpolate_offset=0.1,
+        # RAW adapter parameters
+        w_lut=True,
+        light_mode='normal',
+        lut_dim=32,
+        k_size=3,
+        merge_ratio=1.0,
+        model_adapter_path='/home/paperspace/Documents/nika_space/ECCV_RAW_Adapter/extracted_model_adapter_weights.pth',
+        input_level_adapter_path='/home/paperspace/Documents/nika_space/ECCV_RAW_Adapter/extracted_pre_encoder_weights.pth',
+        fea_c_s = [384, 768, 1920],
+        ada_c_s = [16, 32, 64],
+        mid_c_s = [384, 576, 768],
     ):
         """
         Args:
@@ -102,6 +114,13 @@ class DinoVisionTransformer(nn.Module):
         self.num_register_tokens = num_register_tokens
         self.interpolate_antialias = interpolate_antialias
         self.interpolate_offset = interpolate_offset
+
+        # RAW adapter configuration
+        self.w_lut = w_lut
+        self.light_mode = light_mode
+        self.lut_dim = lut_dim
+        self.k_size = k_size
+        self.merge_ratio = merge_ratio
 
         self.patch_embed = embed_layer(img_size=img_size, patch_size=patch_size, in_chans=in_chans, embed_dim=embed_dim)
         num_patches = self.patch_embed.num_patches
@@ -166,6 +185,29 @@ class DinoVisionTransformer(nn.Module):
         self.head = nn.Identity()
 
         self.mask_token = nn.Parameter(torch.zeros(1, embed_dim))
+        
+        # Initialize RAW adapter
+        if self.w_lut:
+            self.pre_encoder = Input_level_Adapeter(mode=light_mode, lut_dim=lut_dim, k_size=k_size, w_lut=w_lut)
+            for param in self.pre_encoder.parameters():
+                param.requires_grad_(True)            
+
+            # self.model_adapter = Model_level_Adapeter(in_c=in_chans, w_lut=w_lut)
+            self.model_adapter = Model_level_Adapeter(in_c=3, in_dim=ada_c_s[0], w_lut=self.w_lut)
+            if model_adapter_path is not None:
+                print("Loading model adapter:", model_adapter_path)
+                adapter_state = torch.load(model_adapter_path, map_location="cpu")
+                self.model_adapter.load_state_dict(adapter_state, strict=False)
+            if input_level_adapter_path is not None:
+                print("Loading input-level adapter:", input_level_adapter_path)
+                adapter_state = torch.load(input_level_adapter_path, map_location="cpu")
+                self.pre_encoder.load_state_dict(adapter_state)
+           
+            self.merge_1 = Merge_block(fea_c=fea_c_s[0], ada_c=ada_c_s[0], mid_c=mid_c_s[0], return_ada=True)
+            self.merge_2 = Merge_block(fea_c=fea_c_s[1], ada_c=ada_c_s[1], mid_c=mid_c_s[1], return_ada=True)
+            self.merge_3 = Merge_block(fea_c=fea_c_s[2], ada_c=ada_c_s[2], mid_c=mid_c_s[2], return_ada=False)
+            self.merge_blocks = [self.merge_1, self.merge_2, self.merge_3]
+
 
         self.init_weights()
 
@@ -175,6 +217,19 @@ class DinoVisionTransformer(nn.Module):
         if self.register_tokens is not None:
             nn.init.normal_(self.register_tokens, std=1e-6)
         named_apply(init_weights_vit_timm, self)
+        
+        if hasattr(self, "pre_encoder"):
+            print("Init weights for pre-encoder")
+            self.pre_encoder.apply(init_weights_vit_timm)
+
+        if hasattr(self, "model_adapter"):
+            print("Init weights for model adapter")
+            self.model_adapter.apply(init_weights_vit_timm)
+
+        if hasattr(self, "merge_blocks"):
+            print("Init weights for merge blocks")
+            for block in self.merge_blocks:
+                block.apply(init_weights_vit_timm)
 
     def interpolate_pos_encoding(self, x, w, h):
         previous_dtype = x.dtype
@@ -212,6 +267,15 @@ class DinoVisionTransformer(nn.Module):
 
     def prepare_tokens_with_masks(self, x, masks=None):
         B, nc, w, h = x.shape
+
+        x_raw = self.pre_encoder(x)
+        if self.w_lut:  # I1, I2, I3, I4
+            ada = self.model_adapter([x_raw[0], x_raw[1], x_raw[2], x_raw[3]])
+        else:  # I1, I2, I3
+            ada = self.model_adapter([x_raw[0], x_raw[1], x_raw[2]])
+
+        x = x_raw[-1]
+
         x = self.patch_embed(x)
         if masks is not None:
             x = torch.where(masks.unsqueeze(-1), self.mask_token.to(x.dtype).unsqueeze(0), x)
@@ -229,12 +293,34 @@ class DinoVisionTransformer(nn.Module):
                 dim=1,
             )
 
-        return x
+        ada = ada.reshape(ada.shape[0], ada.shape[1], -1) 
+        batch_size, channels, features = ada.shape
+        target_seq_len = x.shape[1] 
+        linear_proj = nn.Linear(features, target_seq_len).to(ada.device).to(ada.dtype)
+        ada = linear_proj(ada).permute(0, 2, 1) 
+
+
+        return x, ada
 
     def forward_features_list(self, x_list, masks_list):
-        x = [self.prepare_tokens_with_masks(x, masks) for x, masks in zip(x_list, masks_list)]
-        for blk in self.blocks:
+        # x = [self.prepare_tokens_with_masks(x, masks) for x, masks in zip(x_list, masks_list)]
+
+        x_s = []
+        ada_list = []
+        for x, masks in zip(x_list, masks_list):
+            x_, ada = self.prepare_tokens_with_masks(x, masks)
+            x_s.append(x_)
+            ada_list.append(ada)
+        
+
+        x = x_s
+
+        for i, blk in enumerate(self.blocks):
             x = blk(x)
+            
+            if self.w_lut and ada is not None and i < len(self.merge_blocks):
+                x_ada_pairs = [self.merge_blocks[i](x_i, ada_i, ratio=self.merge_ratio) for x_i, ada_i in zip(x, ada_list)]
+                x, ada_list = map(list, zip(*x_ada_pairs)) 
 
         all_x = x
         output = []
@@ -255,10 +341,12 @@ class DinoVisionTransformer(nn.Module):
         if isinstance(x, list):
             return self.forward_features_list(x, masks)
 
-        x = self.prepare_tokens_with_masks(x, masks)
+        x, ada = self.prepare_tokens_with_masks(x, masks)
 
-        for blk in self.blocks:
+        for i, blk in enumerate(self.blocks):
             x = blk(x)
+            if self.w_lut and ada is not None and i < len(self.merge_blocks):
+                x, ada  = self.merge_blocks[i](x, ada, ratio=self.merge_ratio)
 
         x_norm = self.norm(x)
         return {
