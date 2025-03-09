@@ -25,21 +25,21 @@ class Merge_block(BaseModule):
         self.ada_c = ada_c
         # 784 - embedded dim + adapter_c
         self.embeded_dim = 768
-        self.fc_1 = nn.Linear(self.embeded_dim + ada_c, mid_c)
+        self.fc_1 = nn.Linear(self.embeded_dim*2, mid_c)
         self.fc_2 = nn.Linear(mid_c, self.embeded_dim)
         self.return_ada = return_ada
 
         if self.return_ada:
-            self.conv_3 = nn.Conv1d(mid_c, ada_c * 2, kernel_size=1)  # 1D Conv instead of 3x3
+            self.conv_3 = nn.Conv1d(mid_c, self.embeded_dim, kernel_size=1)  # 1D Conv instead of 3x3
         else:
             self.conv_3 = None
 
     def forward(self, fea, adapter, ratio=1.0):
         res = fea
         # print("Before concatenation: ", fea.shape, adapter.shape, self.fea_c, self.ada_c)
-
+        # print("before concatenation: ", fea.shape, adapter.shape)
         fea = torch.cat([fea, adapter], dim=-1)  # (B, seq_len, fea_c + ada_c)
-        
+        # print("after concatenation: ", fea.shape, adapter.shape)
         B, seq_len, C = fea.shape
         fea = fea.view(B * seq_len, C) 
         fea = self.fc_1(fea) 
@@ -143,8 +143,9 @@ class Model_level_Adapeter(BaseModule):
 
         else:
             adapter = torch.cat([self.conv_1(IMGS[0]), self.conv_2(IMGS[1]), self.conv_3(IMGS[2])], dim=1)
-        
+        # print("Adapter:", adapter.shape)
         adapter = self.uni_conv(adapter)
+        # print("Adapter:", adapter.shape)
         # adapter = self.res_1(adapter)
         # adapter = self.res_2(adapter)
         return adapter
