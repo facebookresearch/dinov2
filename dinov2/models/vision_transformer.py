@@ -209,9 +209,8 @@ class DinoVisionTransformer(nn.Module):
             self.merge_3 = Merge_block(fea_c=fea_c_s[2], ada_c=ada_c_s[2], mid_c=mid_c_s[2], return_ada=False)
             
             self.merge_blocks = [self.merge_1, self.merge_2, self.merge_3]
-            print(self.merge_blocks)
-            self.first_linear_proj = nn.Linear(625, 50)
-            self.second_linear_proj = nn.Linear(3136, 257)
+            # print(self.merge_blocks)
+
 
         self.init_weights()
 
@@ -279,20 +278,16 @@ class DinoVisionTransformer(nn.Module):
             ada = self.model_adapter([x_raw[0], x_raw[1], x_raw[2]])
 
         x = x_raw[-1]
-
+        print("X before patch embedding ",ada.shape, x.shape )
         x = self.patch_embed(x)
-
-        # print("ada.shape ", ada.shape, x.shape)
+        if x.shape[1] == 256:
+            ada = F.interpolate(ada, size=(64, 64), mode='bilinear', align_corners=False)
+        elif x.shape[1] == 49:
+            ada = F.interpolate(ada, size=(28, 28), mode='bilinear', align_corners=False)
+        print("ada.shape ", ada.shape, x.shape)
         ada = self.patch_embed_for_model_adapter(ada)
-        tensor2_reshaped = ada.transpose(1, 2)  # [32, 768, 196]
-
-        ada = F.interpolate(
-            tensor2_reshaped, 
-            size=x.shape[1], 
-            mode='linear', 
-            align_corners=False
-        )
-        ada = ada.transpose(1, 2)
+        # tensor2_reshaped = ada.transpose(1, 2)  # [32, 768, 196]
+        print("ada.shape after embedding ", ada.shape, x.shape)
 
         if masks is not None:
             x = torch.where(masks.unsqueeze(-1), self.mask_token.to(x.dtype).unsqueeze(0), x)
@@ -303,7 +298,7 @@ class DinoVisionTransformer(nn.Module):
         ada = ada + self.interpolate_pos_encoding(ada, w, h)
 
         x = x + self.interpolate_pos_encoding(x, w, h)
-        # ada = ada + self.interpolate_pos_encoding(ada, w, h)
+
 
 
         if self.register_tokens is not None:
@@ -321,14 +316,12 @@ class DinoVisionTransformer(nn.Module):
         return x, ada
 
     def forward_features_list(self, x_list, masks_list):
-        # x = [self.prepare_tokens_with_masks(x, masks) for x, masks in zip(x_list, masks_list)]
 
         x_s = []
         ada_list = []
-        # print("x_list", [i.shape for i in x_list])
+
         for x, masks in zip(x_list, masks_list):
             x_, ada = self.prepare_tokens_with_masks(x, masks)
-            # print(x.shape, ada.shape, self.model_adapter)
             x_s.append(x_)
             ada_list.append(ada)
         
@@ -336,13 +329,10 @@ class DinoVisionTransformer(nn.Module):
         x = x_s
 
         for i, blk in enumerate(self.blocks):
-            # print([j.shape for j in x])
-            # print(ada.shape)
             x = blk(x)
             
             
             if self.w_lut and ada is not None and i < len(self.merge_blocks):
-                # print("HERE 22")
                 x_ada_pairs = [self.merge_blocks[i](x_i, ada_i, ratio=self.merge_ratio) for x_i, ada_i in zip(x, ada_list)]
                 x, ada_list = map(list, zip(*x_ada_pairs)) 
 
