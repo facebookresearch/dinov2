@@ -29,7 +29,7 @@ logger = logging.getLogger("dinov2")
 
 def get_args_parser(add_help: bool = True):
     parser = argparse.ArgumentParser("DINOv2 training", add_help=add_help)
-    parser.add_argument("--config-file", default="", metavar="FILE", help="path to config file")
+    parser.add_argument("--config-file", default="dinov2/dinov2/configs/train/custom.yaml", metavar="FILE", help="path to config file")
     parser.add_argument(
         "--no-resume",
         action="store_true",
@@ -293,14 +293,29 @@ def do_train(cfg, model, resume=False):
     metric_logger.synchronize_between_processes()
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
 
+import re
+from typing import List, Union
+
+def parse_merge_block_indexes(config_value: str) -> List[int]:
+    """
+    Parses a string containing merge block indexes and returns a list of integers.
+    Supports formats like "1,3,7,11" or "0..11".
+    """
+    if '..' in config_value:
+        start, end = map(int, config_value.split('..'))
+        return list(range(start, end + 1))
+    return list(map(int, re.split(r'\s*,\s*', config_value)))
+
 
 def main(args):
     cfg = setup(args)
 
+    cfg.student.merge_block_indexes = parse_merge_block_indexes(cfg.student.merge_block_indexes)
+    print("INDEXES", cfg.student.merge_block_indexes)
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()
 
-    logger.info("Model:\n{}".format(model))
+    # logger.info("Model:\n{}".format(model))
     if args.eval_only:
         iteration = (
             FSDPCheckpointer(model, save_dir=cfg.train.output_dir)

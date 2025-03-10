@@ -25,12 +25,12 @@ class Merge_block(BaseModule):
         self.ada_c = ada_c
         # 784 - embedded dim + adapter_c
         self.embeded_dim = 768
-        self.fc_1 = nn.Linear(self.embeded_dim*2, mid_c)
-        self.fc_2 = nn.Linear(mid_c, self.embeded_dim)
+        self.fc_1 = nn.Linear(self.embeded_dim*2, mid_c).to(torch.float16)
+        self.fc_2 = nn.Linear(mid_c, self.embeded_dim).to(torch.float16)
         self.return_ada = return_ada
 
         if self.return_ada:
-            self.conv_3 = nn.Conv1d(mid_c, self.embeded_dim, kernel_size=1)  # 1D Conv instead of 3x3
+            self.conv_3 = nn.Conv1d(mid_c, self.embeded_dim, kernel_size=1).to(torch.float16)  # 1D Conv instead of 3x3
         else:
             self.conv_3 = None
 

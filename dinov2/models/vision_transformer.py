@@ -77,6 +77,7 @@ class DinoVisionTransformer(nn.Module):
         fea_c_s = [384, 768, 1920],
         ada_c_s = [16, 32, 64],
         mid_c_s = [384, 576, 768],
+        merge_blocks_indexes=[],
     ):
         """
         Args:
@@ -203,13 +204,25 @@ class DinoVisionTransformer(nn.Module):
                 print("Loading input-level adapter:", input_level_adapter_path)
                 adapter_state = torch.load(input_level_adapter_path, map_location="cpu")
                 self.pre_encoder.load_state_dict(adapter_state)
-           
-            self.merge_1 = Merge_block(fea_c=fea_c_s[0], ada_c=ada_c_s[0], mid_c=mid_c_s[0], return_ada=True)
-            self.merge_2 = Merge_block(fea_c=fea_c_s[1], ada_c=ada_c_s[1], mid_c=mid_c_s[1], return_ada=True)
-            self.merge_3 = Merge_block(fea_c=fea_c_s[2], ada_c=ada_c_s[2], mid_c=mid_c_s[2], return_ada=False)
-            
-            self.merge_blocks = [self.merge_1, self.merge_2, self.merge_3]
-            # print(self.merge_blocks)
+
+            self.merge_blocks = []
+            self.merge_blocks_indexes = merge_blocks_indexes
+            # Loop through the merge_blocks_indexes and create Merge_block instances
+            for i, idx in enumerate(self.merge_blocks_indexes):
+                return_ada = False if i == len(self.merge_blocks_indexes) - 1 else True  # Only the last block gets return_ada=False
+                if i != 0 or i != len(self.merge_blocks_indexes) - 1:
+                    k = 1
+                else:
+                    k = i
+                merge_block = Merge_block(
+                    fea_c=fea_c_s[k], 
+                    ada_c=ada_c_s[k], 
+                    mid_c=mid_c_s[k], 
+                    return_ada=return_ada
+                ).to("cuda")
+                self.merge_blocks.append(merge_block)
+            # self.merge_blocks.to("cuda")
+            print(self.merge_blocks)
 
 
         self.init_weights()
@@ -270,7 +283,7 @@ class DinoVisionTransformer(nn.Module):
 
     def prepare_tokens_with_masks(self, x, masks=None):
         B, nc, w, h = x.shape
-
+        print("BLOCKS NUM: " , len(self.blocks), len(self.merge_blocks))
         x_raw = self.pre_encoder(x)
         if self.w_lut:  # I1, I2, I3, I4
             ada = self.model_adapter([x_raw[0], x_raw[1], x_raw[2], x_raw[3]])
