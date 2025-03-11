@@ -134,7 +134,7 @@ def do_test(cfg, model, iteration):
 from torch.utils.tensorboard import SummaryWriter
 
 def do_train(cfg, model, resume=False):
-    writer = SummaryWriter(log_dir="/home/paperspace/Documents/nika_space/dinov2/dinov2/tensorboard_logs/standart")
+    writer = SummaryWriter(log_dir="/home/paperspace/Documents/nika_space/dinov2/dinov2/tensorboard_logs/standart_custom_conf")
     model.train()
     inputs_dtype = torch.half
     fp16_scaler = model.fp16_scaler  # for mixed precision training
@@ -319,8 +319,8 @@ def parse_merge_block_indexes(config_value: str) -> List[int]:
 def main(args):
     cfg = setup(args)
 
-    cfg.student.merge_block_indexes = parse_merge_block_indexes(cfg.student.merge_block_indexes)
-    print("INDEXES", cfg.student.merge_block_indexes)
+    # cfg.student.merge_block_indexes = parse_merge_block_indexes(cfg.student.merge_block_indexes)
+    # print("INDEXES", cfg.student.merge_block_indexes)
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()
 

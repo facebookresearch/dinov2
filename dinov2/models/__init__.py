@@ -13,7 +13,6 @@ logger = logging.getLogger("dinov2")
 
 def build_model(args, only_teacher=False, img_size=224):
     args.arch = args.arch.removesuffix("_memeff")
-    print("ARGS", args.merge_block_indexes)
     if "vit" in args.arch:
         vit_kwargs = dict(
             img_size=img_size,
@@ -27,7 +26,7 @@ def build_model(args, only_teacher=False, img_size=224):
             num_register_tokens=args.num_register_tokens,
             interpolate_offset=args.interpolate_offset,
             interpolate_antialias=args.interpolate_antialias,
-            merge_blocks_indexes=args.merge_block_indexes,
+            # merge_blocks_indexes=args.merge_block_indexes,
         )
         teacher = vits.__dict__[args.arch](**vit_kwargs)
         if only_teacher:

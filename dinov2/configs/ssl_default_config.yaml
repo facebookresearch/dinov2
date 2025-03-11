@@ -59,17 +59,17 @@ ibot:
   head_nlayers: 3
   head_hidden_dim: 2048
 train:
-  batch_size_per_gpu: 64
-  dataset_path: ImageNet:split=TRAIN
+  batch_size_per_gpu: 16
+  dataset_path: ImageNet:root=/home/paperspace/Documents/nika_space/ADE20K/ADEChallengeData2016/images/training_raw/
   output_dir: .
   saveckp_freq: 20
   seed: 0
   num_workers: 10
-  OFFICIAL_EPOCH_LENGTH: 1250
+  OFFICIAL_EPOCH_LENGTH: 10
   cache_dataset: true
   centering: "centering" # or "sinkhorn_knopp"
 student:
-  arch: vit_large
+  arch: vit_base
   patch_size: 16
   drop_path_rate: 0.3
   layerscale: 1.0e-05
@@ -115,4 +115,4 @@ crops:
   global_crops_size: 224
   local_crops_size: 96
 evaluation:
-  eval_period_iterations: 12500
+  eval_period_iterations: 100

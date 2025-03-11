@@ -78,7 +78,7 @@ class DinoVisionTransformer(nn.Module):
         fea_c_s = [384, 768, 1920],
         ada_c_s = [16, 32, 64],
         mid_c_s = [384, 576, 768],
-        merge_blocks_indexes=[],
+        # merge_blocks_indexes=[],
     ):
         """
         Args:
