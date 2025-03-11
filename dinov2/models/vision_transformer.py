@@ -21,6 +21,7 @@ from dinov2.layers import Mlp, PatchEmbed, SwiGLUFFNFused, MemEffAttention, Nest
 from dinov2.models.help import Merge_block, Model_level_Adapeter
 from dinov2.models.help  import VitInputLevelAdapter as Input_level_Adapeter
 
+
 logger = logging.getLogger("dinov2")
 
 
@@ -67,7 +68,7 @@ class DinoVisionTransformer(nn.Module):
         interpolate_antialias=False,
         interpolate_offset=0.1,
         # RAW adapter parameters
-        w_lut=True,
+        w_lut=False,
         light_mode='normal',
         lut_dim=32,
         k_size=3,
@@ -196,14 +197,14 @@ class DinoVisionTransformer(nn.Module):
 
             # self.model_adapter = Model_level_Adapeter(in_c=in_chans, w_lut=w_lut)
             self.model_adapter = Model_level_Adapeter(in_c=3, in_dim=ada_c_s[0], w_lut=self.w_lut)
-            if model_adapter_path is not None:
-                print("Loading model adapter:", model_adapter_path)
-                adapter_state = torch.load(model_adapter_path, map_location="cpu")
-                self.model_adapter.load_state_dict(adapter_state, strict=False)
-            if input_level_adapter_path is not None:
-                print("Loading input-level adapter:", input_level_adapter_path)
-                adapter_state = torch.load(input_level_adapter_path, map_location="cpu")
-                self.pre_encoder.load_state_dict(adapter_state)
+            # if model_adapter_path is not None:
+            #     print("Loading model adapter:", model_adapter_path)
+            #     adapter_state = torch.load(model_adapter_path, map_location="cpu")
+            #     self.model_adapter.load_state_dict(adapter_state, strict=False)
+            # if input_level_adapter_path is not None:
+            #     print("Loading input-level adapter:", input_level_adapter_path)
+            #     adapter_state = torch.load(input_level_adapter_path, map_location="cpu")
+            #     self.pre_encoder.load_state_dict(adapter_state)
 
             self.merge_blocks = []
             self.merge_blocks_indexes = merge_blocks_indexes
@@ -283,32 +284,33 @@ class DinoVisionTransformer(nn.Module):
 
     def prepare_tokens_with_masks(self, x, masks=None):
         B, nc, w, h = x.shape
-        print("BLOCKS NUM: " , len(self.blocks), len(self.merge_blocks))
-        x_raw = self.pre_encoder(x)
+        # print("BLOCKS NUM: " , len(self.blocks), len(self.merge_blocks))
+        
         if self.w_lut:  # I1, I2, I3, I4
+            x_raw = self.pre_encoder(x)
             ada = self.model_adapter([x_raw[0], x_raw[1], x_raw[2], x_raw[3]])
-        else:  # I1, I2, I3
-            ada = self.model_adapter([x_raw[0], x_raw[1], x_raw[2]])
+        # else:  # I1, I2, I3
+        #     ada = self.model_adapter([x_raw[0], x_raw[1], x_raw[2]])
 
-        x = x_raw[-1]
-        print("X before patch embedding ",ada.shape, x.shape )
+        # x = x_raw[-1]
+        # print("X before patch embedding ",ada.shape, x.shape )
         x = self.patch_embed(x)
-        if x.shape[1] == 256:
-            ada = F.interpolate(ada, size=(64, 64), mode='bilinear', align_corners=False)
-        elif x.shape[1] == 49:
-            ada = F.interpolate(ada, size=(28, 28), mode='bilinear', align_corners=False)
-        print("ada.shape ", ada.shape, x.shape)
-        ada = self.patch_embed_for_model_adapter(ada)
+        # if x.shape[1] == 256:
+        #     ada = F.interpolate(ada, size=(64, 64), mode='bilinear', align_corners=False)
+        # elif x.shape[1] == 49:
+        #     ada = F.interpolate(ada, size=(28, 28), mode='bilinear', align_corners=False)
+        # print("ada.shape ", ada.shape, x.shape)
+        # ada = self.patch_embed_for_model_adapter(ada)
         # tensor2_reshaped = ada.transpose(1, 2)  # [32, 768, 196]
-        print("ada.shape after embedding ", ada.shape, x.shape)
+        # print("ada.shape after embedding ", ada.shape, x.shape)
 
         if masks is not None:
             x = torch.where(masks.unsqueeze(-1), self.mask_token.to(x.dtype).unsqueeze(0), x)
-            ada = torch.where(masks.unsqueeze(-1), self.mask_token.to(ada.dtype).unsqueeze(0), ada)
+            # ada = torch.where(masks.unsqueeze(-1), self.mask_token.to(ada.dtype).unsqueeze(0), ada)
 
         x = torch.cat((self.cls_token.expand(x.shape[0], -1, -1), x), dim=1)
-        ada = torch.cat((self.cls_token.expand(ada.shape[0], -1, -1), ada), dim=1)
-        ada = ada + self.interpolate_pos_encoding(ada, w, h)
+        # ada = torch.cat((self.cls_token.expand(ada.shape[0], -1, -1), ada), dim=1)
+        # ada = ada + self.interpolate_pos_encoding(ada, w, h)
 
         x = x + self.interpolate_pos_encoding(x, w, h)
 
@@ -326,7 +328,8 @@ class DinoVisionTransformer(nn.Module):
             # print("x.shape",x.shape)
 
     
-        return x, ada
+        # return x, ada
+        return x, None
 
     def forward_features_list(self, x_list, masks_list):
 
@@ -340,14 +343,16 @@ class DinoVisionTransformer(nn.Module):
         
 
         x = x_s
-
+        # print("ind: ", self.merge_blocks_indexes)
+        indx = 0
         for i, blk in enumerate(self.blocks):
             x = blk(x)
             
             
-            if self.w_lut and ada is not None and i < len(self.merge_blocks):
-                x_ada_pairs = [self.merge_blocks[i](x_i, ada_i, ratio=self.merge_ratio) for x_i, ada_i in zip(x, ada_list)]
+            if self.w_lut and ada is not None and i in self.merge_blocks_indexes:
+                x_ada_pairs = [self.merge_blocks[indx](x_i, ada_i, ratio=self.merge_ratio) for x_i, ada_i in zip(x, ada_list)]
                 x, ada_list = map(list, zip(*x_ada_pairs)) 
+                indx += 1
 
         all_x = x
         output = []
@@ -369,12 +374,13 @@ class DinoVisionTransformer(nn.Module):
             return self.forward_features_list(x, masks)
 
         x, ada = self.prepare_tokens_with_masks(x, masks)
-
+        indx = 0
         for i, blk in enumerate(self.blocks):
             x = blk(x)
-            if self.w_lut and ada is not None and i < len(self.merge_blocks):
+            if self.w_lut and ada is not None and i in self.merge_blocks_indexes:
                 # print("HERE 11", x.shape, ada.shape)
-                x, ada  = self.merge_blocks[i](x, ada, ratio=self.merge_ratio)
+                x, ada  = self.merge_blocks[indx](x, ada, ratio=self.merge_ratio)
+                indx += 1
 
         x_norm = self.norm(x)
         return {

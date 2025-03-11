@@ -134,7 +134,7 @@ def do_test(cfg, model, iteration):
 from torch.utils.tensorboard import SummaryWriter
 
 def do_train(cfg, model, resume=False):
-    writer = SummaryWriter(log_dir=cfg.train.output_dir)
+    writer = SummaryWriter(log_dir="/home/paperspace/Documents/nika_space/dinov2/dinov2/tensorboard_logs/standart")
     model.train()
     inputs_dtype = torch.half
     fp16_scaler = model.fp16_scaler  # for mixed precision training
@@ -272,7 +272,7 @@ def do_train(cfg, model, resume=False):
             for v in loss_dict.values():
                 torch.distributed.all_reduce(v)
         loss_dict_reduced = {k: v.item() / distributed.get_global_size() for k, v in loss_dict.items()}
-
+        
         if math.isnan(sum(loss_dict_reduced.values())):
             logger.info("NaN detected")
             raise AssertionError
@@ -311,6 +311,8 @@ def parse_merge_block_indexes(config_value: str) -> List[int]:
     if '..' in config_value:
         start, end = map(int, config_value.split('..'))
         return list(range(start, end + 1))
+    if config_value == "":
+        return []
     return list(map(int, re.split(r'\s*,\s*', config_value)))
 
 

@@ -47,6 +47,9 @@ class SSLMetaArch(nn.Module):
             logger.info(f"OPTIONS -- pretrained weights: loading from {cfg.student.pretrained_weights}")
             student_backbone.load_state_dict(chkpt["model"], strict=False)
 
+        # if cfg.student.merge_block_indexes:
+        #     merge_blocks_ind = cfg.student.merge_block_indexes
+
         self.embed_dim = embed_dim
         self.dino_out_dim = cfg.dino.head_n_prototypes
 
