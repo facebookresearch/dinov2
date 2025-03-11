@@ -16,4 +16,7 @@ from .image_ship_id_500imgs import ImageShipID_500I
 from .image_ship_id_1000imgs import ImageShipID_1000I
 from .image_ship_id_5000imgs import ImageShipID_5000I
 from .image_ship_id_10000imgs import ImageShipID_10000I
+from .image_ship_id_1M import ImageShipID_1M
+from .image_ship_id_200k import ImageShipID_200k
+from .image_ship_id_25k import ImageShipID_25k
 from .image_ship_ood import ImageShipOOD

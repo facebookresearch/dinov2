@@ -10,7 +10,7 @@ from typing import Any, Callable, List, Optional, TypeVar
 import torch
 from torch.utils.data import Sampler
 
-from .datasets import ImageNet, ImageNet22k, ImageShipID, ImageShipID_Extra, ImageShipID_20P, ImageShipID_40P, ImageShipID_60P, ImageShipID_80P, ImageShipOOD, ImageShipID_100I, ImageShipID_500I, ImageShipID_1000I, ImageShipID_5000I, ImageShipID_10000I
+from .datasets import ImageNet, ImageNet22k, ImageShipID, ImageShipID_Extra, ImageShipID_20P, ImageShipID_40P, ImageShipID_60P, ImageShipID_80P, ImageShipOOD, ImageShipID_100I, ImageShipID_500I, ImageShipID_1000I, ImageShipID_5000I, ImageShipID_10000I, ImageShipID_1M, ImageShipID_200k, ImageShipID_25k
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler, ShardedInfiniteBalancedSampler
 
 
@@ -103,6 +103,18 @@ def _parse_dataset_str(dataset_str: str):
         class_ = ImageShipID_10000I
         if "split" in kwargs:
             kwargs["split"] = ImageShipID_10000I.Split[kwargs["split"]]
+    elif name == "ImageShipID_1M":
+        class_ = ImageShipID_1M
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipID_1M.Split[kwargs["split"]]
+    elif name == "ImageShipID_200k":
+        class_ = ImageShipID_200k
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipID_200k.Split[kwargs["split"]]
+    elif name == "ImageShipID_25k":
+        class_ = ImageShipID_25k
+        if "split" in kwargs:
+            kwargs["split"] = ImageShipID_25k.Split[kwargs["split"]]
     elif name == "ImageShipOOD":
         class_ = ImageShipOOD
         if "split" in kwargs:
