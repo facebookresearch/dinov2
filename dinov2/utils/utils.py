@@ -18,17 +18,26 @@ logger = logging.getLogger("dinov2")
 
 
 def load_pretrained_weights(model, pretrained_weights, checkpoint_key):
+    
     if urlparse(pretrained_weights).scheme:  # If it looks like an URL
         state_dict = torch.hub.load_state_dict_from_url(pretrained_weights, map_location="cpu")
     else:
         state_dict = torch.load(pretrained_weights, map_location="cpu")
-    if checkpoint_key is not None and checkpoint_key in state_dict:
+        state_dict = state_dict['model']
+    if checkpoint_key is not None:
+        print("INSIDE IF")
         logger.info(f"Take key {checkpoint_key} in provided checkpoint dict")
-        state_dict = state_dict[checkpoint_key]
+        state_dict = {key: value for key, value in state_dict.items() if key.startswith(checkpoint_key) }
+        # state_dict = state_dict[checkpoint_key]
     # remove `module.` prefix
     state_dict = {k.replace("module.", ""): v for k, v in state_dict.items()}
     # remove `backbone.` prefix induced by multicrop wrapper
-    state_dict = {k.replace("backbone.", ""): v for k, v in state_dict.items()}
+    
+    state_dict = {k.replace("teacher.backbone.", ""): v for k, v in state_dict.items()}
+    # print("Model Keys:")
+    # for key in state_dict.keys():
+    #     print(key)
+    # print("State dict: ", state_dict.keys())
     msg = model.load_state_dict(state_dict, strict=False)
     logger.info("Pretrained weights found at {} and loaded with msg: {}".format(pretrained_weights, msg))
 

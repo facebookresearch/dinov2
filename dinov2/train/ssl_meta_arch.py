@@ -26,6 +26,39 @@ except ImportError:
 
 
 logger = logging.getLogger("dinov2")
+import math
+def interpolate_pos_encoding(x, w, h):
+    N = x.shape[1] - 1
+    dim = x.shape[-1]
+    w0 = w / int(math.sqrt(N))
+    h0 = h / int(math.sqrt(N))
+
+    # Interpolate the position embeddings without changing the first row (class token)
+    patch_pos_embed = nn.functional.interpolate(
+        x[:, 1:].reshape(1, int(math.sqrt(N)), int(math.sqrt(N)), dim).permute(0, 3, 1, 2),
+        scale_factor=(w0, h0),
+        mode="bicubic",
+    )
+
+    # assert int(w0) == patch_pos_embed.shape[-2]
+    # assert int(h0) == patch_pos_embed.shape[-1]
+    patch_pos_embed = patch_pos_embed.permute(0, 2, 3, 1).view(1, -1, dim)
+
+    # Concatenate the class token with the interpolated position embeddings
+    return torch.cat((x[:, :1], patch_pos_embed), dim=1)
+
+
+def get_downloaded_dino_vit_interpolated(modelname="dinov2_vits14", merge_block_indexes=[], is_teacher=False):
+    print("HERE !")
+    model = torch.hub.load("facebookresearch/dinov2", modelname, pretrained=False, merge_block_indexes=merge_block_indexes, is_teacher=is_teacher)  #
+    print("HERE 2")
+    input_tensor = model.pos_embed
+    input_tensor = input_tensor.to('cuda') 
+    tensor_corr_shape = interpolate_pos_encoding(input_tensor, 16, 16)
+    pos_embed = nn.Parameter(torch.zeros(1, 257))
+    pos_embed.data = tensor_corr_shape
+    model.pos_embed = pos_embed
+    return model
 
 
 class SSLMetaArch(nn.Module):
@@ -37,7 +70,14 @@ class SSLMetaArch(nn.Module):
         student_model_dict = dict()
         teacher_model_dict = dict()
 
-        student_backbone, teacher_backbone, embed_dim = build_model_from_cfg(cfg)
+        if cfg.student.arch in ["dinov2_vits14", "dinov2_vitb14", "dinov2_vitl14", "dinov2_vitg14"]:
+            print("Load pre-trained encoder:")
+            student_backbone = get_downloaded_dino_vit_interpolated(cfg.student.arch, cfg.student.merge_block_indexes)
+            teacher_backbone = get_downloaded_dino_vit_interpolated(cfg.student.arch, cfg.student.merge_block_indexes, is_teacher=True)
+            embed_dict = {"dinov2_vits14": 384, "dinov2_vitb14": 768, "dinov2_vitl14": 1024, "dinov2_vitg14": 1536}
+            embed_dim = embed_dict[cfg.student.arch]
+        else:
+            student_backbone, teacher_backbone, embed_dim = build_model_from_cfg(cfg)
         student_model_dict["backbone"] = student_backbone
         teacher_model_dict["backbone"] = teacher_backbone
         logger.info(f"OPTIONS -- architecture : embed_dim: {embed_dim}")
@@ -47,8 +87,9 @@ class SSLMetaArch(nn.Module):
             logger.info(f"OPTIONS -- pretrained weights: loading from {cfg.student.pretrained_weights}")
             student_backbone.load_state_dict(chkpt["model"], strict=False)
 
-        # if cfg.student.merge_block_indexes:
-        #     merge_blocks_ind = cfg.student.merge_block_indexes
+        print("Before IF")
+        if cfg.student.merge_block_indexes:
+            self.merge_blocks_ind = cfg.student.merge_block_indexes
 
         self.embed_dim = embed_dim
         self.dino_out_dim = cfg.dino.head_n_prototypes
@@ -115,6 +156,7 @@ class SSLMetaArch(nn.Module):
 
         self.need_to_synchronize_fsdp_streams = True
 
+        print("Student model dict: ", student_model_dict)
         self.student = nn.ModuleDict(student_model_dict)
         self.teacher = nn.ModuleDict(teacher_model_dict)
 
@@ -392,12 +434,216 @@ class SSLMetaArch(nn.Module):
 
     def prepare_for_distributed_training(self):
         logger.info("DISTRIBUTED FSDP -- preparing model for distributed training")
-        if has_batchnorms(self.student):
-            raise NotImplementedError
+        # if has_batchnorms(self.student):
+        #     raise NotImplementedError
         # below will synchronize all student subnetworks across gpus:
+        # print("Self.student: ", self.student.keys())
+        # for name, param in self.named_parameters():
+        #     # Unfreeze only pre_encoder, model_adapter, and merge_blocks
+        #     if not any(sub in name for sub in ["pre_encoder", "model_adapter", "merge_blocks"]):
+        #         param.requires_grad = False
+        #     else:
+        #         param.requires_grad = True  
+    
+        print("Student keys: ", self.student.items())
         for k, v in self.student.items():
             self.teacher[k].load_state_dict(self.student[k].state_dict())
             student_model_cfg = self.cfg.compute_precision.student[k]
+            print("Cfg: ", student_model_cfg)
+
             self.student[k] = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k])
             teacher_model_cfg = self.cfg.compute_precision.teacher[k]
             self.teacher[k] = get_fsdp_wrapper(teacher_model_cfg, modules_to_wrap={BlockChunk})(self.teacher[k])
+
+        print("Type: ", type(self.student["backbone"].pre_encoder))
+        # if self.student["backbone"].pre_encoder:
+        #     cfg = self.cfg.compute_precision.student.pre_encoder
+        #     self.student["backbone"].pre_encoder = get_fsdp_wrapper(cfg, modules_to_wrap={nn.Module})(self.student["backbone"].pre_encoder)
+
+        cfg = self.cfg.compute_precision.student.pre_encoder
+        # if not isinstance(self.student["backbone"].pre_encoder.Predictor_K, FSDP):
+        # self.student["backbone"].pre_encoder.Predictor_K = get_fsdp_wrapper(cfg, modules_to_wrap={nn.Linear, nn.Conv2d, nn.LayerNorm})(self.student["backbone"].pre_encoder.Predictor_K )
+        import dinov2.distributed as distributed
+        from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
+        self.student["backbone"].pre_encoder.Predictor_K = FSDP(
+            self.student["backbone"].pre_encoder.Predictor_K,
+            sharding_strategy=cfg.sharding_strategy,
+            mixed_precision=cfg.mixed_precision,
+            device_id=distributed.get_local_rank(),
+            sync_module_states=True,
+            use_orig_params=True,
+        )
+        self.teacher["backbone"].pre_encoder.Predictor_K = FSDP(
+            self.teacher["backbone"].pre_encoder.Predictor_K,
+            sharding_strategy=cfg.sharding_strategy,
+            mixed_precision=cfg.mixed_precision,
+            device_id=distributed.get_local_rank(),
+            sync_module_states=True,
+            use_orig_params=True,
+        )
+        # if not isinstance(self.student["backbone"].pre_encoder.Predictor_M, FSDP):
+        # self.student["backbone"].pre_encoder.Predictor_M = get_fsdp_wrapper(cfg, modules_to_wrap={nn.Module})(self.student["backbone"].pre_encoder.Predictor_M )
+        self.student["backbone"].pre_encoder.Predictor_M = FSDP(
+            self.student["backbone"].pre_encoder.Predictor_M,
+            sharding_strategy=cfg.sharding_strategy,
+            mixed_precision=cfg.mixed_precision,
+            device_id=distributed.get_local_rank(),
+            sync_module_states=True,
+            use_orig_params=True,
+        )
+        self.teacher["backbone"].pre_encoder.Predictor_M = FSDP(
+            self.teacher["backbone"].pre_encoder.Predictor_M,
+            sharding_strategy=cfg.sharding_strategy,
+            mixed_precision=cfg.mixed_precision,
+            device_id=distributed.get_local_rank(),
+            sync_module_states=True,
+            use_orig_params=True,
+        )
+        # if not isinstance(self.student["backbone"].pre_encoder.LUT, FSDP):
+        self.student["backbone"].pre_encoder.LUT = get_fsdp_wrapper(cfg, modules_to_wrap={nn.Module})(self.student["backbone"].pre_encoder.LUT)
+        self.teacher["backbone"].pre_encoder.LUT = get_fsdp_wrapper(cfg, modules_to_wrap={nn.Module})(self.teacher["backbone"].pre_encoder.LUT)
+        cfg = self.cfg.compute_precision.student.model_adapter
+        self.student["backbone"].model_adapter = get_fsdp_wrapper(cfg, modules_to_wrap={nn.Module})(self.student["backbone"].model_adapter)
+        self.teacher["backbone"].model_adapter = get_fsdp_wrapper(cfg, modules_to_wrap={nn.Module})(self.teacher["backbone"].model_adapter)
+        cfg = self.cfg.compute_precision.student.merge_blocks
+        for block in range(len(self.student["backbone"].merge_blocks)):
+            self.student["backbone"].merge_blocks[block] = get_fsdp_wrapper(cfg, modules_to_wrap={nn.Module})(self.student["backbone"].merge_blocks[block])
+        
+
+    # def prepare_for_distributed_training(self):
+    #     logger.info("DISTRIBUTED FSDP -- preparing model for distributed training")
+        
+    #     # Synchronize all student subnetworks across GPUs
+    #     for k, v in self.student.items():
+    #         self.teacher[k].load_state_dict(self.student[k].state_dict())
+    #         student_model_cfg = self.cfg.compute_precision.student[k]
+    #         self.student[k] = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k])
+    #         teacher_model_cfg = self.cfg.compute_precision.teacher[k]
+    #         self.teacher[k] = get_fsdp_wrapper(teacher_model_cfg, modules_to_wrap={BlockChunk})(self.teacher[k])
+        
+    #     # Wrap the pre-encoder, model adapter, and merge blocks separately
+    #     if hasattr(self, 'pre_encoder'):
+    #         logger.info("Wrapping pre-encoder for FSDP")
+    #         self.pre_encoder = get_fsdp_wrapper(self.cfg.compute_precision.student, modules_to_wrap={nn.Module})(self.pre_encoder)
+        
+    #     if hasattr(self, 'model_adapter'):
+    #         logger.info("Wrapping model adapter for FSDP")
+    #         self.model_adapter = get_fsdp_wrapper(self.cfg.compute_precision.student, modules_to_wrap={nn.Module})(self.model_adapter)
+        
+    #     if hasattr(self, 'merge_blocks'):
+    #         logger.info("Wrapping merge blocks for FSDP")
+    #         for i, block in enumerate(self.merge_blocks):
+    #             self.merge_blocks[i] = get_fsdp_wrapper(self.cfg.compute_precision.student, modules_to_wrap={nn.Module})(block)
+
+    # def prepare_for_distributed_training(self):
+    #     """
+    #     Prepare both student and teacher models for distributed training using FSDP.
+    #     This handles the issue of having both trainable and non-trainable parameters.
+    #     """
+    #     from torch.distributed.fsdp.wrap import ModuleWrapPolicy
+    #     import copy
+
+    #     # Process student models
+    #     for k in self.student.keys():
+    #         print("Preparing student model for distributed training:", k)
+            
+    #         # First make all parameters trainable to satisfy FSDP requirements
+    #         for param in self.student[k].parameters():
+    #             param.requires_grad_(True)
+            
+    #         # Wrap with FSDP
+    #         student_model_cfg = self.cfg.compute_precision.student[k]
+    #         print("Student __: ", self.student[k], student_model_cfg)
+    #         self.student[k] = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k])
+            
+    #         # After FSDP wrapping, set appropriate parameters to not require gradient
+    #         for name, param in self.student[k].named_parameters():
+    #             # Freeze DINO backbone parameters
+    #             if any([x in name for x in [
+    #                 'pre_encoder', 'model_adapter', 'merge_blocks'
+    #             ]]):
+    #                 # print("HERE HERE", name)
+    #                 param.requires_grad_(True)
+    #             else:
+    #                 print("Name: ", name)
+    #                 param.requires_grad_(False)
+    #             #     print("Second option")
+            
+    #         # Print statistics about trainable parameters
+    #         trainable_params = 0
+    #         total_params = 0
+    #         for name, param in self.student[k].named_parameters():
+    #             total_params += param.numel()
+    #             if param.requires_grad:
+    #                 trainable_params += param.numel()
+                    
+    #         print(f"Student {k}: Total params: {total_params:,}, Trainable params: {trainable_params:,} ({trainable_params/total_params:.2%})")
+
+    #     # Process teacher models
+    #     for k in self.teacher.keys():
+    #         print("Preparing teacher model for distributed training:", k)
+            
+    #         # Teacher model doesn't need gradient computation during training
+    #         # But we first make all parameters trainable for FSDP wrapping
+    #         for param in self.teacher[k].parameters():
+    #             param.requires_grad_(True)
+            
+    #         # Wrap with FSDP
+    #         teacher_model_cfg = self.cfg.compute_precision.teacher[k]
+    #         print("Teacher __: ", self.teacher[k], teacher_model_cfg)
+    #         self.teacher[k] = get_fsdp_wrapper(teacher_model_cfg, modules_to_wrap={BlockChunk})(self.teacher[k])
+            
+    #         # After FSDP wrapping, set all parameters to not require gradient
+    #         # Teacher models are typically frozen and only updated via EMA
+    #         for param in self.teacher[k].parameters():
+    #             param.requires_grad_(False)
+            
+    #         # Print statistics
+    #         total_params = sum(p.numel() for p in self.teacher[k].parameters())
+    #         print(f"Teacher {k}: Total params: {total_params:,}, All parameters frozen")
+            
+    # def prepare_for_distributed_training(self):
+    #     logger.info("DISTRIBUTED FSDP -- preparing model for distributed training")
+        
+    #     # Before FSDP wrapping, ensure uniform requires_grad within each BlockChunk
+    #     for k, v in self.student.items():
+    #         for name, module in v.named_modules():
+    #             if isinstance(module, BlockChunk):
+    #                 # # Make requires_grad uniform within each BlockChunk
+    #                 # # Option 1: Make all parameters in the BlockChunk trainable if any are trainable
+    #                 # any_trainable = any(p.requires_grad for p in module.parameters())
+    #                 # if any_trainable:
+    #                 #     for param in module.parameters():
+    #                 #         param.requires_grad = True
+                    
+    #                 # Option 2: Or alternatively, make all parameters in the BlockChunk non-trainable
+    #                 for param in module.parameters():
+    #                     param.requires_grad = False
+        
+    #     # Now proceed with FSDP wrapping
+    #     for k, v in self.student.items():
+    #         self.teacher[k].load_state_dict(self.student[k].state_dict())
+    #         student_model_cfg = self.cfg.compute_precision.student[k]
+    #         self.student[k] = get_fsdp_wrapper(student_model_cfg, modules_to_wrap={BlockChunk})(self.student[k])
+    #         teacher_model_cfg = self.cfg.compute_precision.teacher[k]
+    #         self.teacher[k] = get_fsdp_wrapper(teacher_model_cfg, modules_to_wrap={BlockChunk})(self.teacher[k])
+
+
+    def freeze_original_dino_weights(self):
+        print("Freezing")
+        
+        # Freeze the original DINO weights
+        for param in self.parameters():
+            param.requires_grad = False
+        
+        # Unfreeze the pre-encoder, model adapter, and merge blocks
+        if hasattr(self, 'pre_encoder'):
+            for param in self.pre_encoder.parameters():
+                param.requires_grad = True
+        if hasattr(self, 'model_adapter'):
+            for param in self.model_adapter.parameters():
+                param.requires_grad = True
+        if hasattr(self, 'merge_blocks'):
+            for block in self.merge_blocks:
+                for param in block.parameters():
+                    param.requires_grad = True

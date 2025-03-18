@@ -28,6 +28,7 @@ def _make_dinov2_model(
     interpolate_offset: float = 0.1,
     pretrained: bool = True,
     weights: Union[Weights, str] = Weights.LVD142M,
+    merge_block_indexes: list[int] = [0],
     **kwargs,
 ):
     from ..models import vision_transformer as vits
@@ -48,8 +49,10 @@ def _make_dinov2_model(
         num_register_tokens=num_register_tokens,
         interpolate_antialias=interpolate_antialias,
         interpolate_offset=interpolate_offset,
+        merge_block_indexes=merge_block_indexes
     )
     vit_kwargs.update(**kwargs)
+    print("Kwargs: ", vit_kwargs)
     model = vits.__dict__[arch_name](**vit_kwargs)
 
     if pretrained:

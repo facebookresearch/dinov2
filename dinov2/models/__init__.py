@@ -26,8 +26,10 @@ def build_model(args, only_teacher=False, img_size=224):
             num_register_tokens=args.num_register_tokens,
             interpolate_offset=args.interpolate_offset,
             interpolate_antialias=args.interpolate_antialias,
-            # merge_blocks_indexes=args.merge_block_indexes,
+            merge_block_indexes=args.student.merge_block_indexes,
         )
+        print( vits.__dict__.keys())
+        print("Merge block ind: ", args.student.merge_block_indexes)
         teacher = vits.__dict__[args.arch](**vit_kwargs)
         if only_teacher:
             return teacher, teacher.embed_dim
@@ -41,4 +43,5 @@ def build_model(args, only_teacher=False, img_size=224):
 
 
 def build_model_from_cfg(cfg, only_teacher=False):
+    print("Only teacher", only_teacher)
     return build_model(cfg.student, only_teacher=only_teacher, img_size=cfg.crops.global_crops_size)

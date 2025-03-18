@@ -25,28 +25,30 @@ class Merge_block(BaseModule):
         self.ada_c = ada_c
         # 784 - embedded dim + adapter_c
         self.embeded_dim = 768
-        self.fc_1 = nn.Linear(self.embeded_dim*2, mid_c).to(torch.float16)
-        self.fc_2 = nn.Linear(mid_c, self.embeded_dim).to(torch.float16)
+        self.fc_1 = nn.Linear(self.embeded_dim*2, mid_c)
+        print("Fc 1 type: ", self.fc_1.weight.dtype, self.fc_1.bias.dtype)
+        self.fc_2 = nn.Linear(mid_c, self.embeded_dim)
         self.return_ada = return_ada
 
         if self.return_ada:
-            self.conv_3 = nn.Conv1d(mid_c, self.embeded_dim, kernel_size=1).to(torch.float16)  # 1D Conv instead of 3x3
+            self.conv_3 = nn.Conv1d(mid_c, self.embeded_dim, kernel_size=1)  # 1D Conv instead of 3x3
         else:
             self.conv_3 = None
 
     def forward(self, fea, adapter, ratio=1.0):
         res = fea
         # print("Before concatenation: ", fea.shape, adapter.shape, self.fea_c, self.ada_c)
-        # print("before concatenation: ", fea.shape, adapter.shape)
+        # print("before concatenation: ", fea.dtype, adapter.dtype)
         fea = torch.cat([fea, adapter], dim=-1)  # (B, seq_len, fea_c + ada_c)
         # print("after concatenation: ", fea.shape, adapter.shape)
         B, seq_len, C = fea.shape
         fea = fea.view(B * seq_len, C) 
+        # print("before concatenation: ", fea.dtype, adapter.dtype)
+        fea = fea.to(self.fc_1.weight.dtype)
         fea = self.fc_1(fea) 
         fea = fea.view(B, seq_len, -1)  
         ada = self.fc_2(fea)  
         fea_out = ratio * ada + res
-
         if self.return_ada:
            
             ada = self.conv_3(fea.permute(0, 2, 1))
@@ -313,7 +315,7 @@ class CustomLayerNorm(nn.Module):
 
 # Predictor P_K
 class Kernel_Predictor(nn.Module):
-    def __init__(self, dim, mode='low', num_heads=1, qkv_bias=True, qk_scale=None, attn_drop=0., proj_drop=0.):
+    def __init__(self, dim, mode='normal', num_heads=1, qkv_bias=True, qk_scale=None, attn_drop=0., proj_drop=0.):
         super().__init__()
         self.num_heads = num_heads
         head_dim = dim // num_heads
@@ -546,7 +548,7 @@ def gaussian_blur(img: Tensor, kernel_size: List[int], sigma: List[float]) -> Te
     return img
 
 
-def Gain_Denoise(I1, r1, r2, gain, sigma, k_size=3):  # [9, 9] in LOD dataset, [3, 3] in other dataset
+def Gain_Denoise(I1, r1, r2, gain, sigma, k_size=1):  # [9, 9] in LOD dataset, [3, 3] in other dataset
     out = []
     for i in range(I1.shape[0]):
         I1_gain = gain[i] * I1[i,:,:,:]
@@ -583,11 +585,11 @@ def WB_CCM(I2, ccm_matrix, distance):
     out_I4 = []
     for i in range(I2.shape[0]):
         # SOG White Balance Algorithm
-        I3 = SoG_algo(I2[i,:,:,:], distance[i])
+        I3 = SoG_algo(I2[i,:,:,:])
         
         # Camera Color Matrix
         I4 = torch.tensordot(I3, ccm_matrix[i,:,:], dims=[[-1], [-1]])
-        I4 = torch.clamp(I4, 1e-5, 1.0)
+        I4 = torch.clamp(I4, 1e-7, 1.0)
          
         out_I3.append(I3)
         out_I4.append(I4)
@@ -620,7 +622,7 @@ class VitInputLevelAdapter(nn.Module):
         # (1). I1 --> I2: Denoise & Enhancement & Sharpen
         r1, r2, gain, sigma = self.Predictor_K(I1)
         I2 = Gain_Denoise(I1, r1, r2, gain, sigma, k_size=self.k_size)  # (B,C,H,W)
-        I2 = torch.clamp(I2, 1e-5, 1.0) # normal & over-exposure
+        I2 = torch.clamp(I2, 1e-7, 1.0) # normal & over-exposure
         
         ccm_matrix, distance = self.Predictor_M(I2)
         # (2). I2 --> I3: White Balance, Shade of Gray

@@ -17,6 +17,7 @@ from torch.distributed.fsdp import StateDictType
 from torch.distributed.fsdp.sharded_grad_scaler import ShardedGradScaler
 from torch.distributed.fsdp.wrap import ModuleWrapPolicy
 from torch.distributed.fsdp._runtime_utils import _reshard
+import torch.nn as nn
 
 
 def get_fsdp_wrapper(model_cfg, modules_to_wrap=set()):
@@ -32,16 +33,22 @@ def get_fsdp_wrapper(model_cfg, modules_to_wrap=set()):
         "bf16": torch.bfloat16,
     }
 
+    param_dtype = dtype_dict[model_cfg.mixed_precision.param_dtype]
+    reduce_dtype = dtype_dict[model_cfg.mixed_precision.reduce_dtype]
+    buffer_dtype = dtype_dict[model_cfg.mixed_precision.buffer_dtype]
+    
     mixed_precision_config = MixedPrecision(
-        param_dtype=dtype_dict[model_cfg.mixed_precision.param_dtype],
-        reduce_dtype=dtype_dict[model_cfg.mixed_precision.reduce_dtype],
-        buffer_dtype=dtype_dict[model_cfg.mixed_precision.buffer_dtype],
+        param_dtype=param_dtype,
+        reduce_dtype=reduce_dtype,
+        buffer_dtype=buffer_dtype,
+        cast_forward_inputs=model_cfg.mixed_precision.get("cast_forward_inputs", True)
     )
 
     sharding_strategy_config = sharding_strategy_dict[model_cfg.sharding_strategy]
 
     local_rank = distributed.get_local_rank()
 
+    print("Modules to wrap: ", modules_to_wrap)
     fsdp_wrapper = partial(
         FSDP,
         sharding_strategy=sharding_strategy_config,
@@ -51,6 +58,7 @@ def get_fsdp_wrapper(model_cfg, modules_to_wrap=set()):
         use_orig_params=True,
         auto_wrap_policy=ModuleWrapPolicy(modules_to_wrap),
     )
+
     return fsdp_wrapper
 
 
@@ -112,7 +120,7 @@ class FSDPCheckpointer(Checkpointer):
         self.tag_last_checkpoint(basename)
 
     def load(self, *args, **kwargs):
-        with FSDP.state_dict_type(self.model, StateDictType.LOCAL_STATE_DICT):
+        with FSDP.state_dict_type(self.model, StateDictType.FULL_STATE_DICT):
             return super().load(*args, **kwargs)
 
     def has_checkpoint(self) -> bool:
