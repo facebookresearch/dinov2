@@ -13,7 +13,7 @@ from torch.utils.data import Sampler
 from .datasets import ImageNet, ImageNet22k
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler
 from .datasets import (
-    ADK20Dataset
+    ADK20Dataset, RAWNODDataset, RaiseDataset
 )
 
 logger = logging.getLogger("dinov2")
@@ -60,6 +60,10 @@ def _parse_dataset_str(dataset_str: str):
     #     class_ = HemaStandardDataset
     if name == "ImageNet":
         class_ = ADK20Dataset
+    elif name == "RAW_NOD":
+        class_ = RAWNODDataset
+    elif name == "RAISE":
+        class_ = RaiseDataset
     else:
         raise ValueError(f'Unsupported dataset "{name}"')
 

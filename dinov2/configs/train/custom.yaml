@@ -86,8 +86,9 @@ data_transform: "default"
 train:
   batch_size_per_gpu: 16 #vitg 26+, vitl: 56, vits:152, vitb:120 for 8 node
   num_workers: 1
-  OFFICIAL_EPOCH_LENGTH: 1000  # 1250
-  dataset_path: ImageNet:root=/home/paperspace/Documents/nika_space/ADE20K/ADEChallengeData2016/images/training_raw/ #MIT:root=/home/paperspace/Documents/nika_space/mit_dataset/train/
+  OFFICIAL_EPOCH_LENGTH: 500  # 1250
+  dataset_path: RAISE:root=/home/paperspace/Documents/nika_space/RAISE_383.csv
+  #RAW_NOD:root=/home/paperspace/Documents/nika_space/raw_nod_dataset/RAW-NOD/image/ #ImageNet:root=/home/paperspace/Documents/nika_space/ADE20K/ADEChallengeData2016/images/training_raw/
   centering: sinkhorn_knopp
 
   drop_path_rate: 0.4
@@ -100,7 +101,7 @@ teacher:
   momentum_teacher: 0.994
 optim:
   epochs: 50  # 500
-  weight_decay_end: 0.3
+  weight_decay_end: 0.35
   base_lr: 0.0001  # learning rate for a batch size of 1024
   warmup_epochs: 20  # 80
   layerwise_decay: 1.0
@@ -114,9 +115,9 @@ evaluation:
 # "dinov2_vits14","dinov2_vitb14","dinov2_vitl14","dinov2_vitg14"
 
 student:
-  arch: dinov2_vitb14
+  arch: dinov2_vitb14 #vit_base #dinov2_vitb14
   patch_size: 14
-  merge_block_indexes: ""  # num, num, num,
+  merge_block_indexes: "0, 6, 10"  # num, num, num,
 crops:
   global_crops_scale:
   - 0.32 #0.32 default
