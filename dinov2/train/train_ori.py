@@ -8,7 +8,6 @@ import logging
 import math
 import os
 from functools import partial
-from collections import defaultdict
 
 from fvcore.common.checkpoint import PeriodicCheckpointer
 import torch
@@ -160,7 +159,7 @@ def do_train(cfg, model, resume=False):
         checkpointer,
         period=3 * OFFICIAL_EPOCH_LENGTH,
         max_iter=max_iter,
-        max_to_keep=5,
+        max_to_keep=3,
     )
 
     # setup data preprocessing
@@ -181,7 +180,6 @@ def do_train(cfg, model, resume=False):
         local_crops_size=cfg.crops.local_crops_size,
     )
 
-    accum_steps = cfg.train.grad_accum_steps
     collate_fn = partial(
         collate_data_and_cast,
         mask_ratio_tuple=cfg.ibot.mask_ratio_min_max,
@@ -189,7 +187,6 @@ def do_train(cfg, model, resume=False):
         n_tokens=n_tokens,
         mask_generator=mask_generator,
         dtype=inputs_dtype,
-        grad_accum_steps=accum_steps,
     )
 
     # setup data loader
@@ -229,7 +226,7 @@ def do_train(cfg, model, resume=False):
         max_iter,
         start_iter,
     ):
-        current_batch_size = accum_steps * data[0]["collated_global_crops"].shape[0] / 2
+        current_batch_size = data["collated_global_crops"].shape[0] / 2
         if iteration > max_iter:
             return
 
@@ -245,12 +242,7 @@ def do_train(cfg, model, resume=False):
         # compute losses
 
         optimizer.zero_grad(set_to_none=True)
-        loss_dict = defaultdict(float)
-        for data_shard in data:
-            shard_loss_dict = model.forward_backward(data_shard, teacher_temp=teacher_temp, scale=1.0 / accum_steps)
-            for k, v in shard_loss_dict.items():
-                loss_dict[k] += v.detach()  # .detach(): keep the graph small / avoid dangling references
-        loss_dict = {k: v / accum_steps for k, v in loss_dict.items()}
+        loss_dict = model.forward_backward(data, teacher_temp=teacher_temp)
 
         # clip gradients
 
