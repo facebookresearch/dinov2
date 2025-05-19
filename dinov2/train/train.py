@@ -314,5 +314,6 @@ def main(args):
 
 
 if __name__ == "__main__":
+    import sys
     args = get_args_parser(add_help=True).parse_args()
     main(args)
