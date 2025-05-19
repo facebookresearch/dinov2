@@ -8,29 +8,19 @@
 #   https://github.com/rwightman/pytorch-image-models/tree/master/timm/models/vision_transformer.py
 
 import logging
-import os
-import warnings
 
 from torch import Tensor
 from torch import nn
 
+from ._utils import _xformers_is_available
+
 
 logger = logging.getLogger("dinov2")
 
+XFORMERS_AVAILABLE = _xformers_is_available("Attention")
 
-XFORMERS_ENABLED = os.environ.get("XFORMERS_DISABLED") is None
-try:
-    if XFORMERS_ENABLED:
-        from xformers.ops import memory_efficient_attention, unbind
-
-        XFORMERS_AVAILABLE = True
-        warnings.warn("xFormers is available (Attention)")
-    else:
-        warnings.warn("xFormers is disabled (Attention)")
-        raise ImportError
-except ImportError:
-    XFORMERS_AVAILABLE = False
-    warnings.warn("xFormers is not available (Attention)")
+if XFORMERS_AVAILABLE:
+    from xformers.ops import memory_efficient_attention, unbind
 
 
 class Attention(nn.Module):

@@ -8,9 +8,7 @@
 #   https://github.com/rwightman/pytorch-image-models/tree/master/timm/layers/patch_embed.py
 
 import logging
-import os
 from typing import Callable, List, Any, Tuple, Dict
-import warnings
 
 import torch
 from torch import nn, Tensor
@@ -19,25 +17,15 @@ from .attention import Attention, MemEffAttention
 from .drop_path import DropPath
 from .layer_scale import LayerScale
 from .mlp import Mlp
+from ._utils import _xformers_is_available
 
 
 logger = logging.getLogger("dinov2")
 
+XFORMERS_AVAILABLE = _xformers_is_available("Block")
 
-XFORMERS_ENABLED = os.environ.get("XFORMERS_DISABLED") is None
-try:
-    if XFORMERS_ENABLED:
-        from xformers.ops import fmha, scaled_index_add, index_select_cat
-
-        XFORMERS_AVAILABLE = True
-        warnings.warn("xFormers is available (Block)")
-    else:
-        warnings.warn("xFormers is disabled (Block)")
-        raise ImportError
-except ImportError:
-    XFORMERS_AVAILABLE = False
-
-    warnings.warn("xFormers is not available (Block)")
+if XFORMERS_AVAILABLE:
+    from xformers.ops import fmha, scaled_index_add, index_select_cat
 
 
 class Block(nn.Module):
