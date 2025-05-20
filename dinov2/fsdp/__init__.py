@@ -8,18 +8,16 @@ from typing import Any
 
 import torch
 import dinov2.distributed as distributed
-from functools import partial
 from fvcore.common.checkpoint import Checkpointer
 from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
 from torch.distributed.fsdp import ShardingStrategy
 from torch.distributed.fsdp import MixedPrecision
 from torch.distributed.fsdp import StateDictType
 from torch.distributed.fsdp.sharded_grad_scaler import ShardedGradScaler
-from torch.distributed.fsdp.wrap import ModuleWrapPolicy
 from torch.distributed.fsdp._runtime_utils import _reshard
 
 
-def get_fsdp_wrapper(model_cfg, modules_to_wrap=set()):
+def parse_fsdp_config(model_cfg):
     sharding_strategy_dict = {
         "NO_SHARD": ShardingStrategy.NO_SHARD,
         "SHARD_GRAD_OP": ShardingStrategy.SHARD_GRAD_OP,
@@ -40,18 +38,7 @@ def get_fsdp_wrapper(model_cfg, modules_to_wrap=set()):
 
     sharding_strategy_config = sharding_strategy_dict[model_cfg.sharding_strategy]
 
-    local_rank = distributed.get_local_rank()
-
-    fsdp_wrapper = partial(
-        FSDP,
-        sharding_strategy=sharding_strategy_config,
-        mixed_precision=mixed_precision_config,
-        device_id=local_rank,
-        sync_module_states=True,
-        use_orig_params=True,
-        auto_wrap_policy=ModuleWrapPolicy(modules_to_wrap),
-    )
-    return fsdp_wrapper
+    return dict(sharding_strategy=sharding_strategy_config, mixed_precision=mixed_precision_config)
 
 
 def is_fsdp(x):

@@ -35,13 +35,6 @@ def named_apply(fn: Callable, module: nn.Module, name="", depth_first=True, incl
     return module
 
 
-class BlockChunk(nn.ModuleList):
-    def forward(self, x):
-        for b in self:
-            x = b(x)
-        return x
-
-
 class DinoVisionTransformer(nn.Module):
     def __init__(
         self,
@@ -158,7 +151,7 @@ class DinoVisionTransformer(nn.Module):
             for i in range(0, depth, chunksize):
                 # this is to keep the block index consistent if we chunk the block list
                 chunked_blocks.append([nn.Identity()] * i + blocks_list[i : i + chunksize])
-            self.blocks = nn.ModuleList([BlockChunk(p) for p in chunked_blocks])
+            self.blocks = nn.ModuleList([nn.Sequential(p) for p in chunked_blocks])
         else:
             self.chunked_blocks = False
             self.blocks = nn.ModuleList(blocks_list)
