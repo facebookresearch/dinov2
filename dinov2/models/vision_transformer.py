@@ -10,15 +10,13 @@
 from functools import partial
 import math
 import logging
-from typing import Sequence, Tuple, Union, Callable
+from typing import Sequence, Tuple, Union, Callable, Optional
 
-import numpy as np
 import torch
 import torch.nn as nn
-import torch.utils.checkpoint
 from torch.nn.init import trunc_normal_
 
-from dinov2.layers import Mlp, PatchEmbed, SwiGLUFFNFused, MemEffAttention, NestedTensorBlock as Block
+from dinov2.layers import Mlp, PatchEmbed, SwiGLUFFNFused, Attention, Block
 
 
 logger = logging.getLogger("dinov2")
@@ -117,7 +115,7 @@ class DinoVisionTransformer(nn.Module):
         if drop_path_uniform is True:
             dpr = [drop_path_rate] * depth
         else:
-            dpr = np.linspace(0, drop_path_rate, depth).tolist()  # stochastic depth decay rule
+            dpr = [x.item() for x in torch.linspace(0, drop_path_rate, depth)]  # stochastic depth decay rule
 
         if ffn_layer == "mlp":
             logger.info("using MLP layer as FFN")
@@ -177,7 +175,12 @@ class DinoVisionTransformer(nn.Module):
             nn.init.normal_(self.register_tokens, std=1e-6)
         named_apply(init_weights_vit_timm, self)
 
-    def interpolate_pos_encoding(self, x, w, h):
+    def interpolate_pos_encoding(
+        self,
+        x: torch.Tensor,
+        w: int,
+        h: int,
+    ) -> torch.Tensor:
         previous_dtype = x.dtype
         npatch = x.shape[1] - 1
         N = self.pos_embed.shape[1] - 1
@@ -189,36 +192,40 @@ class DinoVisionTransformer(nn.Module):
         dim = x.shape[-1]
         w0 = w // self.patch_size
         h0 = h // self.patch_size
+
         M = int(math.sqrt(N))  # Recover the number of patches in each dimension
         assert N == M * M
-        kwargs = {}
         if self.interpolate_offset:
             # Historical kludge: add a small number to avoid floating point error in the interpolation, see https://github.com/facebookresearch/dino/issues/8
             # Note: still needed for backward-compatibility, the underlying operators are using both output size and scale factors
             sx = float(w0 + self.interpolate_offset) / M
             sy = float(h0 + self.interpolate_offset) / M
-            kwargs["scale_factor"] = (sx, sy)
+            patch_pos_embed = nn.functional.interpolate(
+                patch_pos_embed.reshape(1, M, M, dim).permute(0, 3, 1, 2),
+                mode="bicubic",
+                antialias=self.interpolate_antialias,
+                scale_factor=(sx, sy),
+            )
         else:
-            # Simply specify an output size instead of a scale factor
-            kwargs["size"] = (w0, h0)
-        patch_pos_embed = nn.functional.interpolate(
-            patch_pos_embed.reshape(1, M, M, dim).permute(0, 3, 1, 2),
-            mode="bicubic",
-            antialias=self.interpolate_antialias,
-            **kwargs,
-        )
-        assert (w0, h0) == patch_pos_embed.shape[-2:]
+            patch_pos_embed = nn.functional.interpolate(
+                patch_pos_embed.reshape(1, M, M, dim).permute(0, 3, 1, 2),
+                mode="bicubic",
+                antialias=self.interpolate_antialias,
+                size=(w0, h0),
+            )
+
         patch_pos_embed = patch_pos_embed.permute(0, 2, 3, 1).view(1, -1, dim)
         return torch.cat((class_pos_embed.unsqueeze(0), patch_pos_embed), dim=1).to(previous_dtype)
 
-    def prepare_tokens_with_masks(self, x, masks=None):
+    @torch.jit.export
+    def prepare_tokens_with_masks(self, x, masks: Optional[torch.Tensor] = None):
         B, nc, w, h = x.shape
         x = self.patch_embed(x)
         if masks is not None:
             x = torch.where(masks.unsqueeze(-1), self.mask_token.to(x.dtype).unsqueeze(0), x)
 
         x = torch.cat((self.cls_token.expand(x.shape[0], -1, -1), x), dim=1)
-        x = x + self.interpolate_pos_encoding(x, w, h)
+        x = x + self.interpolate_pos_encoding(x, int(w), int(h))
 
         if self.register_tokens is not None:
             x = torch.cat(
@@ -252,7 +259,8 @@ class DinoVisionTransformer(nn.Module):
             )
         return output
 
-    def forward_features(self, x, masks=None):
+    @torch.jit.export
+    def forward_features(self, x, masks: Optional[torch.Tensor] = None):
         if isinstance(x, list):
             return self.forward_features_list(x, masks)
 
@@ -322,12 +330,9 @@ class DinoVisionTransformer(nn.Module):
             return tuple(zip(outputs, class_tokens))
         return tuple(outputs)
 
-    def forward(self, *args, is_training=False, **kwargs):
-        ret = self.forward_features(*args, **kwargs)
-        if is_training:
-            return ret
-        else:
-            return self.head(ret["x_norm_clstoken"])
+    @torch.jit.export
+    def forward(self, x, masks: Optional[torch.Tensor] = None):
+        return self.forward_features(x, masks)
 
 
 def init_weights_vit_timm(module: nn.Module, name: str = ""):
@@ -345,7 +350,7 @@ def vit_small(patch_size=16, num_register_tokens=0, **kwargs):
         depth=12,
         num_heads=6,
         mlp_ratio=4,
-        block_fn=partial(Block, attn_class=MemEffAttention),
+        block_fn=partial(Block, attn_class=Attention),
         num_register_tokens=num_register_tokens,
         **kwargs,
     )
@@ -359,7 +364,7 @@ def vit_base(patch_size=16, num_register_tokens=0, **kwargs):
         depth=12,
         num_heads=12,
         mlp_ratio=4,
-        block_fn=partial(Block, attn_class=MemEffAttention),
+        block_fn=partial(Block, attn_class=Attention),
         num_register_tokens=num_register_tokens,
         **kwargs,
     )
@@ -373,7 +378,7 @@ def vit_large(patch_size=16, num_register_tokens=0, **kwargs):
         depth=24,
         num_heads=16,
         mlp_ratio=4,
-        block_fn=partial(Block, attn_class=MemEffAttention),
+        block_fn=partial(Block, attn_class=Attention),
         num_register_tokens=num_register_tokens,
         **kwargs,
     )
@@ -390,7 +395,7 @@ def vit_giant2(patch_size=16, num_register_tokens=0, **kwargs):
         depth=40,
         num_heads=24,
         mlp_ratio=4,
-        block_fn=partial(Block, attn_class=MemEffAttention),
+        block_fn=partial(Block, attn_class=Attention),
         num_register_tokens=num_register_tokens,
         **kwargs,
     )

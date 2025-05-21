@@ -4,12 +4,12 @@
 # found in the LICENSE file in the root directory of this source tree.
 
 
-from dinov2.hub.backbones import dinov2_vitb14, dinov2_vitg14, dinov2_vitl14, dinov2_vits14
-from dinov2.hub.backbones import dinov2_vitb14_reg, dinov2_vitg14_reg, dinov2_vitl14_reg, dinov2_vits14_reg
-from dinov2.hub.classifiers import dinov2_vitb14_lc, dinov2_vitg14_lc, dinov2_vitl14_lc, dinov2_vits14_lc
-from dinov2.hub.classifiers import dinov2_vitb14_reg_lc, dinov2_vitg14_reg_lc, dinov2_vitl14_reg_lc, dinov2_vits14_reg_lc
-from dinov2.hub.depthers import dinov2_vitb14_ld, dinov2_vitg14_ld, dinov2_vitl14_ld, dinov2_vits14_ld
-from dinov2.hub.depthers import dinov2_vitb14_dd, dinov2_vitg14_dd, dinov2_vitl14_dd, dinov2_vits14_dd
+from dinov2.hub.backbones import dinov2_vitb14_scriptable, dinov2_vitg14_scriptable, dinov2_vitl14_scriptable, dinov2_vits14_scriptable
+from dinov2.hub.backbones import dinov2_vitb14_reg_scriptable, dinov2_vitg14_reg_scriptable, dinov2_vitl14_reg_scriptable, dinov2_vits14_reg_scriptable
+from dinov2.hub.classifiers import dinov2_vitb14_lc_scriptable, dinov2_vitg14_lc_scriptable, dinov2_vitl14_lc_scriptable, dinov2_vits14_lc_scriptable
+from dinov2.hub.classifiers import dinov2_vitb14_reg_lc_scriptable, dinov2_vitg14_reg_lc_scriptable, dinov2_vitl14_reg_lc_scriptable, dinov2_vits14_reg_lc_scriptable
+from dinov2.hub.depthers import dinov2_vitb14_ld_scriptable, dinov2_vitg14_ld_scriptable, dinov2_vitl14_ld_scriptable, dinov2_vits14_ld_scriptable
+from dinov2.hub.depthers import dinov2_vitb14_dd_scriptable, dinov2_vitg14_dd_scriptable, dinov2_vitl14_dd_scriptable, dinov2_vits14_dd_scriptable
 
 
 dependencies = ["torch"]

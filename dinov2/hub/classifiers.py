@@ -118,7 +118,7 @@ def _make_dinov2_linear_classifier(
     return _LinearClassifierWrapper(backbone=backbone, linear_head=linear_head, layers=layers)
 
 
-def dinov2_vits14_lc(
+def dinov2_vits14_lc_scriptable(
     *,
     layers: int = 4,
     pretrained: bool = True,
@@ -137,7 +137,7 @@ def dinov2_vits14_lc(
     )
 
 
-def dinov2_vitb14_lc(
+def dinov2_vitb14_lc_scriptable(
     *,
     layers: int = 4,
     pretrained: bool = True,
@@ -156,7 +156,7 @@ def dinov2_vitb14_lc(
     )
 
 
-def dinov2_vitl14_lc(
+def dinov2_vitl14_lc_scriptable(
     *,
     layers: int = 4,
     pretrained: bool = True,
@@ -175,7 +175,7 @@ def dinov2_vitl14_lc(
     )
 
 
-def dinov2_vitg14_lc(
+def dinov2_vitg14_lc_scriptable(
     *,
     layers: int = 4,
     pretrained: bool = True,
@@ -195,7 +195,7 @@ def dinov2_vitg14_lc(
     )
 
 
-def dinov2_vits14_reg_lc(
+def dinov2_vits14_reg_lc_scriptable(
     *, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.IMAGENET1K, **kwargs
 ):
     """
@@ -213,7 +213,7 @@ def dinov2_vits14_reg_lc(
     )
 
 
-def dinov2_vitb14_reg_lc(
+def dinov2_vitb14_reg_lc_scriptable(
     *, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.IMAGENET1K, **kwargs
 ):
     """
@@ -231,7 +231,7 @@ def dinov2_vitb14_reg_lc(
     )
 
 
-def dinov2_vitl14_reg_lc(
+def dinov2_vitl14_reg_lc_scriptable(
     *, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.IMAGENET1K, **kwargs
 ):
     """
@@ -249,7 +249,7 @@ def dinov2_vitl14_reg_lc(
     )
 
 
-def dinov2_vitg14_reg_lc(
+def dinov2_vitg14_reg_lc_scriptable(
     *, layers: int = 4, pretrained: bool = True, weights: Union[Weights, str] = Weights.IMAGENET1K, **kwargs
 ):
     """
