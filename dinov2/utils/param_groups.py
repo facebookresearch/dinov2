@@ -5,6 +5,7 @@
 
 from collections import defaultdict
 import logging
+from torch.distributed.fsdp._common_utils import clean_tensor_name
 
 
 logger = logging.getLogger("dinov2")
@@ -66,7 +67,7 @@ def get_params_groups_with_decay(model, lr_decay_rate=1.0, patch_embed_lr_mult=1
     all_param_groups = []
 
     for name, param in model.named_parameters():
-        name = name.replace("_fsdp_wrapped_module.", "")
+        name = clean_tensor_name(name)
         if not param.requires_grad:
             continue
         decay_rate = get_vit_lr_decay_rate(
@@ -90,14 +91,13 @@ def get_params_groups_with_decay(model, lr_decay_rate=1.0, patch_embed_lr_mult=1
 
 
 def fuse_params_groups(all_params_groups, keys=("lr_multiplier", "wd_multiplier", "is_last_layer")):
-    fused_params_groups = defaultdict(lambda: {"params": []})
+    fused_params_groups = defaultdict(lambda: {"params": [], "param_names": set()})
     for d in all_params_groups:
-        identifier = ""
+        identifier = "-".join([f"{k}={d[k]}" for k in keys])
+        group = fused_params_groups[identifier]
         for k in keys:
-            identifier += k + str(d[k]) + "_"
-
-        for k in keys:
-            fused_params_groups[identifier][k] = d[k]
-        fused_params_groups[identifier]["params"].append(d["params"])
-
-    return fused_params_groups.values()
+            group[k] = d[k]
+        group["params"].append(d["params"])
+        group["param_names"].add(d["name"])
+        group["name"] = identifier
+    return list(fused_params_groups.values())
