@@ -10,7 +10,53 @@ from typing import Any, Callable, List, Optional, TypeVar
 import torch
 from torch.utils.data import Sampler
 
-from .datasets import ImageNet, ImageNet22k, ImageShipID, ImageShipID_Extra, ImageShipID_20P, ImageShipID_40P, ImageShipID_60P, ImageShipID_80P, ImageShipOOD, ImageShipID_100I, ImageShipID_500I, ImageShipID_1000I, ImageShipID_5000I, ImageShipID_10000I, ImageShipID_1M, ImageShipID_200k, ImageShipID_25k
+from .datasets import (
+    ImageNet, 
+    ImageNet22k, 
+    ImageShipID, 
+    ImageShipID_Extra, 
+    ImageShipID_20P, 
+    ImageShipID_40P, 
+    ImageShipID_60P, 
+    ImageShipID_80P, 
+    ImageShipOOD, 
+    ImageShipID_100I, 
+    ImageShipID_500I, 
+    ImageShipID_1000I, 
+    ImageShipID_5000I, 
+    ImageShipID_10000I, 
+    ImageShipID_1M, 
+    ImageShipID_200k, 
+    ImageShipID_25k,
+    Birdsnap,
+    Country211,
+    CUB200_2011,
+    FGVC_Aircraft,
+    Food101,
+    NABirds,
+    OxfordFlowers,
+    OxfordPets,
+    RESISC45,
+    StanfordCars,
+    StanfordDogs,
+    SUN397,
+    INaturalist_2017,
+    INaturalist_2019,
+    ButterfliesMoths_2019,
+    FruitsVegetables,
+    FungiCLEF_2024,
+    FungiCLEF_2025,
+    Herbarium_2021,
+    Herbarium_2022,
+    HotelID_2021,
+    HotelID_2022,
+    ICassava_2019,
+    IDesigner_2019,
+    IFood_2019,
+    PlantCLEF_2024,
+    SnakeCLEF_2024,
+    Sorghum100Cultivars_2022,
+)
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler, ShardedInfiniteBalancedSampler
 
 
@@ -119,6 +165,118 @@ def _parse_dataset_str(dataset_str: str):
         class_ = ImageShipOOD
         if "split" in kwargs:
             kwargs["split"] = ImageShipOOD.Split[kwargs["split"]]
+    elif name == "Birdsnap":
+        class_ = Birdsnap
+        if "split" in kwargs:
+            kwargs["split"] = Birdsnap.Split[kwargs["split"]]
+    elif name == "Country211":
+        class_ = Country211
+        if "split" in kwargs:
+            kwargs["split"] = Country211.Split[kwargs["split"]]
+    elif name == "CUB200_2011":
+        class_ = CUB200_2011
+        if "split" in kwargs:
+            kwargs["split"] = CUB200_2011.Split[kwargs["split"]]
+    elif name == "FGVC_Aircraft":
+        class_ = FGVC_Aircraft
+        if "split" in kwargs:
+            kwargs["split"] = FGVC_Aircraft.Split[kwargs["split"]]
+    elif name == "Food101":
+        class_ = Food101
+        if "split" in kwargs:
+            kwargs["split"] = Food101.Split[kwargs["split"]]
+    elif name == "NABirds":
+        class_ = NABirds
+        if "split" in kwargs:
+            kwargs["split"] = NABirds.Split[kwargs["split"]]
+    elif name == "OxfordFlowers":
+        class_ = OxfordFlowers
+        if "split" in kwargs:
+            kwargs["split"] = OxfordFlowers.Split[kwargs["split"]]
+    elif name == "OxfordPets":
+        class_ = OxfordPets
+        if "split" in kwargs:
+            kwargs["split"] = OxfordPets.Split[kwargs["split"]]
+    elif name == "RESISC45":
+        class_ = RESISC45
+        if "split" in kwargs:
+            kwargs["split"] = RESISC45.Split[kwargs["split"]]
+    elif name == "StanfordCars":
+        class_ = StanfordCars
+        if "split" in kwargs:
+            kwargs["split"] = StanfordCars.Split[kwargs["split"]]
+    elif name == "StanfordDogs":
+        class_ = StanfordDogs
+        if "split" in kwargs:
+            kwargs["split"] = StanfordDogs.Split[kwargs["split"]]
+    elif name == "SUN397":
+        class_ = SUN397
+        if "split" in kwargs:
+            kwargs["split"] = SUN397.Split[kwargs["split"]]
+    elif name == "INaturalist_2017":
+        class_ = INaturalist_2017
+        if "split" in kwargs:
+            kwargs["split"] = INaturalist_2017.Split[kwargs["split"]]
+    elif name == "INaturalist_2019":
+        class_ = INaturalist_2019
+        if "split" in kwargs:
+            kwargs["split"] = INaturalist_2019.Split[kwargs["split"]]
+    elif name == "ButterfliesMoths_2019":
+        class_ = ButterfliesMoths_2019
+        if "split" in kwargs:
+            kwargs["split"] = ButterfliesMoths_2019.Split[kwargs["split"]]
+    elif name == "FruitsVegetables":
+        class_ = FruitsVegetables
+        if "split" in kwargs:
+            kwargs["split"] = FruitsVegetables.Split[kwargs["split"]]
+    elif name == "FungiCLEF_2024":
+        class_ = FungiCLEF_2024
+        if "split" in kwargs:
+            kwargs["split"] = FungiCLEF_2024.Split[kwargs["split"]]
+    elif name == "FungiCLEF_2025":
+        class_ = FungiCLEF_2025
+        if "split" in kwargs:
+            kwargs["split"] = FungiCLEF_2025.Split[kwargs["split"]]
+    elif name == "Herbarium_2021":
+        class_ = Herbarium_2021
+        if "split" in kwargs:
+            kwargs["split"] = Herbarium_2021.Split[kwargs["split"]]
+    elif name == "Herbarium_2022":
+        class_ = Herbarium_2022
+        if "split" in kwargs:
+            kwargs["split"] = Herbarium_2022.Split[kwargs["split"]]
+    elif name == "HotelID_2021":
+        class_ = HotelID_2021
+        if "split" in kwargs:
+            kwargs["split"] = HotelID_2021.Split[kwargs["split"]]
+    elif name == "HotelID_2022":
+        class_ = HotelID_2022
+        if "split" in kwargs:
+            kwargs["split"] = HotelID_2022.Split[kwargs["split"]]
+    elif name == "ICassava_2019":
+        class_ = ICassava_2019
+        if "split" in kwargs:
+            kwargs["split"] = ICassava_2019.Split[kwargs["split"]]
+    elif name == "IDesigner_2019":
+        class_ = IDesigner_2019
+        if "split" in kwargs:
+            kwargs["split"] = IDesigner_2019.Split[kwargs["split"]]
+    elif name == "IFood_2019":
+        class_ = IFood_2019
+        if "split" in kwargs:
+            kwargs["split"] = IFood_2019.Split[kwargs["split"]]
+    elif name == "PlantCLEF_2024":
+        class_ = PlantCLEF_2024
+        if "split" in kwargs:
+            kwargs["split"] = PlantCLEF_2024.Split[kwargs["split"]]
+    elif name == "SnakeCLEF_2024":
+        class_ = SnakeCLEF_2024
+        if "split" in kwargs:
+            kwargs["split"] = SnakeCLEF_2024.Split[kwargs["split"]]
+    elif name == "Sorghum100Cultivars_2022":
+        class_ = Sorghum100Cultivars_2022
+        if "split" in kwargs:
+            kwargs["split"] = Sorghum100Cultivars_2022.Split[kwargs["split"]]
     else:
         raise ValueError(f'Unsupported dataset "{name}"')
 
