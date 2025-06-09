@@ -8,8 +8,7 @@
 from typing import Optional, Union
 
 import torch
-from torch import Tensor
-from torch import nn
+from torch import Tensor, nn
 
 
 class LayerScale(nn.Module):

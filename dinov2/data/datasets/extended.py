@@ -7,7 +7,7 @@ from typing import Any, Tuple
 
 from torchvision.datasets import VisionDataset
 
-from .decoders import TargetDecoder, ImageDataDecoder
+from .decoders import ImageDataDecoder, TargetDecoder
 
 
 class ExtendedVisionDataset(VisionDataset):

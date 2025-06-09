@@ -3,12 +3,11 @@
 # This source code is licensed under the Apache License, Version 2.0
 # found in the LICENSE file in the root directory of this source tree.
 
-from pathlib import Path
 import re
+from pathlib import Path
 from typing import List, Tuple
 
-from setuptools import setup, find_packages
-
+from setuptools import find_packages, setup
 
 NAME = "dinov2"
 DESCRIPTION = "PyTorch code and models for the DINOv2 self-supervised learning method."

@@ -13,7 +13,6 @@ from torch.utils.data import Sampler
 from .datasets import ImageNet, ImageNet22k
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler
 
-
 logger = logging.getLogger("dinov2")
 
 
