@@ -18,7 +18,7 @@ import dinov2.distributed as distributed
 from dinov2.fsdp import FSDPCheckpointer
 from dinov2.logging import MetricLogger
 from dinov2.utils.config import setup
-from dinov2.utils.utils import CosineScheduler
+from dinov2.utils.utils import MemEfficientCosineScheduler
 
 from dinov2.train.ssl_meta_arch import SSLMetaArch
 
@@ -89,15 +89,14 @@ def build_schedulers(cfg):
         start_warmup_value=cfg.teacher["warmup_teacher_temp"],
     )
 
-    lr_schedule = CosineScheduler(**lr)
-    wd_schedule = CosineScheduler(**wd)
-    momentum_schedule = CosineScheduler(**momentum)
-    teacher_temp_schedule = CosineScheduler(**teacher_temp)
-    last_layer_lr_schedule = CosineScheduler(**lr)
-
-    last_layer_lr_schedule.schedule[
-        : cfg.optim["freeze_last_layer_epochs"] * OFFICIAL_EPOCH_LENGTH
-    ] = 0  # mimicking the original schedules
+    lr_schedule = MemEfficientCosineScheduler(**lr)
+    wd_schedule = MemEfficientCosineScheduler(**wd)
+    momentum_schedule = MemEfficientCosineScheduler(**momentum)
+    teacher_temp_schedule = MemEfficientCosineScheduler(**teacher_temp)
+    # this is a hack to mimic the original schedules
+    _lr = lr.copy()
+    _lr.update(freeze_iters=cfg.optim["freeze_last_layer_epochs"] * OFFICIAL_EPOCH_LENGTH)
+    last_layer_lr_schedule = MemEfficientCosineScheduler(**_lr)
 
     logger.info("Schedulers ready.")
 
