@@ -1,3 +1,5 @@
+:new: [2025-06-11] *Added dino.txt inference code, following [DINOv2 Meets Text: A Unified Framework for Image- and Pixel-Level Vision-Language Alignment](https://arxiv.org/abs/2412.16334).*
+
 :new: [2023-10-26] *Added DINOv2 backbones with registers, following [Vision Transformers Need Registers](https://arxiv.org/abs/2309.16588).*
 
 # DINOv2: Learning Robust Visual Features without Supervision
@@ -360,6 +362,41 @@ dinov2_vitg14_reg_lc = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14_
   </tbody>
 </table>
 
+
+### Pretrained heads - Zero-shot tasks with dino.txt
+
+<table style="margin: auto">
+  <thead>
+    <tr>
+      <th rowspan="2">backbone</th>
+      <th rowspan="2">with<br />registers</th>
+      <th>download</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ViT-L/14 distilled</td>
+      <td align="center">:white_check_mark:</td>
+      <td>
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_reg4_dinotxt_tet1280d20h24l_vision_head.pth">vision head</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_reg4_dinotxt_tet1280d20h24l_text_encoder.pth">text model</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/thirdparty/bpe_simple_vocab_16e6.txt.gz">vocabulary</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/thirdparty/LICENSE">vocabulary license</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+The (full) dino.txt model can be loaded via PyTorch Hub:
+
+```python
+import torch
+
+# DINOv2
+dinov2_vitl14_reg4_dinotxt_tet1280d20h24l = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14_reg4_dinotxt_tet1280d20h24l')
+```
+
+
 ## Installation
 
 The training and evaluation code requires PyTorch 2.0 and [xFormers](https://github.com/facebookresearch/xformers) 0.0.18 as well as a number of other 3rd party packages. Note that the code has only been tested with the specified versions and also expects a Linux environment. To setup all the required dependencies for training and evaluation, please follow the instructions below:
@@ -616,5 +653,14 @@ If you find this repository useful, please consider giving a star :star: and cit
   author={Darcet, Timothée and Oquab, Maxime and Mairal, Julien and Bojanowski, Piotr},
   journal={arXiv:2309.16588},
   year={2023}
+}
+```
+
+```
+@misc{jose2024dinov2meetstextunified,
+  title={DINOv2 Meets Text: A Unified Framework for Image- and Pixel-Level Vision-Language Alignment}, 
+  author={Cijo Jose and Théo Moutakanni and Dahyun Kang and Federico Baldassarre and Timothée Darcet and Hu Xu and Daniel Li and Marc Szafraniec and Michaël Ramamonjisoa and Maxime Oquab and Oriane Siméoni and Huy V. Vo and Patrick Labatut and Piotr Bojanowski},
+  journal={arXiv:2412.16334},
+  year={2024}
 }
 ```
