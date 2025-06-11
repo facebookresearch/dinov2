@@ -9,7 +9,7 @@
 
 import logging
 import os
-from typing import Callable, List, Any, Tuple, Dict
+from typing import Callable, List, Any, Tuple, Dict, Optional
 import warnings
 
 import torch
@@ -112,6 +112,62 @@ class Block(nn.Module):
             x = x + attn_residual_func(x)
             x = x + ffn_residual_func(x)
         return x
+
+
+class CausalAttentionBlock(nn.Module):
+    def __init__(
+        self,
+        dim: int,
+        num_heads: int,
+        ffn_ratio: float = 4.0,
+        ls_init_value: Optional[float] = None,
+        is_causal: bool = True,
+        act_layer: Callable = nn.GELU,
+        norm_layer: Callable = nn.LayerNorm,
+        dropout_prob: float = 0.0,
+    ):
+        super().__init__()
+
+        self.dim = dim
+        self.is_causal = is_causal
+        self.ls1 = LayerScale(dim, init_values=ls_init_value) if ls_init_value else nn.Identity()
+        self.attention_norm = norm_layer(dim)
+        self.attention = Attention(dim, num_heads, attn_drop=dropout_prob, proj_drop=dropout_prob)
+
+        self.ffn_norm = norm_layer(dim)
+        ffn_hidden_dim = int(dim * ffn_ratio)
+        self.feed_forward = Mlp(
+            in_features=dim,
+            hidden_features=ffn_hidden_dim,
+            drop=dropout_prob,
+            act_layer=act_layer,
+        )
+
+        self.ls2 = LayerScale(dim, init_values=ls_init_value) if ls_init_value else nn.Identity()
+
+    def init_weights(
+        self,
+        init_attn_std: float | None = None,
+        init_proj_std: float | None = None,
+        init_fc_std: float | None = None,
+        factor: float = 1.0,
+    ) -> None:
+        init_attn_std = init_attn_std or (self.dim**-0.5)
+        init_proj_std = init_proj_std or init_attn_std * factor
+        init_fc_std = init_fc_std or (2 * self.dim) ** -0.5
+        self.attention.init_weights(init_attn_std, init_proj_std)
+        self.attention_norm.reset_parameters()
+        nn.init.normal_(self.feed_forward.fc1.weight, std=init_fc_std)
+        nn.init.normal_(self.feed_forward.fc2.weight, std=init_proj_std)
+        self.ffn_norm.reset_parameters()
+
+    def forward(
+        self,
+        x: torch.Tensor,
+    ):
+        x_attn = x + self.ls1(self.attention(self.attention_norm(x), self.is_causal))
+        x_ffn = x_attn + self.ls2(self.feed_forward(self.ffn_norm(x_attn)))
+        return x_ffn
 
 
 def drop_add_residual_stochastic_depth(
