@@ -74,6 +74,8 @@ def get_fsdp_modules(x):
 
 
 def reshard_fsdp_model(x):
+    return
+
     for m in get_fsdp_modules(x):
         free_if_fsdp(m)
 
