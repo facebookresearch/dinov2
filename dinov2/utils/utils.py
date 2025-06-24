@@ -85,7 +85,38 @@ class CosineScheduler(object):
             return self.final_value
         else:
             return self.schedule[it]
+        
 
+class MemEfficientCosineScheduler:
+    def __init__(self, base_value, final_value, total_iters, warmup_iters=0, start_warmup_value=0, freeze_iters=0):
+        super().__init__()
+        self.final_value = final_value
+        self.total_iters = total_iters
+        self.start_warmup_value = start_warmup_value
+        self.base_value = base_value
+        self.freeze_iters = freeze_iters
+        self.warmup_iters = warmup_iters
+
+    def __getitem__(self, it):
+        if it >= self.total_iters:
+            return self.final_value
+            
+        if it < self.freeze_iters:
+            return 0.0
+            
+        if it < self.freeze_iters + self.warmup_iters:
+            # Linear warmup - fixed to match original implementation
+            alpha = (it - self.freeze_iters) / max(1, self.warmup_iters)
+            value = self.start_warmup_value * (1 - alpha) + self.base_value * alpha
+            return value
+            
+        # Cosine schedule - this part needed adjustment to match CosineScheduler
+        effective_it = it - self.freeze_iters - self.warmup_iters
+        total_cosine_iters = self.total_iters - self.warmup_iters - self.freeze_iters
+        return self.final_value + 0.5 * (self.base_value - self.final_value) * (
+            1 + np.cos(np.pi * effective_it / total_cosine_iters)
+        )
+    
 
 def has_batchnorms(model):
     bn_types = (nn.BatchNorm1d, nn.BatchNorm2d, nn.BatchNorm3d, nn.SyncBatchNorm)
