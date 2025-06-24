@@ -121,9 +121,6 @@ PYTHONPATH=.:dinov2/data python dinov2/run/eval/linear_celldino.py \
 CellDINO code is released under the CC by NC licence See [LICENSE_CELL_DINO](LICENSE_CELL_DINO) for additional details.
 Model weights will be released under the FAIR Non-Commercial Research License.
 
-## Contributing
-
-See [contributing](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Citing ChannelAdaptiveDINO and DINOv2
 
