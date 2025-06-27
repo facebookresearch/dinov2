@@ -62,16 +62,21 @@ def dinov2_vitl14_reg4_dinotxt_tet1280d20h24l():
     return model
 
 
-def get_tokenizer():
+def get_tokenizer(local_path=None):
     from .text.tokenizer import Tokenizer
     import requests
     from io import BytesIO
 
     url = _DINOV2_BASE_URL + "/thirdparty/bpe_simple_vocab_16e6.txt.gz"
     try:
-        response = requests.get(url)
-        response.raise_for_status()
-        file_buf = BytesIO(response.content)
+        if not local_path:
+            response = requests.get(url)
+            response.raise_for_status()
+            content = response.content
+        else:
+            with open(local_path, "rb") as f:
+                content = f.read()
+        file_buf = BytesIO(content)
         return Tokenizer(vocab_path=file_buf)
     except Exception as e:
         raise FileNotFoundError(f"Failed to download file from url {url} with error last: {e}")
