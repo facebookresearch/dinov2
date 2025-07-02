@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, Tuple, Union
 
 import torch
 
@@ -26,12 +26,12 @@ class DINOv2Wrapper(torch.nn.Module):
     def get_intermediate_layers(
         self,
         x: torch.Tensor,
-        n: int | Sequence[int] = 1,  # Layers or n last layers to take
+        n: Union[int, Sequence[int]] = 1,  # Layers or n last layers to take
         reshape: bool = False,
         return_class_token: bool = False,
         return_register_tokens: bool = False,
         norm=True,
-    ) -> tuple[torch.Tensor] | tuple[tuple[torch.Tensor, ...], ...]:
+    ) -> Union[Tuple[torch.Tensor], Tuple[Tuple[torch.Tensor, ...], ...]]:
         if self.model.chunked_blocks:
             outputs = self.model._get_intermediate_layers_chunked(x, n)
         else:

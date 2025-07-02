@@ -11,6 +11,8 @@ import logging
 import os
 import warnings
 
+from typing import Optional
+
 import torch
 from torch import nn, Tensor
 
@@ -55,7 +57,7 @@ class Attention(nn.Module):
         self.proj_drop = nn.Dropout(proj_drop)
 
     def init_weights(
-        self, init_attn_std: float | None = None, init_proj_std: float | None = None, factor: float = 1.0
+        self, init_attn_std: Optional[float] = None, init_proj_std: Optional[float] = None, factor: float = 1.0
     ) -> None:
         init_attn_std = init_attn_std or (self.dim**-0.5)
         init_proj_std = init_proj_std or init_attn_std * factor
