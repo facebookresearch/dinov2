@@ -24,7 +24,6 @@ try:
         from xformers.ops import memory_efficient_attention, unbind
 
         XFORMERS_AVAILABLE = True
-        warnings.warn("xFormers is available (Attention)")
     else:
         warnings.warn("xFormers is disabled (Attention)")
         raise ImportError
