@@ -31,17 +31,8 @@ class MaskingGenerator:
         max_aspect = max_aspect or 1 / min_aspect
         self.log_aspect_ratio = (math.log(min_aspect), math.log(max_aspect))
 
-    def __repr__(self):
-        repr_str = "Generator(%d, %d -> [%d ~ %d], max = %d, %.3f ~ %.3f)" % (
-            self.height,
-            self.width,
-            self.min_num_patches,
-            self.max_num_patches,
-            self.num_masking_patches,
-            self.log_aspect_ratio[0],
-            self.log_aspect_ratio[1],
-        )
-        return repr_str
+    def __repr__(self) -> str:
+        return f"Generator({self.height}, {self.width} -> [{self.min_num_patches} ~ {self.max_num_patches}], max = {self.num_masking_patches}, {self.log_aspect_ratio[0]:.3f} ~ {self.log_aspect_ratio[1]:.3f})"
 
     def get_shape(self):
         return self.height, self.width

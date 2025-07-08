@@ -26,9 +26,10 @@ class DINOLoss(nn.Module):
         self.async_batch_center = None
 
     @torch.no_grad()
-    def softmax_center_teacher(self, teacher_output, teacher_temp):
+    def softmax_center_teacher(self, teacher_output: torch.Tensor, teacher_temp):
         self.apply_center_update()
         # teacher centering and sharpening
+        self.center = self.center.to(device=teacher_output.device)
         return F.softmax((teacher_output - self.center) / teacher_temp, dim=-1)
 
     @torch.no_grad()
