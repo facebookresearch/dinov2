@@ -19,6 +19,9 @@ from dinov2.fsdp import FSDPCheckpointer
 from dinov2.logging import MetricLogger
 from dinov2.utils.config import setup
 from dinov2.utils.utils import CosineScheduler
+from torch.distributed.fsdp.wrap import enable_wrap, transformer_auto_wrap_policy
+from torch.distributed.fsdp import FullyShardedDataParallel
+from dinov2.layers.block import Block
 
 from dinov2.train.ssl_meta_arch import SSLMetaArch
 
@@ -298,7 +301,13 @@ def main(args):
     cfg = setup(args)
 
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
-    model.prepare_for_distributed_training()
+    with enable_wrap(
+        wrapper_cls=FullyShardedDataParallel,
+        auto_wrap_policy=partial(transformer_auto_wrap_policy, transformer_layer_cls={Block}),
+        sync_module_states=True,
+        use_orig_params=True,
+    ):
+        model.prepare_for_distributed_training()
 
     logger.info("Model:\n{}".format(model))
     if args.eval_only:
