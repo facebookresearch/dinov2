@@ -9,6 +9,7 @@
 - HF Dataset Loading
 - HF Model Loading
 - Update README
+- List changes in License
 
 
 ## Original README from Meta
