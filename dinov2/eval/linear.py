@@ -3,7 +3,6 @@
 # This source code is licensed under the Apache License, Version 2.0
 # found in the LICENSE file in the root directory of this source tree.
 
-import argparse
 from functools import partial
 import json
 import logging
@@ -20,136 +19,13 @@ from fvcore.common.checkpoint import Checkpointer, PeriodicCheckpointer
 from dinov2.data import SamplerType, make_data_loader, make_dataset
 from dinov2.data.transforms import make_classification_eval_transform, make_classification_train_transform
 import dinov2.distributed as distributed
-from dinov2.eval.metrics import MetricType, build_metric
-from dinov2.eval.setup import get_args_parser as get_setup_args_parser
+from dinov2.eval.metrics import AccuracyAveraging, MetricType, build_metric, build_topk_accuracy_metric
 from dinov2.eval.setup import setup_and_build_model
-from dinov2.eval.utils import ModelWithIntermediateLayers, evaluate
+from dinov2.eval.utils import ModelWithIntermediateLayers, ModelWithNormalize, evaluate
 from dinov2.logging import MetricLogger
 
 
 logger = logging.getLogger("dinov2")
-
-
-def get_args_parser(
-    description: Optional[str] = None,
-    parents: Optional[List[argparse.ArgumentParser]] = None,
-    add_help: bool = True,
-):
-    parents = parents or []
-    setup_args_parser = get_setup_args_parser(parents=parents, add_help=False)
-    parents = [setup_args_parser]
-    parser = argparse.ArgumentParser(
-        description=description,
-        parents=parents,
-        add_help=add_help,
-    )
-    parser.add_argument(
-        "--train-dataset",
-        dest="train_dataset_str",
-        type=str,
-        help="Training dataset",
-    )
-    parser.add_argument(
-        "--val-dataset",
-        dest="val_dataset_str",
-        type=str,
-        help="Validation dataset",
-    )
-    parser.add_argument(
-        "--test-datasets",
-        dest="test_dataset_strs",
-        type=str,
-        nargs="+",
-        help="Test datasets, none to reuse the validation dataset",
-    )
-    parser.add_argument(
-        "--epochs",
-        type=int,
-        help="Number of training epochs",
-    )
-    parser.add_argument(
-        "--batch-size",
-        type=int,
-        help="Batch Size (per GPU)",
-    )
-    parser.add_argument(
-        "--num-workers",
-        type=int,
-        help="Number de Workers",
-    )
-    parser.add_argument(
-        "--epoch-length",
-        type=int,
-        help="Length of an epoch in number of iterations",
-    )
-    parser.add_argument(
-        "--save-checkpoint-frequency",
-        type=int,
-        help="Number of epochs between two named checkpoint saves.",
-    )
-    parser.add_argument(
-        "--eval-period-iterations",
-        type=int,
-        help="Number of iterations between two evaluations.",
-    )
-    parser.add_argument(
-        "--learning-rates",
-        nargs="+",
-        type=float,
-        help="Learning rates to grid search.",
-    )
-    parser.add_argument(
-        "--no-resume",
-        action="store_true",
-        help="Whether to not resume from existing checkpoints",
-    )
-    parser.add_argument(
-        "--val-metric-type",
-        type=MetricType,
-        choices=list(MetricType),
-        help="Validation metric",
-    )
-    parser.add_argument(
-        "--test-metric-types",
-        type=MetricType,
-        choices=list(MetricType),
-        nargs="+",
-        help="Evaluation metric",
-    )
-    parser.add_argument(
-        "--classifier-fpath",
-        type=str,
-        help="Path to a file containing pretrained linear classifiers",
-    )
-    parser.add_argument(
-        "--val-class-mapping-fpath",
-        type=str,
-        help="Path to a file containing a mapping to adjust classifier outputs",
-    )
-    parser.add_argument(
-        "--test-class-mapping-fpaths",
-        nargs="+",
-        type=str,
-        help="Path to a file containing a mapping to adjust classifier outputs",
-    )
-    parser.set_defaults(
-        train_dataset_str="ImageNet:split=TRAIN",
-        val_dataset_str="ImageNet:split=VAL",
-        test_dataset_strs=None,
-        epochs=10,
-        batch_size=128,
-        num_workers=8,
-        epoch_length=1250,
-        save_checkpoint_frequency=20,
-        eval_period_iterations=1250,
-        learning_rates=[1e-5, 2e-5, 5e-5, 1e-4, 2e-4, 5e-4, 1e-3, 2e-3, 5e-3, 1e-2, 2e-2, 5e-2, 0.1],
-        val_metric_type=MetricType.MEAN_ACCURACY,
-        test_metric_types=None,
-        classifier_fpath=None,
-        val_class_mapping_fpath=None,
-        test_class_mapping_fpaths=[None],
-    )
-    return parser
 
 
 def has_ddp_wrapper(m: nn.Module) -> bool:
@@ -244,9 +120,9 @@ def setup_linear_classifiers(sample_output, n_last_blocks_list, learning_rates, 
                     out_dim, use_n_blocks=n, use_avgpool=avgpool, num_classes=num_classes
                 )
                 linear_classifier = linear_classifier.cuda()
-                linear_classifiers_dict[
-                    f"classifier_{n}_blocks_avgpool_{avgpool}_lr_{lr:.5f}".replace(".", "_")
-                ] = linear_classifier
+                linear_classifiers_dict[f"classifier_{n}_blocks_avgpool_{avgpool}_lr_{lr:.5f}".replace(".", "_")] = (
+                    linear_classifier
+                )
                 optim_param_groups.append({"params": linear_classifier.parameters(), "lr": lr})
 
     linear_classifiers = AllClassifiers(linear_classifiers_dict)
@@ -592,34 +468,39 @@ def run_eval_linear(
     return results_dict
 
 
-def main(args):
-    model, autocast_dtype = setup_and_build_model(args)
+def main(cfg):
+    model, autocast_dtype = setup_and_build_model(cfg)
     run_eval_linear(
         model=model,
-        output_dir=args.output_dir,
-        train_dataset_str=args.train_dataset_str,
-        val_dataset_str=args.val_dataset_str,
-        test_dataset_strs=args.test_dataset_strs,
-        batch_size=args.batch_size,
-        epochs=args.epochs,
-        epoch_length=args.epoch_length,
-        num_workers=args.num_workers,
-        save_checkpoint_frequency=args.save_checkpoint_frequency,
-        eval_period_iterations=args.eval_period_iterations,
-        learning_rates=args.learning_rates,
+        output_dir=cfg.output_dir,
+        train_dataset_str=cfg.train_dataset_str,
+        val_dataset_str=cfg.val_dataset_str,
+        test_dataset_strs=cfg.test_dataset_strs,
+        batch_size=cfg.batch_size,
+        epochs=cfg.epochs,
+        epoch_length=cfg.epoch_length,
+        num_workers=cfg.num_workers,
+        save_checkpoint_frequency=cfg.save_checkpoint_frequency,
+        eval_period_iterations=cfg.eval_period_iterations,
+        learning_rates=cfg.learning_rates,
         autocast_dtype=autocast_dtype,
-        resume=not args.no_resume,
-        classifier_fpath=args.classifier_fpath,
-        val_metric_type=args.val_metric_type,
-        test_metric_types=args.test_metric_types,
-        val_class_mapping_fpath=args.val_class_mapping_fpath,
-        test_class_mapping_fpaths=args.test_class_mapping_fpaths,
+        resume=not cfg.no_resume,
+        classifier_fpath=cfg.classifier_fpath,
+        val_metric_type=cfg.val_metric_type,
+        test_metric_types=cfg.test_metric_types,
+        val_class_mapping_fpath=cfg.val_class_mapping_fpath,
+        test_class_mapping_fpaths=cfg.test_class_mapping_fpaths,
     )
     return 0
 
 
 if __name__ == "__main__":
-    description = "DINOv2 linear evaluation"
-    args_parser = get_args_parser(description=description)
-    args = args_parser.parse_args()
-    sys.exit(main(args))
+    import sys
+    import hydra
+    from omegaconf import DictConfig
+
+    @hydra.main(config_path="../../configs", config_name="ssl_default_config")
+    def hydra_main(cfg: DictConfig):
+        return main(cfg)
+
+    sys.exit(hydra_main())

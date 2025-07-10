@@ -2,6 +2,7 @@
 torch==2.0.0
 torchvision==0.15.0
 omegaconf
+hydra-core
 torchmetrics==0.10.3
 fvcore
 iopath

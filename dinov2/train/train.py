@@ -3,14 +3,16 @@
 # This source code is licensed under the Apache License, Version 2.0
 # found in the LICENSE file in the root directory of this source tree.
 
-import argparse
+import hydra
+from omegaconf import DictConfig
+
 import logging
 import math
 import os
 from functools import partial
 
-from fvcore.common.checkpoint import PeriodicCheckpointer
 import torch
+from fvcore.common.checkpoint import PeriodicCheckpointer
 
 from dinov2.data import SamplerType, make_data_loader, make_dataset
 from dinov2.data import collate_data_and_cast, DataAugmentationDINO, MaskingGenerator
@@ -25,37 +27,6 @@ from dinov2.train.ssl_meta_arch import SSLMetaArch
 
 torch.backends.cuda.matmul.allow_tf32 = True  # PyTorch 1.12 sets this to False by default
 logger = logging.getLogger("dinov2")
-
-
-def get_args_parser(add_help: bool = True):
-    parser = argparse.ArgumentParser("DINOv2 training", add_help=add_help)
-    parser.add_argument("--config-file", default="", metavar="FILE", help="path to config file")
-    parser.add_argument(
-        "--no-resume",
-        action="store_true",
-        help="Whether to not attempt to resume from the checkpoint directory. ",
-    )
-    parser.add_argument("--eval-only", action="store_true", help="perform evaluation only")
-    parser.add_argument("--eval", type=str, default="", help="Eval type to perform")
-    parser.add_argument(
-        "opts",
-        help="""
-Modify config options at the end of the command. For Yacs configs, use
-space-separated "PATH.KEY VALUE" pairs.
-For python-based LazyConfig, use "path.key=value".
-        """.strip(),
-        default=None,
-        nargs=argparse.REMAINDER,
-    )
-    parser.add_argument(
-        "--output-dir",
-        "--output_dir",
-        default="",
-        type=str,
-        help="Output directory to save logs and checkpoints",
-    )
-
-    return parser
 
 
 def build_optimizer(cfg, params_groups):
@@ -95,9 +66,9 @@ def build_schedulers(cfg):
     teacher_temp_schedule = CosineScheduler(**teacher_temp)
     last_layer_lr_schedule = CosineScheduler(**lr)
 
-    last_layer_lr_schedule.schedule[
-        : cfg.optim["freeze_last_layer_epochs"] * OFFICIAL_EPOCH_LENGTH
-    ] = 0  # mimicking the original schedules
+    last_layer_lr_schedule.schedule[: cfg.optim["freeze_last_layer_epochs"] * OFFICIAL_EPOCH_LENGTH] = (
+        0  # mimicking the original schedules
+    )
 
     logger.info("Schedulers ready.")
 
@@ -294,25 +265,23 @@ def do_train(cfg, model, resume=False):
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
 
 
-def main(args):
-    cfg = setup(args)
-
+@hydra.main(config_path="../../configs", config_name="ssl_default_config")
+def main(cfg: DictConfig):
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()
 
     logger.info("Model:\n{}".format(model))
-    if args.eval_only:
+    if getattr(cfg, "eval_only", False):
         iteration = (
             FSDPCheckpointer(model, save_dir=cfg.train.output_dir)
-            .resume_or_load(cfg.MODEL.WEIGHTS, resume=not args.no_resume)
+            .resume_or_load(cfg.MODEL.WEIGHTS, resume=not getattr(cfg, "no_resume", False))
             .get("iteration", -1)
             + 1
         )
         return do_test(cfg, model, f"manual_{iteration}")
 
-    do_train(cfg, model, resume=not args.no_resume)
+    do_train(cfg, model, resume=not getattr(cfg, "no_resume", False))
 
 
 if __name__ == "__main__":
-    args = get_args_parser(add_help=True).parse_args()
-    main(args)
+    main()

@@ -7,53 +7,52 @@ import logging
 import os
 import sys
 
-from dinov2.eval.knn import get_args_parser as get_knn_args_parser
+import hydra
+from omegaconf import DictConfig
+
 from dinov2.logging import setup_logging
-from dinov2.run.submit import get_args_parser, submit_jobs
+from dinov2.run.submit import submit_jobs
 
 
 logger = logging.getLogger("dinov2")
 
 
 class Evaluator:
-    def __init__(self, args):
-        self.args = args
+    def __init__(self, cfg):
+        self.cfg = cfg
 
     def __call__(self):
         from dinov2.eval.knn import main as knn_main
 
         self._setup_args()
-        knn_main(self.args)
+        knn_main(self.cfg)
 
     def checkpoint(self):
         import submitit
 
-        logger.info(f"Requeuing {self.args}")
-        empty = type(self)(self.args)
+        logger.info(f"Requeuing {self.cfg}")
+        empty = type(self)(self.cfg)
         return submitit.helpers.DelayedSubmission(empty)
 
     def _setup_args(self):
         import submitit
 
         job_env = submitit.JobEnvironment()
-        self.args.output_dir = self.args.output_dir.replace("%j", str(job_env.job_id))
+        if "%j" in self.cfg.output_dir:
+            self.cfg.output_dir = self.cfg.output_dir.replace("%j", str(job_env.job_id))
         logger.info(f"Process group: {job_env.num_tasks} tasks, rank: {job_env.global_rank}")
-        logger.info(f"Args: {self.args}")
+        logger.info(f"Config: {self.cfg}")
 
 
-def main():
-    description = "Submitit launcher for DINOv2 k-NN evaluation"
-    knn_args_parser = get_knn_args_parser(add_help=False)
-    parents = [knn_args_parser]
-    args_parser = get_args_parser(description=description, parents=parents)
-    args = args_parser.parse_args()
-
+@hydra.main(config_path="../../configs", config_name="ssl_default_config")
+def main(cfg: DictConfig):
     setup_logging()
-
-    assert os.path.exists(args.config_file), "Configuration file does not exist!"
-    submit_jobs(Evaluator, args, name="dinov2:knn")
+    evaluator = Evaluator(cfg)
+    evaluator()
     return 0
 
 
 if __name__ == "__main__":
+    import sys
+
     sys.exit(main())
