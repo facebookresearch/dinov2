@@ -1,9 +1,9 @@
 ### Running via the HF Dataloader
 
-# Train with any HuggingFace dataset using config
+#### Train with any HuggingFace dataset using config
 python dinov2/run/train/train.py --config-name=config_based_example
 
-# Still works with original approach
+#### Still works with original approach
 python dinov2/run/train/train.py --config-name=vitl16_short
 
 
