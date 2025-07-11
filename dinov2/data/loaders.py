@@ -10,7 +10,7 @@ from typing import Any, Callable, List, Optional, TypeVar
 import torch
 from torch.utils.data import Sampler
 
-from .datasets import ImageNet, ImageNet22k
+from .datasets import ImageNet, ImageNet22k, HuggingFaceDataset
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler
 
 
@@ -49,15 +49,32 @@ def _parse_dataset_str(dataset_str: str):
 
     for token in tokens[1:]:
         key, value = token.split("=")
-        assert key in ("root", "extra", "split")
         kwargs[key] = value
 
     if name == "ImageNet":
         class_ = ImageNet
+        # Only allow specific keys for ImageNet
+        for key in kwargs:
+            assert key in ("root", "extra", "split")
         if "split" in kwargs:
             kwargs["split"] = ImageNet.Split[kwargs["split"]]
     elif name == "ImageNet22k":
         class_ = ImageNet22k
+        # Only allow specific keys for ImageNet22k
+        for key in kwargs:
+            assert key in ("root", "extra", "split")
+    elif name == "HuggingFace":
+        class_ = HuggingFaceDataset
+        # HuggingFace datasets require at least a dataset_name
+        if "dataset_name" not in kwargs:
+            raise ValueError("HuggingFace dataset requires 'dataset_name' parameter")
+        # Convert string values to appropriate types
+        if "streaming" in kwargs:
+            kwargs["streaming"] = kwargs["streaming"].lower() == "true"
+        if "trust_remote_code" in kwargs:
+            kwargs["trust_remote_code"] = kwargs["trust_remote_code"].lower() == "true"
+        if "add_index" in kwargs:
+            kwargs["add_index"] = kwargs["add_index"].lower() == "true"
     else:
         raise ValueError(f'Unsupported dataset "{name}"')
 
@@ -220,3 +237,51 @@ def make_data_loader(
     except TypeError:  # data loader has no length
         logger.info("infinite data loader")
     return data_loader
+
+
+def make_dataset_from_config(
+    data_config: dict,
+    split: str,
+    transform: Optional[Callable] = None,
+    target_transform: Optional[Callable] = None,
+):
+    """
+    Creates a dataset from a configuration dictionary.
+
+    Args:
+        data_config: Configuration dictionary containing dataset parameters
+        split: Which split to use ('train' or 'val')
+        transform: A transform to apply to images.
+        target_transform: A transform to apply to targets.
+
+    Returns:
+        The created dataset.
+    """
+
+    # Get the split name from config
+    split_name = data_config.get(f"{split}_split", split)
+
+    # Create HuggingFace dataset with config parameters
+    dataset = HuggingFaceDataset(
+        dataset_name=data_config["dataset"],
+        config_name=data_config.get("config_name"),
+        split=split_name,
+        img_col_name=data_config.get("img_col_name", "image"),
+        label_col_names=data_config.get("label_col_names", ["label"]),
+        transform=transform,
+        target_transform=target_transform,
+        cache_dir=data_config.get("cache_dir"),
+        data_dir=data_config.get("data_dir"),
+        trust_remote_code=data_config.get("trust_remote_code", True),
+        streaming=data_config.get("streaming", False),
+    )
+
+    logger.info(f"Created dataset for split '{split_name}' with {len(dataset):,d} samples")
+
+    # Set attributes for compatibility
+    if not hasattr(dataset, "transform"):
+        setattr(dataset, "transform", transform)
+    if not hasattr(dataset, "target_transform"):
+        setattr(dataset, "target_transform", target_transform)
+
+    return dataset

@@ -162,17 +162,39 @@ def do_train(cfg, model, resume=False):
 
     # setup data loader
 
-    dataset = make_dataset(
-        dataset_str=cfg.train.dataset_path,
-        transform=data_transform,
-        target_transform=lambda _: (),
-    )
+    # Check if we're using the new config-based dataset loading or old string-based
+    if hasattr(cfg, "data") and hasattr(cfg.data, "dataset"):
+        # New config-based dataset loading
+        from dinov2.data.loaders import make_dataset_from_config
+
+        logger.info("Using config-based dataset loading")
+        dataset = make_dataset_from_config(
+            cfg.data,
+            split="train",
+            transform=data_transform,
+            target_transform=lambda _: (),
+        )
+
+        # Use num_workers from data config
+        num_workers = cfg.data.num_workers
+    else:
+        # Original string-based dataset loading
+        logger.info("Using string-based dataset loading")
+        dataset = make_dataset(
+            dataset_str=cfg.train.dataset_path,
+            transform=data_transform,
+            target_transform=lambda _: (),
+        )
+
+        # Use num_workers from train config
+        num_workers = cfg.train.num_workers
+
     # sampler_type = SamplerType.INFINITE
     sampler_type = SamplerType.SHARDED_INFINITE
     data_loader = make_data_loader(
         dataset=dataset,
         batch_size=cfg.train.batch_size_per_gpu,
-        num_workers=cfg.train.num_workers,
+        num_workers=num_workers,
         shuffle=True,
         seed=start_iter,  # TODO: Fix this -- cfg.train.seed
         sampler_type=sampler_type,
