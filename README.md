@@ -1,3 +1,12 @@
+### Running via the HF Dataloader
+
+# Train with any HuggingFace dataset using config
+python dinov2/run/train/train.py --config-name=config_based_example
+
+# Still works with original approach
+python dinov2/run/train/train.py --config-name=vitl16_short
+
+
 :new: [2025-06-11] *Added dino.txt inference code, following [DINOv2 Meets Text: A Unified Framework for Image- and Pixel-Level Vision-Language Alignment](https://arxiv.org/abs/2412.16334).*
 
 :new: [2023-10-26] *Added DINOv2 backbones with registers, following [Vision Transformers Need Registers](https://arxiv.org/abs/2309.16588).*
