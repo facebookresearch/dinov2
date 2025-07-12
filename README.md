@@ -1,11 +1,11 @@
 ### Running via the HF Dataloader
 
 ```bash
-#Train with any HuggingFace dataset using config
-python dinov2/run/train/train.py --config-name=config_based_example
+# Train with any HuggingFace dataset using config
+python dinov2/train/train.py --config-name=config_based_example
 
-# Still works with original approach
-python dinov2/run/train/train.py --config-name=vitl16_short
+# Still works with original approach  
+python dinov2/train/train.py --config-name=ssl_default_config
 ```
 
 
