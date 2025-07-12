@@ -4,10 +4,14 @@
 
 - Hydra integration
 
-### Upcoming Changes
+### Ready for Review
 
 - HF Dataset Loading
-- HF Model Loading
+
+### Upcoming Changes
+
+- Graph Formulated Loss
+- HF Model Loading (?)
 - Update README
 - List changes in License
 
