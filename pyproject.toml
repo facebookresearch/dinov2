@@ -1,29 +1,17 @@
-[tool.black]
-line-length = 120
-
-[tool.pylint.master]
-persistent = false
-score = false
-
-[tool.pylint.messages_control]
-disable = "all"
-enable = [
-  "miscellaneous",
-  "similarities",
-]
-
-[tool.pylint.similarities]
-ignore-comments = true
-ignore-docstrings = true
-ignore-imports = true
-min-similarity-lines = 8
-
-[tool.pylint.reports]
-reports = false
-
-[tool.pylint.miscellaneous]
-notes = [
-  "FIXME",
-  "XXX",
-  "TODO",
+[project]
+name = "dinov2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "torch",
+    "torchvision",
+    "omegaconf",
+    "torchmetrics",
+    "fvcore",
+    "iopath",
+    "xformers",
+    "submitit",
+    "cuml-cu11"
 ]
