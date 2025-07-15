@@ -10,7 +10,9 @@ import os
 import sys
 from typing import List, Optional
 
+import hydra
 import numpy as np
+from omegaconf import DictConfig
 import torch
 import torch.nn as nn
 from torch.nn.parallel import DistributedDataParallel
@@ -468,6 +470,7 @@ def run_eval_linear(
     return results_dict
 
 
+@hydra.main(config_path="../../configs", config_name="ssl_default_config")
 def main(cfg):
     model, autocast_dtype = setup_and_build_model(cfg)
     run_eval_linear(
@@ -495,12 +498,4 @@ def main(cfg):
 
 
 if __name__ == "__main__":
-    import sys
-    import hydra
-    from omegaconf import DictConfig
-
-    @hydra.main(config_path="../../configs", config_name="ssl_default_config")
-    def hydra_main(cfg: DictConfig):
-        return main(cfg)
-
-    sys.exit(hydra_main())
+    main()

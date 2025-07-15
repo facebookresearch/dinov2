@@ -10,6 +10,8 @@ import time
 from typing import List, Optional
 
 from cuml.linear_model import LogisticRegression
+import hydra
+from omegaconf import DictConfig
 import torch
 import torch.backends.cudnn as cudnn
 import torch.distributed
@@ -347,6 +349,7 @@ def eval_log_regression_with_model(
     return results_dict
 
 
+@hydra.main(config_path="../../configs", config_name="ssl_default_config")
 def main(cfg):
     model, autocast_dtype = setup_and_build_model(cfg)
     eval_log_regression_with_model(
@@ -365,11 +368,4 @@ def main(cfg):
 
 
 if __name__ == "__main__":
-    import hydra
-    from omegaconf import DictConfig
-
-    @hydra.main(config_path="../../configs", config_name="ssl_default_config")
-    def hydra_main(cfg: DictConfig):
-        return main(cfg)
-
-    sys.exit(hydra_main())
+    main()

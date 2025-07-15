@@ -9,3 +9,5 @@ dist/
 *.swp
 
 .vscode/
+
+outputs/
