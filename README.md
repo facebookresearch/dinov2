@@ -1,16 +1,19 @@
 # Work In Progress!
 
+### Completed
+
+- Hydra Integration
+
 ### Currently Under Review:
-
-- Hydra integration
-
-### Ready for Review
 
 - HF Dataset Loading
 
-### Upcoming Changes
+### In Progress
 
 - Graph Formulated Loss
+
+### Upcoming Changes
+
 - HF Model Loading (?)
 - Update README
 - List changes in License
