@@ -3,97 +3,25 @@
 # This source code is licensed under the Apache License, Version 2.0
 # found in the LICENSE file in the root directory of this source tree.
 
-import argparse
-from functools import partial
-import json
 import logging
+import json
 import os
-import sys
+from functools import partial
 from typing import List, Optional
 
 import torch
 from torch.nn.functional import one_hot, softmax
+import hydra
+from omegaconf import DictConfig
 
 import dinov2.distributed as distributed
 from dinov2.data import SamplerType, make_data_loader, make_dataset
 from dinov2.data.transforms import make_classification_eval_transform
 from dinov2.eval.metrics import AccuracyAveraging, build_topk_accuracy_metric
-from dinov2.eval.setup import get_args_parser as get_setup_args_parser
 from dinov2.eval.setup import setup_and_build_model
 from dinov2.eval.utils import ModelWithNormalize, evaluate, extract_features
 
-
 logger = logging.getLogger("dinov2")
-
-
-def get_args_parser(
-    description: Optional[str] = None,
-    parents: Optional[List[argparse.ArgumentParser]] = None,
-    add_help: bool = True,
-):
-    parents = parents or []
-    setup_args_parser = get_setup_args_parser(parents=parents, add_help=False)
-    parents = [setup_args_parser]
-    parser = argparse.ArgumentParser(
-        description=description,
-        parents=parents,
-        add_help=add_help,
-    )
-    parser.add_argument(
-        "--train-dataset",
-        dest="train_dataset_str",
-        type=str,
-        help="Training dataset",
-    )
-    parser.add_argument(
-        "--val-dataset",
-        dest="val_dataset_str",
-        type=str,
-        help="Validation dataset",
-    )
-    parser.add_argument(
-        "--nb_knn",
-        nargs="+",
-        type=int,
-        help="Number of NN to use. 20 is usually working the best.",
-    )
-    parser.add_argument(
-        "--temperature",
-        type=float,
-        help="Temperature used in the voting coefficient",
-    )
-    parser.add_argument(
-        "--gather-on-cpu",
-        action="store_true",
-        help="Whether to gather the train features on cpu, slower"
-        "but useful to avoid OOM for large datasets (e.g. ImageNet22k).",
-    )
-    parser.add_argument(
-        "--batch-size",
-        type=int,
-        help="Batch size.",
-    )
-    parser.add_argument(
-        "--n-per-class-list",
-        nargs="+",
-        type=int,
-        help="Number to take per class",
-    )
-    parser.add_argument(
-        "--n-tries",
-        type=int,
-        help="Number of tries",
-    )
-    parser.set_defaults(
-        train_dataset_str="ImageNet:split=TRAIN",
-        val_dataset_str="ImageNet:split=VAL",
-        nb_knn=[10, 20, 100, 200],
-        temperature=0.07,
-        batch_size=256,
-        n_per_class_list=[-1],
-        n_tries=1,
-    )
-    return parser
 
 
 class KnnModule(torch.nn.Module):
@@ -376,29 +304,27 @@ def eval_knn_with_model(
     return results_dict
 
 
-def main(args):
-    model, autocast_dtype = setup_and_build_model(args)
+@hydra.main(config_path="../../configs", config_name="ssl_default_config")
+def main(cfg: DictConfig):
+    model, autocast_dtype = setup_and_build_model(cfg)
     eval_knn_with_model(
         model=model,
-        output_dir=args.output_dir,
-        train_dataset_str=args.train_dataset_str,
-        val_dataset_str=args.val_dataset_str,
-        nb_knn=args.nb_knn,
-        temperature=args.temperature,
+        output_dir=cfg.output_dir,
+        train_dataset_str=cfg.train_dataset_str,
+        val_dataset_str=cfg.val_dataset_str,
+        nb_knn=cfg.nb_knn,
+        temperature=cfg.temperature,
         autocast_dtype=autocast_dtype,
         accuracy_averaging=AccuracyAveraging.MEAN_ACCURACY,
         transform=None,
-        gather_on_cpu=args.gather_on_cpu,
-        batch_size=args.batch_size,
+        gather_on_cpu=cfg.gather_on_cpu,
+        batch_size=cfg.batch_size,
         num_workers=5,
-        n_per_class_list=args.n_per_class_list,
-        n_tries=args.n_tries,
+        n_per_class_list=cfg.n_per_class_list,
+        n_tries=cfg.n_tries,
     )
     return 0
 
 
 if __name__ == "__main__":
-    description = "DINOv2 k-NN evaluation"
-    args_parser = get_args_parser(description=description)
-    args = args_parser.parse_args()
-    sys.exit(main(args))
+    main()
