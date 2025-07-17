@@ -350,7 +350,7 @@ def eval_log_regression_with_model(
 
 
 @hydra.main(config_path="../../configs", config_name="ssl_default_config")
-def main(cfg):
+def main(cfg: DictConfig):
     model, autocast_dtype = setup_and_build_model(cfg)
     eval_log_regression_with_model(
         model=model,

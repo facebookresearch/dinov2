@@ -11,6 +11,8 @@ from typing import List, Optional
 
 import torch
 from torch.nn.functional import one_hot, softmax
+import hydra
+from omegaconf import DictConfig
 
 import dinov2.distributed as distributed
 from dinov2.data import SamplerType, make_data_loader, make_dataset
@@ -302,7 +304,8 @@ def eval_knn_with_model(
     return results_dict
 
 
-def main(cfg):
+@hydra.main(config_path="../../configs", config_name="ssl_default_config")
+def main(cfg: DictConfig):
     model, autocast_dtype = setup_and_build_model(cfg)
     eval_knn_with_model(
         model=model,
@@ -323,15 +326,5 @@ def main(cfg):
     return 0
 
 
-# If you want to run this file directly with Hydra:
 if __name__ == "__main__":
-    import hydra
-    from omegaconf import DictConfig
-
-    @hydra.main(config_path="../../configs", config_name="ssl_default_config")
-    def hydra_main(cfg: DictConfig):
-        return main(cfg)
-
-    import sys
-
-    sys.exit(hydra_main())
+    main()

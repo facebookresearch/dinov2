@@ -471,7 +471,7 @@ def run_eval_linear(
 
 
 @hydra.main(config_path="../../configs", config_name="ssl_default_config")
-def main(cfg):
+def main(cfg: DictConfig):
     model, autocast_dtype = setup_and_build_model(cfg)
     run_eval_linear(
         model=model,
