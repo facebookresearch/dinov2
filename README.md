@@ -1,13 +1,25 @@
-### Running via the HF Dataloader
+# Work In Progress!
 
-```bash
-# Train with any HuggingFace dataset using config
-python dinov2/train/train.py --config-name=config_based_example
+### Completed
 
-# Still works with original approach  
-python dinov2/train/train.py --config-name=ssl_default_config
-```
+- Hydra Integration
 
+### Currently Under Review:
+
+- HF Dataset Loading
+
+### In Progress
+
+- Graph Formulated Loss
+
+### Upcoming Changes
+
+- HF Model Loading (?)
+- Update README
+- List changes in License
+
+
+## Original README from Meta
 
 :new: [2025-06-11] *Added dino.txt inference code, following [DINOv2 Meets Text: A Unified Framework for Image- and Pixel-Level Vision-Language Alignment](https://arxiv.org/abs/2412.16334).*
 

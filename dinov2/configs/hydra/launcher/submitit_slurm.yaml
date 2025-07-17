@@ -1,0 +1,35 @@
+# @package _global_
+defaults:
+  - override /hydra/launcher: submitit_slurm
+
+hydra:
+  launcher:
+    _target_: hydra_plugins.hydra_submitit_launcher.submitit_launcher.SlurmLauncher
+    folder: ${hydra:runtime.output_dir}/.submitit/%j
+    max_num_timeout: 30
+    
+    # SLURM specific configurations
+    partition: gpu
+    qos: null
+    account: null
+    exclusive: false
+    mem_gb: null
+    cpus_per_task: 10
+    gpus_per_node: 8
+    tasks_per_node: 8
+    nodes: 1
+    timeout_min: 4320  # 72 hours
+    signal_delay_s: 120
+    
+    # Job management
+    name: dinov2_job
+    stderr_to_stdout: false
+    submit_command: sbatch
+    cancel_command: scancel
+    array_parallelism: 256
+    
+    # Additional SLURM parameters
+    additional_parameters:
+      constraint: volta32gb
+      mail-type: END,FAIL
+      mail-user: ${oc.env:USER}@example.com

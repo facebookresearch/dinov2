@@ -18,7 +18,6 @@ dependencies:
   - xformers::xformers=0.0.18
   - pip
   - pip:
-      - git+https://github.com/facebookincubator/submitit
       - --extra-index-url https://pypi.nvidia.com
       - cuml-cu11
       - mmcv-full==1.5.0

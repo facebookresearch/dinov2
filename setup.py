@@ -26,7 +26,9 @@ except FileNotFoundError:
     long_description = DESCRIPTION
 
 
-def get_requirements(path: str = HERE / "requirements.txt") -> Tuple[List[str], List[str]]:
+def get_requirements(
+    path: str = HERE / "requirements.txt",
+) -> Tuple[List[str], List[str]]:
     requirements = []
     extra_indices = []
     with open(path) as f:
@@ -47,12 +49,7 @@ def get_package_version() -> str:
     raise RuntimeError("Can't get package version")
 
 
-requirements, extra_indices = get_requirements()
 version = get_package_version()
-dev_requirements, _ = get_requirements(HERE / "requirements-dev.txt")
-extras_requirements, _ = get_requirements(HERE / "requirements-extras.txt")
-
-
 setup(
     name=NAME,
     version=version,
@@ -66,12 +63,6 @@ setup(
     package_data={
         "": ["*.yaml"],
     },
-    install_requires=requirements,
-    extras_require={
-        "dev": dev_requirements,
-        "extras": extras_requirements,
-    },
-    dependency_links=extra_indices,
     install_package_data=True,
     license="Apache",
     license_files=("LICENSE",),
