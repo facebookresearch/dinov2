@@ -2,12 +2,11 @@ build/
 dist/
 *.egg-info/
 **/__pycache__/
-
 **/.ipynb_checkpoints
 **/.ipynb_checkpoints/**
 
 *.swp
-
 .vscode/
+.venv/
 
 outputs/
