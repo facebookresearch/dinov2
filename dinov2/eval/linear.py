@@ -552,7 +552,7 @@ def main(cfg: DictConfig):
     model, autocast_dtype = setup_and_build_model(cfg)
     run_eval_linear(
         model=model,
-        output_dir=cfg.output_dir,
+        output_dir=cfg.train.output_dir,
         train_dataset_str=cfg.train_dataset_str,
         val_dataset_str=cfg.val_dataset_str,
         test_dataset_strs=cfg.test_dataset_strs,

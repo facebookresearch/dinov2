@@ -85,7 +85,7 @@ data:
 # Training configuration
 train:
   batch_size_per_gpu: 64
-  output_dir: "outputs"
+  output_dir: "../outputs"
   num_workers: 4
   OFFICIAL_EPOCH_LENGTH: 1250
   # Enable semi-supervised training
@@ -141,8 +141,10 @@ defaults:
   - _self_
   - hydra/launcher: submitit_local # Change to submitit_slurm for SLURM clusters
 
+# disable hydra outputs
 hydra:
+  output_subdir: null
   job:
     chdir: true
   run:
-    dir: ${train.output_dir}/hydra_outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    dir: .

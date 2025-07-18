@@ -42,7 +42,7 @@ def default_setup(cfg):
     distributed.enable(overwrite=True)
     seed = getattr(cfg, "seed", 0)
     rank = distributed.get_global_rank()
-    setup_logging(output=cfg.output_dir, level=logging.INFO)
+    setup_logging(output=cfg.train.output_dir, level=logging.INFO)
     logger = logging.getLogger("dinov2")
     utils.fix_random_seeds(seed + rank)
     logger.info("git:\n  {}\n".format(utils.get_sha()))

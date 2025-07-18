@@ -351,7 +351,7 @@ def main(cfg: DictConfig):
     model, autocast_dtype = setup_and_build_model(cfg)
     eval_knn_with_model(
         model=model,
-        output_dir=cfg.output_dir,
+        output_dir=cfg.train.output_dir,
         train_dataset_str=cfg.train_dataset_str,
         val_dataset_str=cfg.val_dataset_str,
         nb_knn=cfg.nb_knn,
