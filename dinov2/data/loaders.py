@@ -229,17 +229,8 @@ def _make_sampler(
             seed=seed,
             drop_last=False,
         )
-    elif type == SamplerType.SEMI_SUPERVISED:
-        logger.info("sampler: semi-supervised")
-        if size > 0:
-            raise ValueError("sampler size > 0 is invalid")
-        if advance > 0:
-            raise ValueError("sampler advance > 0 is invalid")
-        # This requires additional parameters from the data loader
-        # We'll handle this in the make_data_loader function
-        raise NotImplementedError(
-            "Semi-supervised sampler requires additional parameters"
-        )
+    # SEMI_SUPERVISED sampler is handled in make_data_loader function
+    # and should never reach this point
 
     logger.info("sampler: none")
     return None
