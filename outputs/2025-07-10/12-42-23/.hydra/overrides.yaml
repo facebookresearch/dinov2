@@ -1,3 +1,0 @@
-- train.batch_size_per_gpu=32
-- optim.base_lr=0.001
-- temperature=0.05

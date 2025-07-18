@@ -9,4 +9,6 @@ dist/
 .vscode/
 .venv/
 
+*.log
+*.out
 outputs/
