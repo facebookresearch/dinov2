@@ -4,10 +4,10 @@ torchvision==0.15.0
 omegaconf
 hydra-core
 hydra-submitit-launcher
-torchmetrics==0.10.3
+torchmetrics
 fvcore
 iopath
-xformers==0.0.18
+xformers
 datasets
 aiohttp
 --extra-index-url https://pypi.nvidia.com

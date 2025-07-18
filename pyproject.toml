@@ -3,9 +3,8 @@ name = "dinov2"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 dependencies = [
-    "torch",
     "torchvision",
     "omegaconf",
     "torchmetrics",
@@ -16,4 +15,5 @@ dependencies = [
     "cuml-cu11",
     "hydra-core>=1.3.2",
     "datasets==3.6.0",
+    "torch==2.0.0",
 ]
