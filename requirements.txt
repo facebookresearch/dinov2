@@ -8,5 +8,7 @@ torchmetrics==0.10.3
 fvcore
 iopath
 xformers==0.0.18
+datasets
+aiohttp
 --extra-index-url https://pypi.nvidia.com
 cuml-cu11

@@ -10,8 +10,9 @@ from typing import Any, Callable, List, Optional, TypeVar
 import torch
 from torch.utils.data import Sampler
 
-from .datasets import ImageNet, ImageNet22k
+from .datasets import ImageNet, ImageNet22k, HuggingFaceDataset
 from .samplers import EpochSampler, InfiniteSampler, ShardedInfiniteSampler
+from .semisup_wrapper import SemiSupervisedWrapper, SemiSupervisedSampler
 
 
 logger = logging.getLogger("dinov2")
@@ -23,13 +24,17 @@ class SamplerType(Enum):
     INFINITE = 2
     SHARDED_INFINITE = 3
     SHARDED_INFINITE_NEW = 4
+    SEMI_SUPERVISED = 5
 
 
 def _make_bool_str(b: bool) -> str:
     return "yes" if b else "no"
 
 
-def _make_sample_transform(image_transform: Optional[Callable] = None, target_transform: Optional[Callable] = None):
+def _make_sample_transform(
+    image_transform: Optional[Callable] = None,
+    target_transform: Optional[Callable] = None,
+):
     def transform(sample):
         image, target = sample
         if image_transform is not None:
@@ -49,15 +54,32 @@ def _parse_dataset_str(dataset_str: str):
 
     for token in tokens[1:]:
         key, value = token.split("=")
-        assert key in ("root", "extra", "split")
         kwargs[key] = value
 
     if name == "ImageNet":
         class_ = ImageNet
+        # Only allow specific keys for ImageNet
+        for key in kwargs:
+            assert key in ("root", "extra", "split")
         if "split" in kwargs:
             kwargs["split"] = ImageNet.Split[kwargs["split"]]
     elif name == "ImageNet22k":
         class_ = ImageNet22k
+        # Only allow specific keys for ImageNet22k
+        for key in kwargs:
+            assert key in ("root", "extra", "split")
+    elif name == "HuggingFace":
+        class_ = HuggingFaceDataset
+        # HuggingFace datasets require at least a dataset_name
+        if "dataset_name" not in kwargs:
+            raise ValueError("HuggingFace dataset requires 'dataset_name' parameter")
+        # Convert string values to appropriate types
+        if "streaming" in kwargs:
+            kwargs["streaming"] = kwargs["streaming"].lower() == "true"
+        if "trust_remote_code" in kwargs:
+            kwargs["trust_remote_code"] = kwargs["trust_remote_code"].lower() == "true"
+        if "add_index" in kwargs:
+            kwargs["add_index"] = kwargs["add_index"].lower() == "true"
     else:
         raise ValueError(f'Unsupported dataset "{name}"')
 
@@ -95,6 +117,58 @@ def make_dataset(
         setattr(dataset, "target_transform", target_transform)
 
     return dataset
+
+
+def make_semisupervised_dataset(
+    *,
+    dataset_str: str,
+    transform: Optional[Callable] = None,
+    target_transform: Optional[Callable] = None,
+    main_label_col: str = "label",
+    supervised_proportion: float = 0.1,
+    seed: int = 813846,
+    labels_per_class: Optional[int] = None,
+):
+    """
+    Creates a semi-supervised dataset with the specified parameters.
+
+    Args:
+        dataset_str: A dataset string description (e.g. ImageNet:split=TRAIN).
+        transform: A transform to apply to images.
+        target_transform: A transform to apply to targets.
+        main_label_col: Name of the main label column.
+        supervised_proportion: Proportion of data to use as supervised (0-1).
+        seed: Random seed for reproducibility.
+        labels_per_class: If set, use this many labels per class instead of proportion.
+
+    Returns:
+        The created semi-supervised dataset.
+    """
+    logger.info(f'creating semi-supervised dataset from: "{dataset_str}"')
+    logger.info(f"supervised_proportion: {supervised_proportion}")
+    if labels_per_class is not None:
+        logger.info(f"labels_per_class: {labels_per_class}")
+
+    # Create the base dataset
+    dataset = make_dataset(
+        dataset_str=dataset_str,
+        transform=transform,
+        target_transform=target_transform,
+    )
+
+    # Wrap with semi-supervised functionality
+    semisup_dataset = SemiSupervisedWrapper(
+        dataset=dataset,
+        main_label_col=main_label_col,
+        supervised_proportion=supervised_proportion,
+        seed=seed,
+        labels_per_class=labels_per_class,
+    )
+
+    logger.info(f"# of supervised samples: {len(semisup_dataset.supervised_split):,d}")
+    logger.info(f"# of total samples: {len(semisup_dataset):,d}")
+
+    return semisup_dataset
 
 
 def _make_sampler(
@@ -155,6 +229,8 @@ def _make_sampler(
             seed=seed,
             drop_last=False,
         )
+    # SEMI_SUPERVISED sampler is handled in make_data_loader function
+    # and should never reach this point
 
     logger.info("sampler: none")
     return None
@@ -176,6 +252,7 @@ def make_data_loader(
     drop_last: bool = True,
     persistent_workers: bool = False,
     collate_fn: Optional[Callable[[List[T]], Any]] = None,
+    supervised_per_batch: int = 0,
 ):
     """
     Creates a data loader with the specified parameters.
@@ -186,22 +263,38 @@ def make_data_loader(
         num_workers: The number of workers to use.
         shuffle: Whether to shuffle samples.
         seed: The random seed to use.
-        sampler_type: Which sampler to use: EPOCH, INFINITE, SHARDED_INFINITE, SHARDED_INFINITE_NEW, DISTRIBUTED or None.
+        sampler_type: Which sampler to use: EPOCH, INFINITE, SHARDED_INFINITE, SHARDED_INFINITE_NEW, DISTRIBUTED, SEMI_SUPERVISED or None.
         sampler_size: The number of images per epoch (when applicable) or -1 for the entire dataset.
         sampler_advance: How many samples to skip (when applicable).
         drop_last: Whether the last non-full batch of data should be dropped.
         persistent_workers: maintain the workers Dataset instances alive after a dataset has been consumed once.
         collate_fn: Function that performs batch collation
+        supervised_per_batch: Number of supervised samples per batch (for semi-supervised training)
     """
 
-    sampler = _make_sampler(
-        dataset=dataset,
-        type=sampler_type,
-        shuffle=shuffle,
-        seed=seed,
-        size=sampler_size,
-        advance=sampler_advance,
-    )
+    # Handle semi-supervised sampler specially
+    if sampler_type == SamplerType.SEMI_SUPERVISED:
+        logger.info("sampler: semi-supervised")
+        if not isinstance(dataset, SemiSupervisedWrapper):
+            raise ValueError(
+                "Semi-supervised sampler requires a SemiSupervisedWrapper dataset"
+            )
+
+        sampler = SemiSupervisedSampler(
+            dataset=dataset,
+            batch_size=batch_size,
+            supervised_per_batch=supervised_per_batch,
+            seed=seed,
+        )
+    else:
+        sampler = _make_sampler(
+            dataset=dataset,
+            type=sampler_type,
+            shuffle=shuffle,
+            seed=seed,
+            size=sampler_size,
+            advance=sampler_advance,
+        )
 
     logger.info("using PyTorch data loader")
     data_loader = torch.utils.data.DataLoader(
@@ -220,3 +313,109 @@ def make_data_loader(
     except TypeError:  # data loader has no length
         logger.info("infinite data loader")
     return data_loader
+
+
+def make_dataset_from_config(
+    data_config: dict,
+    split: str,
+    transform: Optional[Callable] = None,
+    target_transform: Optional[Callable] = None,
+):
+    """
+    Creates a dataset from a configuration dictionary.
+
+    Args:
+        data_config: Configuration dictionary containing dataset parameters
+        split: Which split to use ('train' or 'val')
+        transform: A transform to apply to images.
+        target_transform: A transform to apply to targets.
+
+    Returns:
+        The created dataset.
+    """
+
+    # Get the split name from config
+    split_name = data_config.get(f"{split}_split", split)
+
+    # Create HuggingFace dataset with config parameters
+    dataset = HuggingFaceDataset(
+        dataset_name=data_config["dataset"],
+        config_name=data_config.get("config_name"),
+        split=split_name,
+        img_col_name=data_config.get("img_col_name", "image"),
+        label_col_names=data_config.get("label_col_names", ["label"]),
+        transform=transform,
+        target_transform=target_transform,
+        cache_dir=data_config.get("cache_dir"),
+        data_dir=data_config.get("data_dir"),
+        trust_remote_code=data_config.get("trust_remote_code", True),
+        streaming=data_config.get("streaming", False),
+    )
+
+    logger.info(
+        f"Created dataset for split '{split_name}' with {len(dataset):,d} samples"
+    )
+
+    # Set attributes for compatibility
+    if not hasattr(dataset, "transform"):
+        setattr(dataset, "transform", transform)
+    if not hasattr(dataset, "target_transform"):
+        setattr(dataset, "target_transform", target_transform)
+
+    return dataset
+
+
+def make_semisupervised_dataset_from_config(
+    data_config: dict,
+    split: str,
+    transform: Optional[Callable] = None,
+    target_transform: Optional[Callable] = None,
+):
+    """
+    Creates a semi-supervised dataset from a configuration dictionary.
+
+    Args:
+        data_config: Configuration dictionary containing dataset parameters
+        split: Which split to use ('train' or 'val')
+        transform: A transform to apply to images.
+        target_transform: A transform to apply to targets.
+
+    Returns:
+        The created semi-supervised dataset.
+    """
+
+    # First create the base dataset
+    dataset = make_dataset_from_config(
+        data_config=data_config,
+        split=split,
+        transform=transform,
+        target_transform=target_transform,
+    )
+
+    # Get semi-supervised parameters from config
+    semisup_config = data_config.get("semisupervised", {})
+    main_label_col = semisup_config.get("main_label_col", "label")
+    supervised_proportion = semisup_config.get("supervised_proportion", 0.1)
+    seed = semisup_config.get("seed", 813846)
+    labels_per_class = semisup_config.get("labels_per_class", None)
+
+    logger.info(f"Creating semi-supervised dataset with:")
+    logger.info(f"  main_label_col: {main_label_col}")
+    logger.info(f"  supervised_proportion: {supervised_proportion}")
+    if labels_per_class is not None:
+        logger.info(f"  labels_per_class: {labels_per_class}")
+
+    # Wrap with semi-supervised functionality
+    semisup_dataset = SemiSupervisedWrapper(
+        dataset=dataset,
+        main_label_col=main_label_col,
+        supervised_proportion=supervised_proportion,
+        seed=seed,
+        labels_per_class=labels_per_class,
+    )
+
+    logger.info(
+        f"Created semi-supervised dataset with {len(semisup_dataset.supervised_split):,d} supervised samples out of {len(semisup_dataset):,d} total"
+    )
+
+    return semisup_dataset
