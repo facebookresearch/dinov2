@@ -12,3 +12,4 @@ dist/
 *.log
 *.out
 outputs/
+dinov2/run/train/outputs/

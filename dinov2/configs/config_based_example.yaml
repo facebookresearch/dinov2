@@ -145,8 +145,13 @@ student:
   ffn_layer: "mlp"
   block_chunks: 0
   qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
   qk_scale: null
   init_values: null
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
 teacher:
   momentum_teacher: 0.996
   final_momentum_teacher: 1

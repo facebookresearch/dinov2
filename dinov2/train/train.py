@@ -335,6 +335,7 @@ def do_train(cfg, model, resume=False):
 
 @hydra.main(config_path="../configs", config_name="ssl_default_config")
 def main(cfg: DictConfig):
+    cfg = setup(cfg)
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()
 
