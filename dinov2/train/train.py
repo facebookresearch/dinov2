@@ -333,7 +333,7 @@ def do_train(cfg, model, resume=False):
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
 
 
-@hydra.main(config_path="../../configs", config_name="ssl_default_config")
+@hydra.main(config_path="../configs", config_name="ssl_default_config")
 def main(cfg: DictConfig):
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()

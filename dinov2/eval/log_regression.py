@@ -79,7 +79,15 @@ def evaluate_model(*, logreg_model, logreg_metric, test_data_loader, device):
     return evaluate(nn.Identity(), test_data_loader, postprocessors, metrics, device)
 
 
-def train_for_C(*, C, max_iter, train_features, train_labels, dtype=torch.float64, device=_CPU_DEVICE):
+def train_for_C(
+    *,
+    C,
+    max_iter,
+    train_features,
+    train_labels,
+    dtype=torch.float64,
+    device=_CPU_DEVICE,
+):
     logreg_model = LogRegModule(C, max_iter=max_iter, dtype=dtype, device=device)
     logreg_model.fit(train_features, train_labels)
     return logreg_model
@@ -204,10 +212,18 @@ def eval_log_regression(
     start = time.time()
 
     train_features, train_labels = extract_features(
-        model, train_dataset, batch_size, num_workers, gather_on_cpu=(train_features_device == _CPU_DEVICE)
+        model,
+        train_dataset,
+        batch_size,
+        num_workers,
+        gather_on_cpu=(train_features_device == _CPU_DEVICE),
     )
     val_features, val_labels = extract_features(
-        model, val_dataset, batch_size, num_workers, gather_on_cpu=(train_features_device == _CPU_DEVICE)
+        model,
+        val_dataset,
+        batch_size,
+        num_workers,
+        gather_on_cpu=(train_features_device == _CPU_DEVICE),
     )
     val_data_loader = torch.utils.data.DataLoader(
         TensorDataset(val_features, val_labels),
@@ -226,12 +242,22 @@ def eval_log_regression(
         indices = torch.randperm(len(train_features), device=train_features.device)
         finetune_index = indices[: len(train_features) // 10]
         train_index = indices[len(train_features) // 10 :]
-        finetune_features, finetune_labels = train_features[finetune_index], train_labels[finetune_index]
-        train_features, train_labels = train_features[train_index], train_labels[train_index]
+        finetune_features, finetune_labels = (
+            train_features[finetune_index],
+            train_labels[finetune_index],
+        )
+        train_features, train_labels = (
+            train_features[train_index],
+            train_labels[train_index],
+        )
     else:
         logger.info("Choosing hyperparameters on the finetune dataset")
         finetune_features, finetune_labels = extract_features(
-            model, finetune_dataset, batch_size, num_workers, gather_on_cpu=(train_features_device == _CPU_DEVICE)
+            model,
+            finetune_dataset,
+            batch_size,
+            num_workers,
+            gather_on_cpu=(train_features_device == _CPU_DEVICE),
         )
     # release the model - free GPU memory
     del model
@@ -305,11 +331,21 @@ def eval_log_regression_with_model(
     transform = make_classification_eval_transform(resize_size=224)
     target_transform = None
 
-    train_dataset = make_dataset(dataset_str=train_dataset_str, transform=transform, target_transform=target_transform)
-    val_dataset = make_dataset(dataset_str=val_dataset_str, transform=transform, target_transform=target_transform)
+    train_dataset = make_dataset(
+        dataset_str=train_dataset_str,
+        transform=transform,
+        target_transform=target_transform,
+    )
+    val_dataset = make_dataset(
+        dataset_str=val_dataset_str,
+        transform=transform,
+        target_transform=target_transform,
+    )
     if finetune_dataset_str is not None:
         finetune_dataset = make_dataset(
-            dataset_str=finetune_dataset_str, transform=transform, target_transform=target_transform
+            dataset_str=finetune_dataset_str,
+            transform=transform,
+            target_transform=target_transform,
         )
     else:
         finetune_dataset = None
@@ -331,7 +367,8 @@ def eval_log_regression_with_model(
 
     results_dict = {
         "top-1": results_dict_logreg["top-1"].cpu().numpy() * 100.0,
-        "top-5": results_dict_logreg.get("top-5", torch.tensor(0.0)).cpu().numpy() * 100.0,
+        "top-5": results_dict_logreg.get("top-5", torch.tensor(0.0)).cpu().numpy()
+        * 100.0,
         "best_C": results_dict_logreg["best_C"],
     }
     logger.info(
@@ -349,7 +386,7 @@ def eval_log_regression_with_model(
     return results_dict
 
 
-@hydra.main(config_path="../../configs", config_name="ssl_default_config")
+@hydra.main(config_path="../configs", config_name="ssl_default_config")
 def main(cfg: DictConfig):
     model, autocast_dtype = setup_and_build_model(cfg)
     eval_log_regression_with_model(

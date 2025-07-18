@@ -45,15 +45,16 @@ compute_precision:
         buffer_dtype: fp32
 
 # New data configuration format
+# For CIFAR-10:
 data:
-  dataset: "randall-lab/face-obfuscated-imagenet"
-  img_col_name: "image"
+  dataset: "cifar10"
+  img_col_name: "img"
   label_col_names: ["label"]
   train_split: "train"
-  val_split: "validation"
-  config_name: "noface-1k"
-  num_classes: 1000
-  num_workers: 10
+  val_split: "test"
+  config_name: null
+  num_classes: 10
+  num_workers: 4
   seed: 983245
   supervised_proportion: 0.0
   supervised_per_batch: 0
@@ -64,16 +65,16 @@ data:
   data_dir: null
 
 # Alternative examples for different datasets:
-# For CIFAR-10:
+# For face-obfuscated-imagenet:
 # data:
-#   dataset: "cifar10"
-#   img_col_name: "img"
+#   dataset: "randall-lab/face-obfuscated-imagenet"
+#   img_col_name: "image"
 #   label_col_names: ["label"]
 #   train_split: "train"
-#   val_split: "test"
-#   config_name: null
-#   num_classes: 10
-#   num_workers: 4
+#   val_split: "validation"
+#   config_name: "noface-1k"
+#   num_classes: 1000
+#   num_workers: 10
 #   seed: 983245
 #   supervised_proportion: 0.0
 #   supervised_per_batch: 0
@@ -160,3 +161,14 @@ crops:
   local_crops_size: 96
 evaluation:
   eval_period_iterations: 12500
+
+# Hydra configuration
+defaults:
+  - _self_
+  - hydra/launcher: submitit_local # Change to submitit_slurm for SLURM clusters
+
+hydra:
+  job:
+    chdir: true
+  run:
+    dir: ${train.output_dir}/hydra_outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
