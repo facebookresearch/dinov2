@@ -60,17 +60,28 @@ class DINOLoss(nn.Module):
         Q *= B  # the columns must sum to 1 so that Q is an assignment
         return Q.t()
 
-    def forward(self, student_output_list, teacher_out_softmaxed_centered_list):
-        """
-        Cross-entropy between softmax outputs of the teacher and student networks.
-        """
-        # TODO: Use cross_entropy_distribution here
+    def forward(self, student_output_list, teacher_out_softmaxed_centered_list, graph):
+        
+        batch_size = student_output_list[0].shape[0]
+        device = student_output_list[0].device
+        graph = graph.to(device) if graph is not None else None
+
+        if graph is None:
+            graph = torch.eye(batch_size, device=device)
+        else:
+            graph.fill_diagonal_(1)
+
+        row_sums = graph.sum(dim=1, keepdim=True)
+        graph_norm = graph / row_sums.clamp(min=1.0)
+
         total_loss = 0
         for s in student_output_list:
-            lsm = F.log_softmax(s / self.student_temp, dim=-1)
+            lsm = F.log_softmax(s / self.student_temp, dim=-1) 
             for t in teacher_out_softmaxed_centered_list:
-                loss = torch.sum(t * lsm, dim=-1)
-                total_loss -= loss.mean()
+                aggregated_t = torch.matmul(graph_norm, t)
+
+                loss = torch.sum(aggregated_t * lsm, dim=-1)
+                total_loss -= loss.mean() 
         return total_loss
 
     @torch.no_grad()

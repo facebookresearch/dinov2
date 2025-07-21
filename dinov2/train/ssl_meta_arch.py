@@ -164,7 +164,9 @@ class SSLMetaArch(nn.Module):
         else:
             loss.backward()
 
-    def forward_backward(self, images, teacher_temp):
+    def forward_backward(self, images, teacher_temp , graph = None):
+        print("Forward and backward pass started.")
+        print(f"Graph provided: {graph is not None}")
         n_global_crops = 2
         assert n_global_crops == 2
         n_local_crops = self.cfg.crops.local_crops_number
@@ -374,12 +376,21 @@ class SSLMetaArch(nn.Module):
             )[:n_masked_patches]
 
         if n_local_crops > 0:
-            dino_local_crops_loss = self.dino_loss(
-                student_output_list=student_local_cls_tokens_after_head.chunk(
-                    n_local_crops
-                ),
-                teacher_out_softmaxed_centered_list=teacher_dino_softmaxed_centered_list,
-            ) / (n_global_crops_loss_terms + n_local_crops_loss_terms)
+            if graph is None:
+                dino_local_crops_loss = self.dino_loss(
+                    student_output_list=student_local_cls_tokens_after_head.chunk(
+                        n_local_crops
+                    ),
+                    teacher_out_softmaxed_centered_list=teacher_dino_softmaxed_centered_list,
+                ) / (n_global_crops_loss_terms + n_local_crops_loss_terms)
+            else:
+                dino_local_crops_loss = self.dino_loss(
+                    student_output_list=student_local_cls_tokens_after_head.chunk(
+                        n_local_crops
+                    ),
+                    teacher_out_softmaxed_centered_list=teacher_dino_softmaxed_centered_list,
+                    graph=graph,
+                ) / (n_global_crops_loss_terms + n_local_crops_loss_terms)
 
             # store for display
             loss_dict["dino_local_crops_loss"] = dino_local_crops_loss
@@ -392,16 +403,29 @@ class SSLMetaArch(nn.Module):
 
         if do_dino:
             # compute loss
-            dino_global_crops_loss = (
-                self.dino_loss(
-                    student_output_list=[student_global_cls_tokens_after_head],
-                    teacher_out_softmaxed_centered_list=[
-                        teacher_dino_softmaxed_centered_list.flatten(0, 1)
-                    ],  # these were chunked and stacked in reverse so A is matched to B
+            if graph is None:
+                dino_global_crops_loss = (
+                    self.dino_loss(
+                        student_output_list=[student_global_cls_tokens_after_head],
+                        teacher_out_softmaxed_centered_list=[
+                            teacher_dino_softmaxed_centered_list.flatten(0, 1)
+                        ],  # these were chunked and stacked in reverse so A is matched to B
+                    )
+                    * loss_scales
+                    / (n_global_crops_loss_terms + n_local_crops_loss_terms)
                 )
-                * loss_scales
-                / (n_global_crops_loss_terms + n_local_crops_loss_terms)
-            )
+            else:
+                dino_global_crops_loss = (
+                    self.dino_loss(
+                        student_output_list=[student_global_cls_tokens_after_head],
+                        teacher_out_softmaxed_centered_list=[
+                            teacher_dino_softmaxed_centered_list.flatten(0, 1)
+                        ],  # these were chunked and stacked in reverse so A is matched to B
+                        graph=graph,
+                    )
+                    * loss_scales
+                    / (n_global_crops_loss_terms + n_local_crops_loss_terms)
+                )
 
             loss_dict["dino_global_crops_loss"] = dino_global_crops_loss
 
@@ -448,9 +472,11 @@ class SSLMetaArch(nn.Module):
     def fsdp_synchronize_streams(self):
         if self.need_to_synchronize_fsdp_streams:
             torch.cuda.synchronize()
-            self.student.dino_head._streams = self.teacher.dino_head._streams = (
-                self.student.backbone._streams
-            ) = self.teacher.backbone._streams
+            for attr in {"_unshard_stream", "_post_backward_stream", "_pre_unshard_stream", "_all_reduce_stream", "_default_stream"}:
+                stream = getattr(self.teacher.backbone, attr)
+                setattr(self.student.dino_head, attr, stream)
+                setattr(self.teacher.dino_head, attr, stream)
+                setattr(self.student.backbone, attr, stream)
             self.need_to_synchronize_fsdp_streams = False
 
     def update_teacher(self, m):

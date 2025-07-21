@@ -93,6 +93,8 @@ class SemiSupervisedWrapper(torch.utils.data.Dataset):
             self.dataset.dataset = self.dataset.dataset.add_column(
                 "is_supervised", is_sup.tolist()
             )
+            self.is_supervised = is_sup.tolist() #TODO Debug this, not able to access is_supervised column in collate_fn
+
         else:
             # For other datasets, we'll store this information locally
             self.is_supervised = is_sup.tolist()
@@ -101,7 +103,7 @@ class SemiSupervisedWrapper(torch.utils.data.Dataset):
         return len(self.dataset)
 
     def __getitem__(self, index: int):
-        return self.dataset[index]
+        return self.dataset[index] , self.is_supervised[index]
 
 
 class SemiSupervisedSampler(torch.utils.data.DistributedSampler):

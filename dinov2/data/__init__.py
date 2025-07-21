@@ -12,7 +12,7 @@ from .loaders import (
     make_semisupervised_dataset_from_config,
     SamplerType,
 )
-from .collate import collate_data_and_cast
+from .collate import collate_data_and_cast , collate_data_and_cast_semisl
 from .masking import MaskingGenerator
 from .augmentations import DataAugmentationDINO
 from .semisup_wrapper import SemiSupervisedWrapper, SemiSupervisedSampler

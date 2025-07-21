@@ -63,25 +63,26 @@ ibot:
 
 # Semi-supervised training configuration
 data:
-  dataset: "your-dataset-name" # Replace with your HuggingFace dataset name
-  config_name: null # Set if your dataset has configurations
-  train_split: "train"
-  val_split: "validation"
-  img_col_name: "image"
+  dataset: "cifar10"
+  img_col_name: "img"
   label_col_names: ["label"]
-  cache_dir: null
-  data_dir: null
+  train_split: "train"
+  val_split: "test"
+  config_name: null
+  num_classes: 10
+  num_workers: 4
+  seed: 983245
+  # Optional additional parameters
   trust_remote_code: true
   streaming: false
-  num_workers: 4
+  cache_dir: null
+  data_dir: null
 
-  # Semi-supervised configuration
   semisupervised:
     main_label_col: "label"
-    supervised_proportion: 0.1 # Use 10% of data as supervised
+    supervised_proportion: 1.0 # Use 10% of data as supervised
     # labels_per_class: 50  # Alternative: use 50 labels per class instead of proportion
-    seed: 813846
-
+    seed: 813846y
 # Training configuration
 train:
   batch_size_per_gpu: 64
