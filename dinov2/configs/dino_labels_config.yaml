@@ -56,13 +56,16 @@ data:
   num_classes: 10
   num_workers: 4
   seed: 983245
-  supervised_proportion: 0.0
-  supervised_per_batch: 0
   # Optional additional parameters
   trust_remote_code: true
   streaming: false
   cache_dir: null
   data_dir: null
+
+  semisupervised:
+    main_label_col: "label"
+    supervised_proportion: 1.0 
+    seed: 813846
 
 # Alternative examples for different datasets:
 # For face-obfuscated-imagenet:
@@ -135,6 +138,8 @@ train:
   OFFICIAL_EPOCH_LENGTH: 1250
   cache_dataset: true
   centering: "centering" # or "sinkhorn_knopp"
+  use_semisupervised: true
+  supervised_per_batch: 64
 student:
   arch: vit_large
   patch_size: 16
