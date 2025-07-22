@@ -32,6 +32,9 @@ from dinov2.utils.graph import (
     label_graph,
     semisup_graph,
     nview_graph,
+    label_graph_global2global,
+    semisup_graph_global2global,
+    nview_graph_global2global,
 )
 
 
@@ -281,23 +284,58 @@ def do_train(cfg, model, resume=False):
 
             data , targets , is_sup = data_
             is_sup = torch.tensor(is_sup, dtype=torch.bool) if is_sup is not None else None
+            if distributed.get_global_size() > 1:
+                data = distributed.all_gather(data)
+                targets = distributed.all_gather(targets)
+                is_sup = distributed.all_gather(is_sup)
 
             view_graph = nview_graph(
-                batch_size=len(targets),
+                batch_size=data["collated_global_crops"].shape[0] // 2,
+                n_global_crops= 2,
+                n_local_crops=cfg.crops.local_crops_number,
                 device=data["collated_global_crops"].device,
             )
             labels_graph = label_graph(
-                targets,
+                gathered_targets=targets,
+                n_global_crops=2,
+                n_local_crops=cfg.crops.local_crops_number,
                 device=data["collated_global_crops"].device,
             )
             semisup_graph_ = semisup_graph(
-                labels_graph,
-                view_graph,
-                is_supervised=is_sup,
+                labels_graph=labels_graph,
+                view_graph=view_graph,
+                gathered_is_supervised=is_sup,
+                n_global_crops=2,
+                n_local_crops=cfg.crops.local_crops_number,
                 device=data["collated_global_crops"].device,
             )
+
+            view_graph_global = nview_graph_global2global(
+                batch_size=data["collated_global_crops"].shape[0] // 2,
+                n_global_crops=2,
+                device=data["collated_global_crops"].device,
+            )
+
+            labels_graph_global = label_graph_global2global(
+                gathered_targets=targets,
+                n_global_crops=2,
+                device=data["collated_global_crops"].device,
+            )
+
+            semisup_graph_global_ = semisup_graph_global2global(
+                labels_graph=labels_graph_global,
+                view_graph=view_graph_global,
+                gathered_is_supervised=is_sup,
+                n_global_crops=2,
+                device=data["collated_global_crops"].device,
+            )
+
+            graph = {
+                "semisup_graph": semisup_graph_,
+                "semisup_graph_global": semisup_graph_global_,
+            }
             
-            print(f"Using semisupervised graph with shape: {semisup_graph_.shape}")
+
         else:
             data = data_
 
@@ -321,7 +359,7 @@ def do_train(cfg, model, resume=False):
 
         optimizer.zero_grad(set_to_none=True)
         if hasattr(cfg.train, "use_semisupervised") and cfg.train.use_semisupervised:
-            loss_dict = model.forward_backward(data, teacher_temp=teacher_temp , graph=semisup_graph_)
+            loss_dict = model.forward_backward(data, teacher_temp=teacher_temp , graph=graph)
         else:
             loss_dict = model.forward_backward(data, teacher_temp=teacher_temp)
         # clip gradients

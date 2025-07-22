@@ -61,37 +61,24 @@ class DINOLoss(nn.Module):
         return Q.t()
     
     def forward(self, student_output_list, teacher_out_softmaxed_centered_list, graph=None):
-        print("local_crops_number:", len(student_output_list))
-        print("global_crops_number:", len(teacher_out_softmaxed_centered_list))
-        print("student_output_list[0].shape:", student_output_list[0].shape)
-        print("teacher_out_softmaxed_centered_list[0].shape:", teacher_out_softmaxed_centered_list[0].shape)
-
         student_cls_tokens = torch.cat(student_output_list, dim=0)  # shape: (N_CROPS * BS, D)
         teacher_cls_tokens = torch.cat(list(teacher_out_softmaxed_centered_list), dim=0)  # shape: (N_CROPS * BS, D)
-        print("student_cls_tokens.shape:", student_cls_tokens.shape)
-        print("teacher_cls_tokens.shape:", teacher_cls_tokens.shape)
 
         p_s = F.softmax(student_cls_tokens / self.student_temp, dim=-1)
         log_p_t = F.log_softmax(teacher_cls_tokens / self.student_temp, dim=-1)
-        print("p_s.shape:", p_s.shape)
-        print("log_p_t.shape:", log_p_t.shape)
+
 
         log_p_t = log_p_t.to(p_s.dtype)
-        H = - p_s @ log_p_t.T
-        print("H.shape :", H.shape)
+        H = p_s @ log_p_t.T
 
         if graph is not None:
             graph = graph.to(H.device)
             assert graph.shape == H.shape, f"Graph shape {graph.shape} must match entropy matrix {H.shape}"
             L = graph * H
-            print("L.shape (graph @ H):", L.shape)
         else:
             L = H
-            print("L.shape (no graph):", L.shape)
 
-        # 5. Loss
         loss = L.sum()
-        print("Loss:", loss.item())
 
         return loss
 
