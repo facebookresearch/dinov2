@@ -1,0 +1,154 @@
+# Example configuration for training with HuggingFace datasets using the new config format
+
+MODEL:
+  WEIGHTS: ""
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16 
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16 
+        buffer_dtype: fp32
+
+# New data configuration format
+data:
+  dataset: "cifar10"
+  img_col_name: "img"
+  label_col_names: ["label"]
+  train_split: "train"
+  val_split: "test"
+  config_name: null
+  num_classes: 10
+  num_workers: 4
+  seed: 983245
+  # Optional additional parameters
+  trust_remote_code: true
+  streaming: false
+  cache_dir: null
+  data_dir: null
+
+  semisupervised:
+    main_label_col: "label"
+    supervised_proportion: 1.0 
+    seed: 813846
+
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 8192 # <-- MODIFIED: Drastically reduced from 65536. This reduces the size of the head's final layer.
+  head_bottleneck_dim: 256
+  head_nlayers: 2 # <-- MODIFIED: Reduced from 3 to make the projection head smaller.
+  head_hidden_dim: 1024 # <-- MODIFIED: Reduced from 2048 to decrease MLP size in the head.
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max: [0.1, 0.5]
+  mask_ratio_mu: 0.55
+  mask_ratio_std: 0.25
+  separate_head: false
+  head_n_prototypes: 8192 # <-- MODIFIED: Drastically reduced from 65536 for memory savings.
+  head_bottleneck_dim: 256
+  head_nlayers: 1
+  head_hidden_dim: 1024 # <-- MODIFIED: Reduced from 2048.
+optim:
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.004
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+train:
+  batch_size_per_gpu: 64 # This is already at the minimum possible value.
+  output_dir: "../outputs"
+  saveckp_freq: 20
+  seed: 0
+  OFFICIAL_EPOCH_LENGTH: 1250
+  cache_dataset: false # <-- MODIFIED: Crucial change. Disables caching the entire dataset into RAM.
+  centering: "centering"
+  use_semisupervised: true
+  supervised_per_batch: 64
+student:
+  arch: vit_small # <-- MODIFIED: Most impactful change. Switched from 'vit_large' to 'vit_small'.
+  patch_size: 16 # <-- MODIFIED: Increased from 4. This significantly reduces the sequence length, a major memory user in transformers.
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ""
+  ffn_layer: "mlp"
+  block_chunks: 1 # <-- MODIFIED: Set to 1 to enable gradient checkpointing. This trades computation for memory.
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  qk_scale: null
+  init_values: null
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.996
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+crops:
+  global_crops_scale: [0.32, 1.0]
+  local_crops_scale: [0.05, 0.32]
+  local_crops_number: 4 # <-- MODIFIED: Reduced from 8. This decreases the number of views processed per sample.
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_iterations: 12500
+
+# Hydra configuration
+defaults:
+  - _self_
+  - hydra/launcher: submitit_local
+
+# disable hydra outputs
+hydra:
+  output_subdir: null
+  job:
+    chdir: true
+  run:
+    dir: .

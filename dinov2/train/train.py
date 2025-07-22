@@ -20,7 +20,7 @@ from dinov2.data import (
     make_dataset,
     SemiSupervisedWrapper,
 )
-from dinov2.data import collate_data_and_cast, DataAugmentationDINO, MaskingGenerator
+from dinov2.data import collate_data_and_cast, DataAugmentationDINO, MaskingGenerator, collate_data_and_cast_semisl
 import dinov2.distributed as distributed
 from dinov2.fsdp import FSDPCheckpointer
 from dinov2.logging import MetricLogger
@@ -28,6 +28,11 @@ from dinov2.utils.config import setup
 from dinov2.utils.utils import CosineScheduler
 
 from dinov2.train.ssl_meta_arch import SSLMetaArch
+from dinov2.utils.graph import (
+    label_graph,
+    semisup_graph,
+    nview_graph,
+)
 
 
 torch.backends.cuda.matmul.allow_tf32 = (
@@ -167,15 +172,25 @@ def do_train(cfg, model, resume=False):
         local_crops_size=cfg.crops.local_crops_size,
     )
 
-    collate_fn = partial(
-        collate_data_and_cast,
-        mask_ratio_tuple=cfg.ibot.mask_ratio_min_max,
-        mask_probability=cfg.ibot.mask_sample_probability,
-        n_tokens=n_tokens,
-        mask_generator=mask_generator,
-        dtype=inputs_dtype,
-    )
 
+    if hasattr(cfg.train, "use_semisupervised") and cfg.train.use_semisupervised:
+        collate_fn = partial(
+            collate_data_and_cast_semisl,
+            mask_ratio_tuple=cfg.ibot.mask_ratio_min_max,
+            mask_probability=cfg.ibot.mask_sample_probability,
+            n_tokens=n_tokens,
+            mask_generator=mask_generator,
+            dtype=inputs_dtype,
+        )
+    else:
+        collate_fn = partial(
+            collate_data_and_cast,
+            mask_ratio_tuple=cfg.ibot.mask_ratio_min_max,
+            mask_probability=cfg.ibot.mask_sample_probability,
+            n_tokens=n_tokens,
+            mask_generator=mask_generator,
+            dtype=inputs_dtype,
+        )
     # setup data loader
 
     # Check if we're using the new config-based dataset loading or old string-based
@@ -195,7 +210,7 @@ def do_train(cfg, model, resume=False):
                 cfg.data,
                 split="train",
                 transform=data_transform,
-                target_transform=lambda _: (),
+                target_transform=None,
             )
         else:
             logger.info("Creating standard dataset")
@@ -231,6 +246,7 @@ def do_train(cfg, model, resume=False):
         sampler_type = SamplerType.SHARDED_INFINITE
         supervised_per_batch = 0
 
+        
     data_loader = make_data_loader(
         dataset=dataset,
         batch_size=cfg.train.batch_size_per_gpu,
@@ -243,7 +259,7 @@ def do_train(cfg, model, resume=False):
         drop_last=True,
         collate_fn=collate_fn,
     )
-
+    
     # training loop
 
     iteration = start_iter
@@ -253,13 +269,77 @@ def do_train(cfg, model, resume=False):
     metric_logger = MetricLogger(delimiter="  ", output_file=metrics_file)
     header = "Training"
 
-    for data in metric_logger.log_every(
+    for data_ in metric_logger.log_every(
         data_loader,
         10,
         header,
         max_iter,
         start_iter,
-    ):
+    ):  
+        
+        if hasattr(cfg.train, "use_semisupervised") and cfg.train.use_semisupervised:
+
+            data , targets , is_sup = data_
+            is_sup = torch.tensor(is_sup, dtype=torch.bool) if is_sup is not None else None
+            
+            if distributed.get_global_size() > 1:
+                data = distributed.all_gather(data)
+                targets = distributed.all_gather(targets)
+                is_sup = distributed.all_gather(is_sup)
+
+            view_graph = nview_graph(
+                batch_size=data["collated_global_crops"].shape[0] // 2,
+                n_global_crops= 2,
+                n_local_crops=cfg.crops.local_crops_number,
+                device=data["collated_global_crops"].device,
+            )
+            labels_graph = label_graph(
+                gathered_targets=targets,
+                n_global_crops=2,
+                n_local_crops=cfg.crops.local_crops_number,
+                device=data["collated_global_crops"].device,
+            )
+            semisup_graph_ = semisup_graph(
+                labels_graph=labels_graph,
+                view_graph=view_graph,
+                gathered_is_supervised=is_sup,
+                n_global_crops=2,
+                n_local_crops=cfg.crops.local_crops_number,
+                device=data["collated_global_crops"].device,
+            )
+
+            view_graph_global = nview_graph(
+                batch_size=data["collated_global_crops"].shape[0] // 2,
+                n_global_crops=2,
+                n_local_crops=2,
+                device=data["collated_global_crops"].device,
+            )
+
+            labels_graph_global = label_graph(
+                gathered_targets=targets,
+                n_global_crops=2,
+                n_local_crops=2,
+                device=data["collated_global_crops"].device,
+            )
+
+            semisup_graph_global_ = semisup_graph(
+                labels_graph=labels_graph_global,
+                view_graph=view_graph_global,
+                gathered_is_supervised=is_sup,
+                n_global_crops=2,
+                n_local_crops=2,
+                device=data["collated_global_crops"].device,
+            )
+
+            graph = {
+                "semisup_graph": semisup_graph_,
+                "semisup_graph_global": semisup_graph_global_,
+            }
+            
+        else:
+            data = data_
+                        
+
         current_batch_size = data["collated_global_crops"].shape[0] / 2
         if iteration > max_iter:
             return
@@ -276,8 +356,10 @@ def do_train(cfg, model, resume=False):
         # compute losses
 
         optimizer.zero_grad(set_to_none=True)
-        loss_dict = model.forward_backward(data, teacher_temp=teacher_temp)
-
+        if hasattr(cfg.train, "use_semisupervised") and cfg.train.use_semisupervised:
+            loss_dict = model.forward_backward(data, teacher_temp=teacher_temp , graph=graph)
+        else:
+            loss_dict = model.forward_backward(data, teacher_temp=teacher_temp)
         # clip gradients
 
         if fp16_scaler is not None:

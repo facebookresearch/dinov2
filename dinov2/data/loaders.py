@@ -275,10 +275,6 @@ def make_data_loader(
     # Handle semi-supervised sampler specially
     if sampler_type == SamplerType.SEMI_SUPERVISED:
         logger.info("sampler: semi-supervised")
-        if not isinstance(dataset, SemiSupervisedWrapper):
-            raise ValueError(
-                "Semi-supervised sampler requires a SemiSupervisedWrapper dataset"
-            )
 
         sampler = SemiSupervisedSampler(
             dataset=dataset,
