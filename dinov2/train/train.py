@@ -32,9 +32,6 @@ from dinov2.utils.graph import (
     label_graph,
     semisup_graph,
     nview_graph,
-    label_graph_global2global,
-    semisup_graph_global2global,
-    nview_graph_global2global,
 )
 
 
@@ -284,6 +281,7 @@ def do_train(cfg, model, resume=False):
 
             data , targets , is_sup = data_
             is_sup = torch.tensor(is_sup, dtype=torch.bool) if is_sup is not None else None
+            
             if distributed.get_global_size() > 1:
                 data = distributed.all_gather(data)
                 targets = distributed.all_gather(targets)
@@ -310,23 +308,26 @@ def do_train(cfg, model, resume=False):
                 device=data["collated_global_crops"].device,
             )
 
-            view_graph_global = nview_graph_global2global(
+            view_graph_global = nview_graph(
                 batch_size=data["collated_global_crops"].shape[0] // 2,
                 n_global_crops=2,
+                n_local_crops=2,
                 device=data["collated_global_crops"].device,
             )
 
-            labels_graph_global = label_graph_global2global(
+            labels_graph_global = label_graph(
                 gathered_targets=targets,
                 n_global_crops=2,
+                n_local_crops=2,
                 device=data["collated_global_crops"].device,
             )
 
-            semisup_graph_global_ = semisup_graph_global2global(
+            semisup_graph_global_ = semisup_graph(
                 labels_graph=labels_graph_global,
                 view_graph=view_graph_global,
                 gathered_is_supervised=is_sup,
                 n_global_crops=2,
+                n_local_crops=2,
                 device=data["collated_global_crops"].device,
             )
 
@@ -335,12 +336,9 @@ def do_train(cfg, model, resume=False):
                 "semisup_graph_global": semisup_graph_global_,
             }
             
-
         else:
             data = data_
-
-            
-            
+                        
 
         current_batch_size = data["collated_global_crops"].shape[0] / 2
         if iteration > max_iter:
