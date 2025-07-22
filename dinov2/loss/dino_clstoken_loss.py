@@ -59,30 +59,42 @@ class DINOLoss(nn.Module):
 
         Q *= B  # the columns must sum to 1 so that Q is an assignment
         return Q.t()
+    
+    def forward(self, student_output_list, teacher_out_softmaxed_centered_list, graph=None):
+        print("local_crops_number:", len(student_output_list))
+        print("global_crops_number:", len(teacher_out_softmaxed_centered_list))
+        print("student_output_list[0].shape:", student_output_list[0].shape)
+        print("teacher_out_softmaxed_centered_list[0].shape:", teacher_out_softmaxed_centered_list[0].shape)
 
-    def forward(self, student_output_list, teacher_out_softmaxed_centered_list, graph):
-        
-        batch_size = student_output_list[0].shape[0]
-        device = student_output_list[0].device
-        graph = graph.to(device) if graph is not None else None
+        student_cls_tokens = torch.cat(student_output_list, dim=0)  # shape: (N_CROPS * BS, D)
+        teacher_cls_tokens = torch.cat(list(teacher_out_softmaxed_centered_list), dim=0)  # shape: (N_CROPS * BS, D)
+        print("student_cls_tokens.shape:", student_cls_tokens.shape)
+        print("teacher_cls_tokens.shape:", teacher_cls_tokens.shape)
 
-        if graph is None:
-            graph = torch.eye(batch_size, device=device)
+        p_s = F.softmax(student_cls_tokens / self.student_temp, dim=-1)
+        log_p_t = F.log_softmax(teacher_cls_tokens / self.student_temp, dim=-1)
+        print("p_s.shape:", p_s.shape)
+        print("log_p_t.shape:", log_p_t.shape)
+
+        log_p_t = log_p_t.to(p_s.dtype)
+        H = - p_s @ log_p_t.T
+        print("H.shape :", H.shape)
+
+        if graph is not None:
+            graph = graph.to(H.device)
+            assert graph.shape == H.shape, f"Graph shape {graph.shape} must match entropy matrix {H.shape}"
+            L = graph * H
+            print("L.shape (graph @ H):", L.shape)
         else:
-            graph.fill_diagonal_(1)
+            L = H
+            print("L.shape (no graph):", L.shape)
 
-        row_sums = graph.sum(dim=1, keepdim=True)
-        graph_norm = graph / row_sums.clamp(min=1.0)
+        # 5. Loss
+        loss = L.sum()
+        print("Loss:", loss.item())
 
-        total_loss = 0
-        for s in student_output_list:
-            lsm = F.log_softmax(s / self.student_temp, dim=-1) 
-            for t in teacher_out_softmaxed_centered_list:
-                aggregated_t = torch.matmul(graph_norm, t)
+        return loss
 
-                loss = torch.sum(aggregated_t * lsm, dim=-1)
-                total_loss -= loss.mean() 
-        return total_loss
 
     @torch.no_grad()
     def update_center(self, teacher_output):
