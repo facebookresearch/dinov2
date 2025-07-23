@@ -165,8 +165,6 @@ class SSLMetaArch(nn.Module):
             loss.backward()
 
     def forward_backward(self, images, teacher_temp, graph=None):
-        print("❤️ [DEBUG] FORWARD BACKWARD Graph provided:", graph is not None)
-
         n_global_crops = 2
         assert n_global_crops == 2
         n_local_crops = self.cfg.crops.local_crops_number
@@ -376,21 +374,18 @@ class SSLMetaArch(nn.Module):
             )[:n_masked_patches]
 
         if n_local_crops > 0:
+            dino_local_crops_loss = self.dino_loss(
+                student_output_list=student_local_cls_tokens_after_head.chunk(
+                    n_local_crops
+                ),
+                teacher_out_softmaxed_centered_list=teacher_dino_softmaxed_centered_list,
+                graph=graph["semisup_graph"] if graph is not None else None,
+            )
+
             if graph is None:
-                dino_local_crops_loss = self.dino_loss(
-                    student_output_list=student_local_cls_tokens_after_head.chunk(
-                        n_local_crops
-                    ),
-                    teacher_out_softmaxed_centered_list=teacher_dino_softmaxed_centered_list,
-                ) / (n_global_crops_loss_terms + n_local_crops_loss_terms)
-            else:
-                dino_local_crops_loss = self.dino_loss(
-                    student_output_list=student_local_cls_tokens_after_head.chunk(
-                        n_local_crops
-                    ),
-                    teacher_out_softmaxed_centered_list=teacher_dino_softmaxed_centered_list,
-                    graph=graph["semisup_graph"],
-                ) / (n_global_crops_loss_terms + n_local_crops_loss_terms)
+                dino_local_crops_loss /= (
+                    n_global_crops_loss_terms + n_local_crops_loss_terms
+                )
 
             # store for display
             loss_dict["dino_local_crops_loss"] = dino_local_crops_loss
@@ -402,29 +397,17 @@ class SSLMetaArch(nn.Module):
         loss_scales = 2  # this is here since we process global crops together
 
         if do_dino:
-            # compute loss
+            dino_global_crops_loss = self.dino_loss(
+                student_output_list=[student_global_cls_tokens_after_head],
+                teacher_out_softmaxed_centered_list=[
+                    teacher_dino_softmaxed_centered_list.flatten(0, 1)
+                ],  # these were chunked and stacked in reverse so A is matched to B
+                graph=graph["semisup_graph_global"] if graph is not None else None,
+            )
+
             if graph is None:
-                dino_global_crops_loss = (
-                    self.dino_loss(
-                        student_output_list=[student_global_cls_tokens_after_head],
-                        teacher_out_softmaxed_centered_list=[
-                            teacher_dino_softmaxed_centered_list.flatten(0, 1)
-                        ],  # these were chunked and stacked in reverse so A is matched to B
-                    )
-                    * loss_scales
-                    / (n_global_crops_loss_terms + n_local_crops_loss_terms)
-                )
-            else:
-                dino_global_crops_loss = (
-                    self.dino_loss(
-                        student_output_list=[student_global_cls_tokens_after_head],
-                        teacher_out_softmaxed_centered_list=[
-                            teacher_dino_softmaxed_centered_list.flatten(0, 1)
-                        ],  # these were chunked and stacked in reverse so A is matched to B
-                        graph=graph["semisup_graph_global"],
-                    )
-                    * loss_scales
-                    / (n_global_crops_loss_terms + n_local_crops_loss_terms)
+                dino_global_crops_loss *= loss_scales / (
+                    n_global_crops_loss_terms + n_local_crops_loss_terms
                 )
 
             loss_dict["dino_global_crops_loss"] = dino_global_crops_loss
@@ -435,13 +418,25 @@ class SSLMetaArch(nn.Module):
             student_cls_tokens = student_global_cls_tokens
 
             if self.do_koleo:
-                koleo_loss = self.cfg.dino.koleo_loss_weight * sum(
-                    self.koleo_loss(p) for p in student_cls_tokens.chunk(2)
-                )  # we don't apply koleo loss between cls tokens of a same image
+                per_view_graph = graph
+                # keep one view graph for koleo
+                if per_view_graph is not None:
+                    graph_size = per_view_graph["semisup_graph_global"].shape[0] // 2
+                    per_view_graph = graph["semisup_graph_global"][
+                        :graph_size, :graph_size
+                    ]
+
+                # we don't apply koleo loss between cls tokens of a same image
+                # koleo loss per global crop
+                student_views_cls = student_cls_tokens.chunk(2)
+                koleo_weight = self.cfg.dino.koleo_loss_weight
+                koleo_loss = koleo_weight * sum(
+                    self.koleo_loss(p, graph=per_view_graph) for p in student_views_cls
+                )
+
+                # this is to display the same losses as before but we can remove eventually
                 loss_accumulator += koleo_loss
-                loss_dict["koleo_loss"] = (
-                    koleo_loss / loss_scales
-                )  # this is to display the same losses as before but we can remove eventually
+                loss_dict["koleo_loss"] = koleo_loss / loss_scales
 
         if do_ibot:
             # compute loss

@@ -65,37 +65,41 @@ class DINOLoss(nn.Module):
     def forward(
         self, student_output_list, teacher_out_softmaxed_centered_list, graph=None
     ):
-        print("❤️ [DEBUG] Graph provided:", graph is not None)
-
-        # print graph shape
         if graph is not None:
-            print("Graph shape:", graph.shape)
+            student_cls_tokens = torch.cat(
+                student_output_list, dim=0
+            )  # shape: (N_CROPS * BS, D)
+            teacher_softmaxed_cls = torch.cat(
+                list(teacher_out_softmaxed_centered_list), dim=0
+            )  # shape: (N_CROPS * BS, D)
 
-        student_cls_tokens = torch.cat(
-            student_output_list, dim=0
-        )  # shape: (N_CROPS * BS, D)
-        teacher_cls_tokens = torch.cat(
-            list(teacher_out_softmaxed_centered_list), dim=0
-        )  # shape: (N_CROPS * BS, D)
+            log_p_s = F.log_softmax(student_cls_tokens / self.student_temp, dim=-1)
+            teacher_softmaxed_cls = teacher_softmaxed_cls.to(log_p_s.dtype)
 
-        p_s = F.softmax(student_cls_tokens / self.student_temp, dim=-1)
-        log_p_t = F.log_softmax(teacher_cls_tokens / self.student_temp, dim=-1)
+            # shape: (N_CROPS * BS, N_CROPS * BS)
+            H = -(log_p_s @ teacher_softmaxed_cls.t())
 
-        log_p_t = log_p_t.to(p_s.dtype)
-        H = p_s @ log_p_t.T
-
-        if graph is not None:
-            graph = graph.to(H.device)
             assert graph.shape == H.shape, (
                 f"Graph shape {graph.shape} must match entropy matrix {H.shape}"
             )
-            L = graph * H
+
+            # Rem: Should remove the main diag of G?
+            # TODO eq (3) of https://arxiv.org/pdf/2104.14294
+
+            G = graph.to(H.device)
+            total_loss = (G * H).sum() / G.sum()
+
+            return total_loss
+
         else:
-            L = H
+            total_loss = 0
+            for s in student_output_list:
+                lsm = F.log_softmax(s / self.student_temp, dim=-1)
+                for t in teacher_out_softmaxed_centered_list:
+                    loss = torch.sum(t * lsm, dim=-1)
+                    total_loss -= loss.mean()
 
-        loss = -L.sum()  # TODO divide by number of elements if needed to avg
-
-        return loss
+            return total_loss
 
     @torch.no_grad()
     def update_center(self, teacher_output):

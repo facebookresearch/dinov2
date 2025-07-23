@@ -134,7 +134,7 @@ optim:
   adamw_beta2: 0.999
 train:
   batch_size_per_gpu: 64
-  output_dir: "../outputs"
+  output_dir: "./outputs"
   saveckp_freq: 20
   seed: 0
   # num_workers is now taken from data.num_workers
@@ -171,8 +171,7 @@ crops:
   global_crops_size: 224
   local_crops_size: 98
 evaluation:
-  eval_period_iterations: 12500
-
+  eval_period_iterations: 100 #12500
 
 
 # Hydra configuration
