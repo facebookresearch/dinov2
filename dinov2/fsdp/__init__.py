@@ -95,7 +95,17 @@ class FSDPCheckpointer(Checkpointer):
             return
 
         data = {}
-        with FSDP.state_dict_type(self.model, StateDictType.LOCAL_STATE_DICT):
+
+        if is_fsdp(self.model):
+            statedict_type = (
+                StateDictType.LOCAL_STATE_DICT
+                if is_sharded_fsdp(self.model)
+                else StateDictType.FULL_STATE_DICT
+            )
+
+            with FSDP.state_dict_type(self.model, statedict_type):
+                data["model"] = self.model.state_dict()
+        else:
             data["model"] = self.model.state_dict()
 
         # data["model"] = self.model.state_dict()
@@ -112,7 +122,13 @@ class FSDPCheckpointer(Checkpointer):
         self.tag_last_checkpoint(basename)
 
     def load(self, *args, **kwargs):
-        with FSDP.state_dict_type(self.model, StateDictType.LOCAL_STATE_DICT):
+        statedict_type = (
+            StateDictType.LOCAL_STATE_DICT
+            if is_sharded_fsdp(self.model)
+            else StateDictType.FULL_STATE_DICT
+        )
+
+        with FSDP.state_dict_type(self.model, statedict_type):
             return super().load(*args, **kwargs)
 
     def has_checkpoint(self) -> bool:
