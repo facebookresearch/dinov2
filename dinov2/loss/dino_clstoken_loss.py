@@ -35,7 +35,9 @@ class DINOLoss(nn.Module):
     def sinkhorn_knopp_teacher(self, teacher_output, teacher_temp, n_iterations=3):
         teacher_output = teacher_output.float()
         world_size = dist.get_world_size() if dist.is_initialized() else 1
-        Q = torch.exp(teacher_output / teacher_temp).t()  # Q is K-by-B for consistency with notations from our paper
+        Q = torch.exp(
+            teacher_output / teacher_temp
+        ).t()  # Q is K-by-B for consistency with notations from our paper
         B = Q.shape[1] * world_size  # number of samples to assign
         K = Q.shape[0]  # how many prototypes
 
@@ -59,29 +61,41 @@ class DINOLoss(nn.Module):
 
         Q *= B  # the columns must sum to 1 so that Q is an assignment
         return Q.t()
-    
-    def forward(self, student_output_list, teacher_out_softmaxed_centered_list, graph=None):
-        student_cls_tokens = torch.cat(student_output_list, dim=0)  # shape: (N_CROPS * BS, D)
-        teacher_cls_tokens = torch.cat(list(teacher_out_softmaxed_centered_list), dim=0)  # shape: (N_CROPS * BS, D)
+
+    def forward(
+        self, student_output_list, teacher_out_softmaxed_centered_list, graph=None
+    ):
+        print("❤️ [DEBUG] Graph provided:", graph is not None)
+
+        # print graph shape
+        if graph is not None:
+            print("Graph shape:", graph.shape)
+
+        student_cls_tokens = torch.cat(
+            student_output_list, dim=0
+        )  # shape: (N_CROPS * BS, D)
+        teacher_cls_tokens = torch.cat(
+            list(teacher_out_softmaxed_centered_list), dim=0
+        )  # shape: (N_CROPS * BS, D)
 
         p_s = F.softmax(student_cls_tokens / self.student_temp, dim=-1)
         log_p_t = F.log_softmax(teacher_cls_tokens / self.student_temp, dim=-1)
-
 
         log_p_t = log_p_t.to(p_s.dtype)
         H = p_s @ log_p_t.T
 
         if graph is not None:
             graph = graph.to(H.device)
-            assert graph.shape == H.shape, f"Graph shape {graph.shape} must match entropy matrix {H.shape}"
+            assert graph.shape == H.shape, (
+                f"Graph shape {graph.shape} must match entropy matrix {H.shape}"
+            )
             L = graph * H
         else:
             L = H
 
-        loss = L.sum()
+        loss = -L.sum()  # TODO divide by number of elements if needed to avg
 
         return loss
-
 
     @torch.no_grad()
     def update_center(self, teacher_output):
@@ -104,6 +118,8 @@ class DINOLoss(nn.Module):
                 self.reduce_handle.wait()
             _t = self.async_batch_center / (self.len_teacher_output * world_size)
 
-            self.center = self.center * self.center_momentum + _t * (1 - self.center_momentum)
+            self.center = self.center * self.center_momentum + _t * (
+                1 - self.center_momentum
+            )
 
             self.updated = True

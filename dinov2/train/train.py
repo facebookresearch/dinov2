@@ -20,7 +20,12 @@ from dinov2.data import (
     make_dataset,
     SemiSupervisedWrapper,
 )
-from dinov2.data import collate_data_and_cast, DataAugmentationDINO, MaskingGenerator, collate_data_and_cast_semisl
+from dinov2.data import (
+    collate_data_and_cast,
+    DataAugmentationDINO,
+    MaskingGenerator,
+    collate_data_and_cast_semisl,
+)
 import dinov2.distributed as distributed
 from dinov2.fsdp import FSDPCheckpointer
 from dinov2.logging import MetricLogger
@@ -121,6 +126,8 @@ def do_train(cfg, model, resume=False):
     inputs_dtype = torch.half
     fp16_scaler = model.fp16_scaler  # for mixed precision training
 
+    is_semisup = cfg.data.semisupervised.supervised_proportion > 0
+
     # setup optimizer
 
     optimizer = build_optimizer(cfg, model.get_params_groups())
@@ -172,8 +179,7 @@ def do_train(cfg, model, resume=False):
         local_crops_size=cfg.crops.local_crops_size,
     )
 
-
-    if hasattr(cfg.train, "use_semisupervised") and cfg.train.use_semisupervised:
+    if is_semisup:
         collate_fn = partial(
             collate_data_and_cast_semisl,
             mask_ratio_tuple=cfg.ibot.mask_ratio_min_max,
@@ -204,7 +210,7 @@ def do_train(cfg, model, resume=False):
         logger.info("Using config-based dataset loading")
 
         # Check if semi-supervised training is enabled
-        if hasattr(cfg.train, "use_semisupervised") and cfg.train.use_semisupervised:
+        if is_semisup:
             logger.info("Creating semi-supervised dataset")
             dataset = make_semisupervised_dataset_from_config(
                 cfg.data,
@@ -236,9 +242,9 @@ def do_train(cfg, model, resume=False):
         num_workers = cfg.train.num_workers
 
     # Determine sampler type and parameters
-    if hasattr(cfg.train, "use_semisupervised") and cfg.train.use_semisupervised:
+    if is_semisup:
         sampler_type = SamplerType.SEMI_SUPERVISED
-        supervised_per_batch = cfg.train.get("supervised_per_batch", 0)
+        supervised_per_batch = cfg.data.semisupervised.get("supervised_per_batch", 0)
         logger.info(
             f"Using semi-supervised sampler with {supervised_per_batch} supervised samples per batch"
         )
@@ -246,7 +252,6 @@ def do_train(cfg, model, resume=False):
         sampler_type = SamplerType.SHARDED_INFINITE
         supervised_per_batch = 0
 
-        
     data_loader = make_data_loader(
         dataset=dataset,
         batch_size=cfg.train.batch_size_per_gpu,
@@ -259,7 +264,7 @@ def do_train(cfg, model, resume=False):
         drop_last=True,
         collate_fn=collate_fn,
     )
-    
+
     # training loop
 
     iteration = start_iter
@@ -275,13 +280,13 @@ def do_train(cfg, model, resume=False):
         header,
         max_iter,
         start_iter,
-    ):  
-        
-        if hasattr(cfg.train, "use_semisupervised") and cfg.train.use_semisupervised:
+    ):
+        if is_semisup:
+            data, targets, is_sup = data_
+            is_sup = (
+                torch.tensor(is_sup, dtype=torch.bool) if is_sup is not None else None
+            )
 
-            data , targets , is_sup = data_
-            is_sup = torch.tensor(is_sup, dtype=torch.bool) if is_sup is not None else None
-            
             if distributed.get_global_size() > 1:
                 data = distributed.all_gather(data)
                 targets = distributed.all_gather(targets)
@@ -289,7 +294,7 @@ def do_train(cfg, model, resume=False):
 
             view_graph = nview_graph(
                 batch_size=data["collated_global_crops"].shape[0] // 2,
-                n_global_crops= 2,
+                n_global_crops=2,
                 n_local_crops=cfg.crops.local_crops_number,
                 device=data["collated_global_crops"].device,
             )
@@ -335,10 +340,9 @@ def do_train(cfg, model, resume=False):
                 "semisup_graph": semisup_graph_,
                 "semisup_graph_global": semisup_graph_global_,
             }
-            
+
         else:
             data = data_
-                        
 
         current_batch_size = data["collated_global_crops"].shape[0] / 2
         if iteration > max_iter:
@@ -356,10 +360,12 @@ def do_train(cfg, model, resume=False):
         # compute losses
 
         optimizer.zero_grad(set_to_none=True)
-        if hasattr(cfg.train, "use_semisupervised") and cfg.train.use_semisupervised:
-            loss_dict = model.forward_backward(data, teacher_temp=teacher_temp , graph=graph)
-        else:
-            loss_dict = model.forward_backward(data, teacher_temp=teacher_temp)
+        give_graph = graph if is_semisup else None
+
+        loss_dict = model.forward_backward(
+            data, teacher_temp=teacher_temp, graph=give_graph
+        )
+
         # clip gradients
 
         if fp16_scaler is not None:
