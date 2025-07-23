@@ -1,5 +1,13 @@
 # Work In Progress!
 
+### Launching Command
+
+From the root directory:
+
+```bash
+python -m dinov2.run.train.train --config-path=../../configs/train/ --config-name=semisup_cifar10.yaml
+```
+
 ### Completed
 
 - Hydra Integration

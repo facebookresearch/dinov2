@@ -14,6 +14,8 @@ import torch.nn.functional as F
 
 logger = logging.getLogger("dinov2")
 
+# TODO Implement the graph support
+
 
 class KoLeoLoss(nn.Module):
     """Kozachenko-Leonenko entropic loss regularizer from Sablayrolles et al. - 2018 - Spreading vectors for similarity search"""

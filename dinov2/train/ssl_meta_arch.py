@@ -164,7 +164,7 @@ class SSLMetaArch(nn.Module):
         else:
             loss.backward()
 
-    def forward_backward(self, images, teacher_temp , graph = None):
+    def forward_backward(self, images, teacher_temp, graph=None):
         n_global_crops = 2
         assert n_global_crops == 2
         n_local_crops = self.cfg.crops.local_crops_number
@@ -311,6 +311,9 @@ class SSLMetaArch(nn.Module):
 
         loss_dict = {}
 
+        print(" ❤️[DEBUG] global_crops.shape:", global_crops.shape)
+        print(" ❤️[DEBUG] local_crops.shape:", local_crops.shape)
+
         loss_accumulator = 0  # for backprop
         student_global_backbone_output_dict, student_local_backbone_output_dict = (
             self.student.backbone(
@@ -373,7 +376,6 @@ class SSLMetaArch(nn.Module):
                 0
             )[:n_masked_patches]
 
-        
         if n_local_crops > 0:
             if graph is None:
                 dino_local_crops_loss = self.dino_loss(
@@ -388,7 +390,7 @@ class SSLMetaArch(nn.Module):
                         n_local_crops
                     ),
                     teacher_out_softmaxed_centered_list=teacher_dino_softmaxed_centered_list,
-                    graph=graph['semisup_graph'],
+                    graph=graph["semisup_graph"],
                 ) / (n_global_crops_loss_terms + n_local_crops_loss_terms)
 
             # store for display
@@ -420,7 +422,7 @@ class SSLMetaArch(nn.Module):
                         teacher_out_softmaxed_centered_list=[
                             teacher_dino_softmaxed_centered_list.flatten(0, 1)
                         ],  # these were chunked and stacked in reverse so A is matched to B
-                        graph=graph['semisup_graph_global'],
+                        graph=graph["semisup_graph_global"],
                     )
                     * loss_scales
                     / (n_global_crops_loss_terms + n_local_crops_loss_terms)
@@ -471,10 +473,9 @@ class SSLMetaArch(nn.Module):
     def fsdp_synchronize_streams(self):
         if self.need_to_synchronize_fsdp_streams:
             torch.cuda.synchronize()
-            self.student.dino_head._streams = (
-                self.teacher.dino_head._streams
-            ) = self.student.backbone._streams = self.teacher.backbone._streams
-
+            self.student.dino_head._streams = self.teacher.dino_head._streams = (
+                self.student.backbone._streams
+            ) = self.teacher.backbone._streams
 
             self.need_to_synchronize_fsdp_streams = False
 
