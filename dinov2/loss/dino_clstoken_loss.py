@@ -65,6 +65,12 @@ class DINOLoss(nn.Module):
     def forward(
         self, student_output_list, teacher_out_softmaxed_centered_list, graph=None
     ):
+        print("❤️ [DEBUG] Graph provided:", graph is not None)
+
+        # print graph shape
+        if graph is not None:
+            print("Graph shape:", graph.shape)
+
         student_cls_tokens = torch.cat(
             student_output_list, dim=0
         )  # shape: (N_CROPS * BS, D)
@@ -87,7 +93,7 @@ class DINOLoss(nn.Module):
         else:
             L = H
 
-        loss = L.sum()  # TODO divide by number of elements if needed to avg
+        loss = -L.sum()  # TODO divide by number of elements if needed to avg
 
         return loss
 

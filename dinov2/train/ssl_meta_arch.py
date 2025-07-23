@@ -165,6 +165,8 @@ class SSLMetaArch(nn.Module):
             loss.backward()
 
     def forward_backward(self, images, teacher_temp, graph=None):
+        print("❤️ [DEBUG] FORWARD BACKWARD Graph provided:", graph is not None)
+
         n_global_crops = 2
         assert n_global_crops == 2
         n_local_crops = self.cfg.crops.local_crops_number
@@ -310,9 +312,6 @@ class SSLMetaArch(nn.Module):
         reshard_fsdp_model(self.teacher)
 
         loss_dict = {}
-
-        print(" ❤️[DEBUG] global_crops.shape:", global_crops.shape)
-        print(" ❤️[DEBUG] local_crops.shape:", local_crops.shape)
 
         loss_accumulator = 0  # for backprop
         student_global_backbone_output_dict, student_local_backbone_output_dict = (

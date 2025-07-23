@@ -1,4 +1,5 @@
 # Example configuration for training with HuggingFace datasets using the new config format
+# This shows how to use the new configuration-based dataset loading system
 
 MODEL:
   WEIGHTS: ""
@@ -34,16 +35,17 @@ compute_precision:
       sharding_strategy: SHARD_GRAD_OP
       mixed_precision:
         param_dtype: fp16
-        reduce_dtype: fp16 
+        reduce_dtype: fp32
         buffer_dtype: fp32
     ibot_head:
       sharding_strategy: SHARD_GRAD_OP
       mixed_precision:
         param_dtype: fp16
-        reduce_dtype: fp16 
+        reduce_dtype: fp32
         buffer_dtype: fp32
 
 # New data configuration format
+# For CIFAR-10:
 data:
   dataset: "cifar10"
   img_col_name: "img"
@@ -62,15 +64,47 @@ data:
 
   semisupervised:
     main_label_col: "label"
+    supervised_per_batch: 16 # <-- MODIFIED: Reduced from 64 to 16 for semi-supervised learning.
     supervised_proportion: 0.05 # <-- MODIFIED: Reduced from 1.0 to 0.05 for semi-supervised learning. 
     seed: 813846
+    #TODO add label per class
+
+
+# Alternative examples for different datasets:
+# For face-obfuscated-imagenet:
+# data:
+#   dataset: "randall-lab/face-obfuscated-imagenet"
+#   img_col_name: "image"
+#   label_col_names: ["label"]
+#   train_split: "train"
+#   val_split: "validation"
+#   config_name: "noface-1k"
+#   num_classes: 1000
+#   num_workers: 10
+#   seed: 983245
+#   supervised_proportion: 0.0
+#   supervised_per_batch: 0
+
+# For ImageNet-1K:
+# data:
+#   dataset: "imagenet-1k"
+#   img_col_name: "image"
+#   label_col_names: ["label"]
+#   train_split: "train"
+#   val_split: "validation"
+#   config_name: null
+#   num_classes: 1000
+#   num_workers: 10
+#   seed: 983245
+#   supervised_proportion: 0.0
+#   supervised_per_batch: 0
 
 dino:
   loss_weight: 1.0
-  head_n_prototypes: 8192 # <-- MODIFIED: Drastically reduced from 65536. This reduces the size of the head's final layer.
+  head_n_prototypes: 65536
   head_bottleneck_dim: 256
-  head_nlayers: 2 # <-- MODIFIED: Reduced from 3 to make the projection head smaller.
-  head_hidden_dim: 1024 # <-- MODIFIED: Reduced from 2048 to decrease MLP size in the head.
+  head_nlayers: 3
+  head_hidden_dim: 2048
   koleo_loss_weight: 0.1
 ibot:
   loss_weight: 1.0
@@ -79,15 +113,15 @@ ibot:
   mask_ratio_mu: 0.55
   mask_ratio_std: 0.25
   separate_head: false
-  head_n_prototypes: 8192 # <-- MODIFIED: Drastically reduced from 65536 for memory savings.
+  head_n_prototypes: 65536
   head_bottleneck_dim: 256
-  head_nlayers: 1
-  head_hidden_dim: 1024 # <-- MODIFIED: Reduced from 2048.
+  head_nlayers: 3
+  head_hidden_dim: 2048
 optim:
-  epochs: 100
+  epochs: 10
   weight_decay: 0.04
   weight_decay_end: 0.4
-  base_lr: 0.004
+  base_lr: 0.004 # learning rate for a batch size of 1024
   lr: 0.004
   warmup_epochs: 10
   min_lr: 1.0e-06
@@ -99,24 +133,23 @@ optim:
   adamw_beta1: 0.9
   adamw_beta2: 0.999
 train:
-  batch_size_per_gpu: 64 # This is already at the minimum possible value.
+  batch_size_per_gpu: 64
   output_dir: "../outputs"
   saveckp_freq: 20
   seed: 0
-  OFFICIAL_EPOCH_LENGTH: 1250
-  cache_dataset: false # <-- MODIFIED: Crucial change. Disables caching the entire dataset into RAM.
-  centering: "centering"
-  use_semisupervised: true
-  supervised_per_batch: 64
+  # num_workers is now taken from data.num_workers
+  OFFICIAL_EPOCH_LENGTH: 195 #1250 for in-1k? 
+  cache_dataset: true
+  centering: "centering" # or "sinkhorn_knopp"
 student:
-  arch: vit_small # <-- MODIFIED: Most impactful change. Switched from 'vit_large' to 'vit_small'.
-  patch_size: 16 # <-- MODIFIED: Increased from 4. This significantly reduces the sequence length, a major memory user in transformers.
+  arch: vit_small
+  patch_size: 14
   drop_path_rate: 0.3
   layerscale: 1.0e-05
   drop_path_uniform: true
   pretrained_weights: ""
   ffn_layer: "mlp"
-  block_chunks: 1 # <-- MODIFIED: Set to 1 to enable gradient checkpointing. This trades computation for memory.
+  block_chunks: 0
   qkv_bias: true
   proj_bias: true
   ffn_bias: true
@@ -134,16 +167,18 @@ teacher:
 crops:
   global_crops_scale: [0.32, 1.0]
   local_crops_scale: [0.05, 0.32]
-  local_crops_number: 4 # <-- MODIFIED: Reduced from 8. This decreases the number of views processed per sample.
+  local_crops_number: 8
   global_crops_size: 224
-  local_crops_size: 96
+  local_crops_size: 98
 evaluation:
   eval_period_iterations: 12500
+
+
 
 # Hydra configuration
 defaults:
   - _self_
-  - hydra/launcher: submitit_local
+  - hydra/launcher: submitit_local # Change to submitit_slurm for SLURM clusters
 
 # disable hydra outputs
 hydra:
