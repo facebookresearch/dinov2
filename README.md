@@ -1,31 +1,22 @@
-# Work In Progress!
+# Graph-DINOv2
 
-### Launching Command
+## Running DINOv2
 
-From the root directory:
+This project has shifted from using `omegaconf` to `hydra` for launching. This modular improvement makes running much simipler. To run the training script with a desired config:
 
 ```bash
 python -m dinov2.run.train.train --config-path=../../configs/train/ --config-name=semisup_cifar10.yaml
 ```
 
-### Completed
+You should sub out the config name as needed, depending on the desired usage.
 
-- Hydra Integration
+## Using Datasets
 
-### Currently Under Review:
+Original DINOv2 did not support arbitrary datasets. We have shifted to utilize the `datasets` library, integrating with HuggingFace datasets allowing DINOv2 to be trained on new datasets.
 
-- HF Dataset Loading
+## Graph Loss
 
-### In Progress
-
-- Graph Formulated Loss
-
-### Upcoming Changes
-
-- HF Model Loading (?)
-- Update README
-- List changes in License
-
+We have also shifted from the original loss to utilize a new graph-based loss. This allows for a better theoretical understanding and characterization of the performance of DINOv2.
 
 ## Original README from Meta
 
