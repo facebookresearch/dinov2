@@ -1,0 +1,52 @@
+student:
+  arch: vit_small
+  patch_size: 14
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ""
+  ffn_layer: "mlp"
+  block_chunks: 0
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  qk_scale: null
+  init_values: null
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.996
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+crops:
+  global_crops_scale: [0.32, 1.0]
+  global_crops_size: 224
+
+data:
+  dataset_name: uoft-cs/cifar10
+  train_split: train
+  val_split: test
+  input_column_name: img
+  label_column_name: label
+  num_workers: 4
+
+
+optimization:
+  epochs: 1
+  batch_size: 512
+  lr: 0.001
+
+eval:
+  extract_embeddings: False
+  linear_probe: True
+  knn_probe: True
+
+linear_probe_kwargs:
+  ...
+
+knn_probe_kwargs:
+  k: 10
+  queue_length: 50000

@@ -65,6 +65,9 @@ class DINOLoss(nn.Module):
     def forward(
         self, student_output_list, teacher_out_softmaxed_centered_list, graph=None
     ):
+        BS = len(student_output_list[0])
+        is_global = len(student_output_list) == len(teacher_out_softmaxed_centered_list)
+
         if graph is not None:
             student_cls_tokens = torch.cat(
                 student_output_list, dim=0
@@ -76,7 +79,7 @@ class DINOLoss(nn.Module):
             log_p_s = F.log_softmax(student_cls_tokens / self.student_temp, dim=-1)
             teacher_softmaxed_cls = teacher_softmaxed_cls.to(log_p_s.dtype)
 
-            # shape: (N_CROPS * BS, N_CROPS * BS)
+            # shape: (S_CROPS * BS, T_CROPS * BS)
             H = -(log_p_s @ teacher_softmaxed_cls.t())
 
             assert graph.shape == H.shape, (
@@ -87,7 +90,11 @@ class DINOLoss(nn.Module):
             # TODO eq (3) of https://arxiv.org/pdf/2104.14294
 
             G = graph.to(H.device)
-            total_loss = (G * H).sum() / G.sum()
+            # G.view(-1)[:: (G.shape[0] + 1)].fill_(0)  # Trick to fill diagonal with 0
+            total_loss = (G * H).sum() / BS
+
+            # devide by 2 as global flattened crops are counted twice
+            total_loss = total_loss / 2 if is_global else total_loss
 
             return total_loss
 

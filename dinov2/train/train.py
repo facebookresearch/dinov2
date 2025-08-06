@@ -362,6 +362,9 @@ def do_train(cfg, model, resume=False):
         optimizer.zero_grad(set_to_none=True)
         give_graph = graph if is_semisup else None
 
+        if distributed.get_global_size() > 1:
+            data = distributed.all_gather(data)
+
         loss_dict = model.forward_backward(
             data, teacher_temp=teacher_temp, graph=give_graph
         )

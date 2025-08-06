@@ -382,10 +382,9 @@ class SSLMetaArch(nn.Module):
                 graph=graph["semisup_graph"] if graph is not None else None,
             )
 
-            if graph is None:
-                dino_local_crops_loss /= (
-                    n_global_crops_loss_terms + n_local_crops_loss_terms
-                )
+            dino_local_crops_loss /= (
+                n_global_crops_loss_terms + n_local_crops_loss_terms
+            )
 
             # store for display
             loss_dict["dino_local_crops_loss"] = dino_local_crops_loss
@@ -405,10 +404,10 @@ class SSLMetaArch(nn.Module):
                 graph=graph["semisup_graph_global"] if graph is not None else None,
             )
 
-            if graph is None:
-                dino_global_crops_loss *= loss_scales / (
-                    n_global_crops_loss_terms + n_local_crops_loss_terms
-                )
+            # if graph is None:
+            dino_global_crops_loss *= loss_scales / (
+                n_global_crops_loss_terms + n_local_crops_loss_terms
+            )
 
             loss_dict["dino_global_crops_loss"] = dino_global_crops_loss
 
