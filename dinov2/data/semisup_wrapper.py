@@ -82,7 +82,7 @@ class SemiSupervisedSampler(torch.utils.data.DistributedSampler):
         self,
         dataset,
         batch_size: int,
-        min_supervised_per_batch: int = 0,
+        supervised_per_batch: int = 0,
         seed: int = 0,
     ):
         self.dataset_len = len(dataset)
@@ -95,7 +95,7 @@ class SemiSupervisedSampler(torch.utils.data.DistributedSampler):
         self.sup_ratio = dataset.supervised_proportion
 
         # Linearly scale supervision, with minimum threshold
-        self.sup_per_batch = max(min_supervised_per_batch, int(batch_size * self.sup_ratio))
+        self.sup_per_batch = max(supervised_per_batch, int(batch_size * self.sup_ratio))
         print(f"👷🏼 Supervised samples per batch set to {self.sup_per_batch}")
 
         self.seed = seed
