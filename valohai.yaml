@@ -1,0 +1,24 @@
+- step:
+    name: dino-train
+    image: neurolabszia.azurecr.io/valohai-zia-vision:phase3-multi-gpu-training-gpu
+    command:
+      - mkdir /valohai/inputs/data/
+      - mkdir /valohai/inputs/model/
+      - mkdir /valohai/outputs/models/
+      - python untar_archives.py --input_path /valohai/inputs/data
+      - PYTHONPATH=. python dinov2/run/train/train.py {parameters}
+    
+    inputs:
+      - name: data
+        default: gs://valohai-datasets/syn/3dmodels/fruits-and-friends-revised.tar.gz
+    parameters:
+      - name: config_file
+        type: string
+        pass-as: --config-file={v}
+        description: path to config file
+        default: dinov2/configs/train/vitb14.yaml
+      - name: output-dir
+        type: string
+        pass-as: --output_dir={v}
+        description: path to output directory.
+        default: /valohai/outputs/

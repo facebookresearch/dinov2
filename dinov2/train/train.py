@@ -7,6 +7,7 @@ import argparse
 import logging
 import math
 import os
+import json
 from functools import partial
 
 from fvcore.common.checkpoint import PeriodicCheckpointer
@@ -54,6 +55,7 @@ For python-based LazyConfig, use "path.key=value".
         type=str,
         help="Output directory to save logs and checkpoints",
     )
+    parser.add_argument("--local-rank", default=0, type=int, help="Variable for distributed computing.") 
 
     return parser
 
@@ -282,6 +284,9 @@ def do_train(cfg, model, resume=False):
         metric_logger.update(current_batch_size=current_batch_size)
         metric_logger.update(total_loss=losses_reduced, **loss_dict_reduced)
 
+        print(json.dumps({"iteration": iteration,
+                          "total_loss": losses_reduced}))
+
         # checkpointing and testing
 
         if cfg.evaluation.eval_period_iterations > 0 and (iteration + 1) % cfg.evaluation.eval_period_iterations == 0:
@@ -297,6 +302,8 @@ def do_train(cfg, model, resume=False):
 def main(args):
     cfg = setup(args)
 
+    logger.info("Cfg:\n{}".format(cfg))
+
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()
 
@@ -309,6 +316,8 @@ def main(args):
             + 1
         )
         return do_test(cfg, model, f"manual_{iteration}")
+    
+    logger.info("Cfg:\n{}".format(cfg))
 
     do_train(cfg, model, resume=not args.no_resume)
 
