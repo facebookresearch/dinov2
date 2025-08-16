@@ -217,8 +217,8 @@ class DinoVisionTransformer(nn.Module):
         if masks is not None:
             x = torch.where(masks.unsqueeze(-1), self.mask_token.to(x.dtype).unsqueeze(0), x)
 
-        x = torch.cat((self.cls_token.expand(x.shape[0], -1, -1), x), dim=1)
-        x = x + self.interpolate_pos_encoding(x, w, h)
+        x = torch.cat((self.cls_token.to(x, non_blocking=True).expand(x.shape[0], -1, -1), x), dim=1)
+        x = x + self.interpolate_pos_encoding(x, w, h).to(x, non_blocking=True)
 
         if self.register_tokens is not None:
             x = torch.cat(
@@ -254,8 +254,10 @@ class DinoVisionTransformer(nn.Module):
 
     def forward_features(self, x, masks=None):
         if isinstance(x, list):
+            self.norm.to(x[0], non_blocking=True)
             return self.forward_features_list(x, masks)
 
+        self.norm.to(x, non_blocking=True)
         x = self.prepare_tokens_with_masks(x, masks)
 
         for blk in self.blocks:
