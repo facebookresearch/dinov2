@@ -1,21 +1,69 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-#
-# This source code is licensed under the Apache License, Version 2.0
-# found in the LICENSE file in the root directory of this source tree.
-
 import torch
 import torch.distributed as dist
 import torch.nn.functional as F
-from torch import nn
+from torch import Tensor, nn
 
 
 class DINOLoss(nn.Module):
+    """Implementation of the loss described in 'Emerging Properties in
+    Self-Supervised Vision Transformers'. [0]
+
+    This implementation follows the code published by the authors. [1]
+    It supports global and local image crops. A linear warmup schedule for the
+    teacher temperature is implemented to stabilize training at the beginning.
+    Centering is applied to the teacher output to avoid model collapse.
+
+    - [0]: DINO, 2021, https://arxiv.org/abs/2104.14294
+    - [1]: https://github.com/facebookresearch/dino
+
+    Attributes:
+        output_dim:
+            Dimension of the model output.
+        teacher_temp:
+            Temperature parameter for the teacher network.
+        student_temp:
+            Temperature parameter for the student network.
+        center:
+            Center used for the teacher output. It is updated with a moving average
+            during training.
+        center_momentum:
+            Momentum term for the center calculation.
+        warmup_teacher_temp_epochs:
+                Number of epochs for the warmup phase of the teacher temperature (for backward compatibility).
+        teacher_temp_schedule:
+            A linear schedule for the teacher temperature during the warmup phase (for backward compatibility).
+
+    Examples:
+        >>> # initialize loss function
+        >>> loss_fn = DINOLoss(128)
+        >>>
+        >>> # generate a view of the images with a random transform
+        >>> view = transform(images)
+        >>>
+        >>> # embed the view with a student and teacher model
+        >>> teacher_out = teacher(view)
+        >>> student_out = student(view)
+        >>>
+        >>> # calculate loss
+        >>> loss = loss_fn([teacher_out], [student_out])
+    """
+
     def __init__(
         self,
-        out_dim,
-        student_temp=0.1,
-        center_momentum=0.9,
-    ):
+        out_dim: int = 65536,
+        student_temp: float = 0.1,
+        center_momentum: float = 0.9,
+    ) -> None:
+        """Initializes the DINOLoss Module.
+
+        Args:
+            center_mode:
+                Mode for center calculation. Only 'mean' is supported.
+            warmup_teacher_temp:
+                Initial temperature for the teacher network (for backward compatibility).
+            warmup_teacher_temp_epochs:
+                Number of epochs for the warmup phase of the teacher temperature (for backward compatibility).
+        """
         super().__init__()
         self.student_temp = student_temp
         self.center_momentum = center_momentum
@@ -63,50 +111,57 @@ class DINOLoss(nn.Module):
         return Q.t()
 
     def forward(
-        self, student_output_list, teacher_out_softmaxed_centered_list, graph=None
-    ):
-        BS = len(student_output_list[0])
-        is_global = len(student_output_list) == len(teacher_out_softmaxed_centered_list)
+        self,
+        student_output_list: list[Tensor],
+        teacher_out_softmaxed_centered_list: list[Tensor],
+        graph=None,
+    ) -> Tensor:
+        """Cross-entropy between softmax outputs of the teacher and student networks.
 
+        Returns:
+            The average cross-entropy loss.
+        """
+
+        def normalize_to_list(x):
+            if torch.is_tensor(x):
+                return [x]
+            if isinstance(x, (list, tuple)):
+                return [t for t in x if torch.is_tensor(t)]
+            raise TypeError(f"Unsupported type for stacking: {type(x)}")
+
+        # Calculate cross-entropy loss.
+        if len(teacher_out_softmaxed_centered_list) == len(student_output_list):
+            teacher_out_softmaxed_centered_list = list(teacher_out_softmaxed_centered_list[0].chunk(2, dim=0)) [::-1]
+            student_output_list = list(student_output_list[0].chunk(2, dim=0))
+        teacher_out_softmaxed_centered_list = normalize_to_list(
+            teacher_out_softmaxed_centered_list
+        )
+        student_output_list = normalize_to_list(student_output_list)
+        t_out = torch.stack(teacher_out_softmaxed_centered_list)
+        student_out_stacked = torch.stack(student_output_list)
+        s_out = F.log_softmax(student_out_stacked / self.student_temp, dim=-1)
+
+        # Calculate feature similarities, ignoring the diagonal
+        # b = batch_size, t = n_views_teacher, s = n_views_student, d = output_dim
+        t_out = t_out.squeeze()
+        s_out = s_out.squeeze()
         if graph is not None:
-            student_cls_tokens = torch.cat(
-                student_output_list, dim=0
-            )  # shape: (N_CROPS * BS, D)
-            teacher_softmaxed_cls = torch.cat(
-                list(teacher_out_softmaxed_centered_list), dim=0
-            )  # shape: (N_CROPS * BS, D)
-
-            log_p_s = F.log_softmax(student_cls_tokens / self.student_temp, dim=-1)
-            teacher_softmaxed_cls = teacher_softmaxed_cls.to(log_p_s.dtype)
-
-            # shape: (S_CROPS * BS, T_CROPS * BS)
-            H = -(log_p_s @ teacher_softmaxed_cls.t())
-
-            assert graph.shape == H.shape, (
-                f"Graph shape {graph.shape} must match entropy matrix {H.shape}"
-            )
-
-            # Rem: Should remove the main diag of G?
-            # TODO eq (3) of https://arxiv.org/pdf/2104.14294
-
-            G = graph.to(H.device)
-            # G.view(-1)[:: (G.shape[0] + 1)].fill_(0)  # Trick to fill diagonal with 0
-            total_loss = (G * H).sum() / BS
-
-            # devide by 2 as global flattened crops are counted twice
-            total_loss = total_loss / 2 if is_global else total_loss
-
-            return total_loss
-
+            bs = t_out.shape[1]
+            graph = graph.view(t_out.shape[0], bs, s_out.shape[0], bs)
+            graph = graph.float()
+            graph = graph.to(t_out.device)
+            # print(f"Graph shape: {graph.shape}")
+            loss = - torch.einsum('tbd,tbsb,sbd->ts', t_out, graph,s_out.float(),)
         else:
-            total_loss = 0
-            for s in student_output_list:
-                lsm = F.log_softmax(s / self.student_temp, dim=-1)
-                for t in teacher_out_softmaxed_centered_list:
-                    loss = torch.sum(t * lsm, dim=-1)
-                    total_loss -= loss.mean()
+            loss = -torch.einsum("tbd,sbd->ts", t_out, s_out.float())
+        loss.fill_diagonal_(0)
 
-            return total_loss
+        # Number of loss terms, ignoring the diagonal
+        n_terms = loss.numel() - loss.diagonal().numel()
+        batch_size = t_out.shape[1]
+
+        loss = loss.sum() / (n_terms * batch_size)
+        return loss
 
     @torch.no_grad()
     def update_center(self, teacher_output):

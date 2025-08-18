@@ -94,6 +94,8 @@ class DataAugmentationDINO(object):
         self.local_transfo = transforms.Compose([color_jittering, local_transfo_extra, self.normalize])
 
     def __call__(self, image):
+        if image.mode != "RGB":
+            image = image.convert("RGB")        
         output = {}
 
         # global crops:

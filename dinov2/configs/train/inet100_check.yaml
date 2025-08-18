@@ -1,0 +1,203 @@
+# Example configuration for training with HuggingFace datasets using the new config format
+# This shows how to use the new configuration-based dataset loading system
+
+MODEL:
+  WEIGHTS: ""
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+
+# New data configuration format
+# For CIFAR-10:
+data:
+  dataset: "clane9/imagenet-100"
+  img_col_name: "image"
+  label_col_names: ["label"]
+  train_split: "train"
+  val_split: "validation"
+  config_name: null
+  num_classes: 10
+  num_workers: 4
+  seed: 983245
+  # Optional additional parameters
+  trust_remote_code: true
+  streaming: false
+  cache_dir: null
+  data_dir: null
+
+  semisupervised:
+    main_label_col: "label"
+    supervised_per_batch: 64 # <-- MODIFIED: Reduced from 64 to 16 for semi-supervised learning.
+    supervised_proportion: 1.0 # <-- MODIFIED: Reduced from 1.0 to 0.05 for semi-supervised learning. 
+    seed: 813846
+    view_graph: false 
+    #TODO add label per class
+
+
+# Alternative examples for different datasets:
+# For face-obfuscated-imagenet:
+# data:
+#   dataset: "randall-lab/face-obfuscated-imagenet"
+#   img_col_name: "image"
+#   label_col_names: ["label"]
+#   train_split: "train"
+#   val_split: "validation"
+#   config_name: "noface-1k"
+#   num_classes: 1000
+#   num_workers: 10
+#   seed: 983245
+#   supervised_proportion: 0.0
+#   supervised_per_batch: 0
+
+# For ImageNet-1K:
+# data:
+#   dataset: "imagenet-1k"
+#   img_col_name: "image"
+#   label_col_names: ["label"]
+#   train_split: "train"
+#   val_split: "validation"
+#   config_name: null
+#   num_classes: 1000
+#   num_workers: 10
+#   seed: 983245
+#   supervised_proportion: 0.0
+#   supervised_per_batch: 0
+
+dino:
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max: [0.1, 0.5]
+  mask_ratio_mu: 0.55
+  mask_ratio_std: 0.25
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+optim:
+  epochs: 20
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004 # learning rate for a batch size of 1024
+  lr: 0. # will be set after applying scaling rule
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+train:
+  batch_size_per_gpu: 64
+  output_dir: "./outputs_inet100_graph_check_sup_v3"
+  saveckp_freq: 100
+  seed: 0
+  # num_workers is now taken from data.num_workers
+  OFFICIAL_EPOCH_LENGTH: 1979 #1250 for in-1k? 
+  cache_dataset: true
+  centering: "centering" # or "sinkhorn_knopp"
+student:
+  arch: vit_small
+  patch_size: 14
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ""
+  ffn_layer: "mlp"
+  block_chunks: 0
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  qk_scale: null
+  init_values: null
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+teacher:
+  momentum_teacher: 0.996
+  final_momentum_teacher: 1  
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+crops:
+  global_crops_scale: [0.32, 1.0]
+  local_crops_scale: [0.05, 0.32]
+  local_crops_number: 8
+  global_crops_size: 224
+  local_crops_size: 98
+evaluation:
+  eval_period_iterations: 1000 #12500
+  knn:
+    k: [10, 20, 100, 200]
+    temperature: 0.07
+    n_per_class_list: [-1]
+    n_tries: 1
+    batch_size: 256
+    gather_on_cpu: false
+  linear:
+    n_last_blocks: [1, 4]
+    avgpool_patchtokens: [true, false]
+    learning_rates: [0.001, 0.005, 0.01, 0.05]
+    epochs: 100
+    batch_size: 256
+    save_checkpoint_frequency: 1
+pretrained_weights: "outputs_inet100_graph_check_sup/eval/training_37999/teacher_checkpoint.pth"
+
+# Hydra configuration
+defaults:
+  - _self_
+  - hydra/launcher: submitit_local # Change to submitit_slurm for SLURM clusters
+
+# disable hydra outputs
+hydra:
+  output_subdir: null
+  job:
+    chdir: true
+  run:
+    dir: .

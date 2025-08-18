@@ -385,6 +385,7 @@ class SSLMetaArch(nn.Module):
             dino_local_crops_loss /= (
                 n_global_crops_loss_terms + n_local_crops_loss_terms
             )
+            dino_local_crops_loss = dino_local_crops_loss * n_local_crops_loss_terms
 
             # store for display
             loss_dict["dino_local_crops_loss"] = dino_local_crops_loss
