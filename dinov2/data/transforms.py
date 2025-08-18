@@ -15,10 +15,8 @@ class GaussianBlur(transforms.RandomApply):
     """
 
     def __init__(self, *, p: float = 0.5, radius_min: float = 0.1, radius_max: float = 2.0):
-        # NOTE: torchvision is applying 1 - probability to return the original image
-        keep_p = 1 - p
         transform = transforms.GaussianBlur(kernel_size=9, sigma=(radius_min, radius_max))
-        super().__init__(transforms=[transform], p=keep_p)
+        super().__init__(transforms=[transform], p=p)
 
 
 class MaybeToTensor(transforms.ToTensor):
