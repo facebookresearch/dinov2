@@ -122,16 +122,38 @@ class DINOLoss(nn.Module):
             The average cross-entropy loss.
         """
 
-        # TODO add the graph
+        def normalize_to_list(x):
+            if torch.is_tensor(x):
+                return [x]
+            if isinstance(x, (list, tuple)):
+                return [t for t in x if torch.is_tensor(t)]
+            raise TypeError(f"Unsupported type for stacking: {type(x)}")
 
         # Calculate cross-entropy loss.
+        if len(teacher_out_softmaxed_centered_list) == len(student_output_list):
+            teacher_out_softmaxed_centered_list = list(teacher_out_softmaxed_centered_list[0].chunk(2, dim=0)) [::-1]
+            student_output_list = list(student_output_list[0].chunk(2, dim=0))
+        teacher_out_softmaxed_centered_list = normalize_to_list(
+            teacher_out_softmaxed_centered_list
+        )
+        student_output_list = normalize_to_list(student_output_list)
         t_out = torch.stack(teacher_out_softmaxed_centered_list)
         student_out_stacked = torch.stack(student_output_list)
         s_out = F.log_softmax(student_out_stacked / self.student_temp, dim=-1)
 
         # Calculate feature similarities, ignoring the diagonal
         # b = batch_size, t = n_views_teacher, s = n_views_student, d = output_dim
-        loss = -torch.einsum("tbd,sbd->ts", t_out, s_out)
+        t_out = t_out.squeeze()
+        s_out = s_out.squeeze()
+        if graph is not None:
+            bs = t_out.shape[1]
+            graph = graph.view(t_out.shape[0], bs, s_out.shape[0], bs)
+            graph = graph.float()
+            graph = graph.to(t_out.device)
+            # print(f"Graph shape: {graph.shape}")
+            loss = - torch.einsum('tbd,tbsb,sbd->ts', t_out, graph,s_out.float(),)
+        else:
+            loss = -torch.einsum("tbd,sbd->ts", t_out, s_out.float())
         loss.fill_diagonal_(0)
 
         # Number of loss terms, ignoring the diagonal

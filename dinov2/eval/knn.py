@@ -8,7 +8,9 @@ import json
 import os
 from functools import partial
 from typing import List, Optional
-
+from dinov2.data.loaders import make_dataset_from_config
+from dinov2.utils.config import setup
+from torchvision import transforms
 import torch
 from torch.nn.functional import one_hot, softmax
 import hydra
@@ -287,6 +289,7 @@ def eval_knn(
 
 def eval_knn_with_model(
     model,
+    cfg,
     output_dir,
     train_dataset_str="ImageNet:split=TRAIN",
     val_dataset_str="ImageNet:split=VAL",
@@ -302,15 +305,30 @@ def eval_knn_with_model(
     n_tries=1,
 ):
     transform = transform or make_classification_eval_transform()
-
-    train_dataset = make_dataset(
-        dataset_str=train_dataset_str,
-        transform=transform,
-    )
-    val_dataset = make_dataset(
-        dataset_str=val_dataset_str,
-        transform=transform,
-    )
+    transform.transforms.insert(0, transforms.Lambda(lambda x: x.convert("RGB")))
+    if hasattr(cfg, "data") and hasattr(cfg.data, "dataset"):
+        logger.info("Using config-based dataset loading for KNN eval")
+        train_dataset = make_dataset_from_config(
+            cfg.data,
+            split=cfg.data.train_split,
+            transform=transform,
+        )
+        val_dataset = make_dataset_from_config(
+            cfg.data,
+            split=cfg.data.val_split,
+            transform=transform,
+        )
+        num_workers = cfg.data.num_workers
+    else:
+        logger.info("Using string-based dataset loading for KNN eval")
+        train_dataset = make_dataset(
+            dataset_str=train_dataset_str,
+            transform=transform,
+        )
+        val_dataset = make_dataset(
+            dataset_str=val_dataset_str,
+            transform=transform,
+        )
 
     with torch.cuda.amp.autocast(dtype=autocast_dtype):
         results_dict_knn = eval_knn(
@@ -348,23 +366,44 @@ def eval_knn_with_model(
 
 @hydra.main(config_path="../configs", config_name="ssl_default_config")
 def main(cfg: DictConfig):
+    setup(cfg)
     model, autocast_dtype = setup_and_build_model(cfg)
-    eval_knn_with_model(
-        model=model,
-        output_dir=cfg.train.output_dir,
-        train_dataset_str=cfg.train_dataset_str,
-        val_dataset_str=cfg.val_dataset_str,
-        nb_knn=cfg.nb_knn,
-        temperature=cfg.temperature,
-        autocast_dtype=autocast_dtype,
-        accuracy_averaging=AccuracyAveraging.MEAN_ACCURACY,
-        transform=None,
-        gather_on_cpu=cfg.gather_on_cpu,
-        batch_size=cfg.batch_size,
-        num_workers=5,
-        n_per_class_list=cfg.n_per_class_list,
-        n_tries=cfg.n_tries,
-    )
+# new way, with eval config
+    if hasattr(cfg, "evaluation") and hasattr(cfg.evaluation, "knn"):
+        logger.info("Running k-NN evaluation with new config.")
+        eval_knn_with_model(
+            model=model,
+            cfg=cfg,
+            output_dir=cfg.train.output_dir,
+            nb_knn=cfg.evaluation.knn.k,
+            temperature=cfg.evaluation.knn.temperature,
+            autocast_dtype=autocast_dtype,
+            accuracy_averaging=AccuracyAveraging.MEAN_ACCURACY,
+            gather_on_cpu=cfg.evaluation.knn.gather_on_cpu,
+            batch_size=cfg.evaluation.knn.batch_size,
+            num_workers=cfg.data.num_workers,
+            n_per_class_list=cfg.evaluation.knn.n_per_class_list,
+            n_tries=cfg.evaluation.knn.n_tries,
+        )
+    else: # old way
+        logger.info("Running k-NN evaluation with old config.")
+        eval_knn_with_model(
+            model=model,
+            cfg=cfg,
+            output_dir=cfg.train.output_dir,
+            train_dataset_str=cfg.train_dataset_str,
+            val_dataset_str=cfg.val_dataset_str,
+            nb_knn=cfg.nb_knn,
+            temperature=cfg.temperature,
+            autocast_dtype=autocast_dtype,
+            accuracy_averaging=AccuracyAveraging.MEAN_ACCURACY,
+            transform=None,
+            gather_on_cpu=cfg.gather_on_cpu,
+            batch_size=cfg.batch_size,
+            num_workers=5,
+            n_per_class_list=cfg.n_per_class_list,
+            n_tries=cfg.n_tries,
+        )
     return 0
 
 

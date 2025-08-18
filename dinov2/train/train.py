@@ -19,6 +19,7 @@ from dinov2.data import (
     make_data_loader,
     make_dataset,
     SemiSupervisedWrapper,
+    DataLoaderResetWrapper
 )
 from dinov2.data import (
     collate_data_and_cast,
@@ -266,6 +267,9 @@ def do_train(cfg, model, resume=False):
     )
 
     # training loop
+    if is_semisup:
+        #As DINOV2 uses SHARDED_INFINITE sampler, we need to wrap the data loader 
+        data_loader = DataLoaderResetWrapper(data_loader)
 
     iteration = start_iter
 
@@ -273,7 +277,6 @@ def do_train(cfg, model, resume=False):
     metrics_file = os.path.join(cfg.train.output_dir, "training_metrics.json")
     metric_logger = MetricLogger(delimiter="  ", output_file=metrics_file)
     header = "Training"
-
     for data_ in metric_logger.log_every(
         data_loader,
         10,
@@ -336,6 +339,8 @@ def do_train(cfg, model, resume=False):
                 device=data["collated_global_crops"].device,
             )
 
+            print("using sem sup graph with ")
+
             graph = {
                 "semisup_graph": semisup_graph_,
                 "semisup_graph_global": semisup_graph_global_,
@@ -343,6 +348,27 @@ def do_train(cfg, model, resume=False):
 
         else:
             data = data_
+
+        if cfg.data.semisupervised.get("view_graph" , False ) == True:
+            print("Using view graph")
+            view_graph_global = nview_graph(
+                    batch_size=data["collated_global_crops"].shape[0] // 2,
+                    n_global_crops=2,
+                    n_local_crops=2,
+                    device=data["collated_global_crops"].device,
+                )
+            view_graph = nview_graph(
+                    batch_size=data["collated_global_crops"].shape[0] // 2,
+                    n_global_crops=cfg.crops.local_crops_number,
+                    n_local_crops=2,
+                    device=data["collated_global_crops"].device,
+                )
+            
+            graph = {
+                "semisup_graph": view_graph,
+                "semisup_graph_global": view_graph_global,
+            }
+
 
         current_batch_size = data["collated_global_crops"].shape[0] / 2
         if iteration > max_iter:
@@ -360,7 +386,10 @@ def do_train(cfg, model, resume=False):
         # compute losses
 
         optimizer.zero_grad(set_to_none=True)
-        give_graph = graph if is_semisup else None
+        if graph is None:
+            give_graph = None
+        else:
+            give_graph = graph
 
         if distributed.get_global_size() > 1:
             data = distributed.all_gather(data)

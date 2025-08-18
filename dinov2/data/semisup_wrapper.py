@@ -159,3 +159,26 @@ class SemiSupervisedSampler(torch.utils.data.DistributedSampler):
 
     def set_epoch(self, epoch: int) -> None:
         self.epoch = epoch
+
+
+class DataLoaderResetWrapper:
+
+    def __init__(self, data_loader: torch.utils.data.DataLoader):
+        self.data_loader = data_loader
+        self.sampler = getattr(data_loader, "sampler", None)
+        if self.sampler is None or not hasattr(self.sampler, "set_epoch"):
+            print("Warning: Sampler does not have a 'set_epoch' method. Shuffling may not change between epochs.")
+
+    def __iter__(self):
+        epoch = 0
+        while True:
+            if self.sampler is not None:
+                self.sampler.set_epoch(epoch)
+            
+            for batch in self.data_loader:
+                yield batch
+            
+            epoch += 1
+
+    def __len__(self):
+        raise TypeError("This is an infinite wrapper and has no length.")
