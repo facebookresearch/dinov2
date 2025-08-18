@@ -27,7 +27,7 @@ DINOv2 models produce high-performance visual features that can be directly empl
 https://github.com/facebookresearch/dinov2/assets/60359573/f168823e-7922-415a-b429-578badf5c356
 
 <div align="center">
-  Visualization of the three first principal components of the patch features of all frames, mapped to RGB values.
+  Visualization of the first three principal components of the patch features of all frames, mapped to RGB values.
 </div>
 
 ## Pretrained models
