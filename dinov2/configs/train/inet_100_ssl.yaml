@@ -135,7 +135,7 @@ train:
 
 student:
   arch: vit_tiny
-  patch_size: 14
+  patch_size: 16
   drop_path_rate: 0.3
   layerscale: 1.0e-05
   drop_path_uniform: true
