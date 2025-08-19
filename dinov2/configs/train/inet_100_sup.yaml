@@ -62,7 +62,7 @@ data:
 
   semisupervised:
     main_label_col: "label"
-    supervised_per_batch: 64
+    supervised_per_batch: 8
     supervised_proportion: 1.0 
     seed: 813846
     view_graph: false 
