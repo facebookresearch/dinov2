@@ -19,7 +19,7 @@ from dinov2.data import (
     make_data_loader,
     make_dataset,
     SemiSupervisedWrapper,
-    DataLoaderResetWrapper
+    DataLoaderResetWrapper,
 )
 from dinov2.data import (
     collate_data_and_cast,
@@ -268,7 +268,7 @@ def do_train(cfg, model, resume=False):
 
     # training loop
     if is_semisup:
-        #As DINOV2 uses SHARDED_INFINITE sampler, we need to wrap the data loader 
+        # As DINOV2 uses SHARDED_INFINITE sampler, we need to wrap the data loader
         data_loader = DataLoaderResetWrapper(data_loader)
 
     iteration = start_iter
@@ -290,22 +290,28 @@ def do_train(cfg, model, resume=False):
                 torch.tensor(is_sup, dtype=torch.bool) if is_sup is not None else None
             )
 
+            graph_batch_size = (
+                data["collated_global_crops"].shape[0] * distributed.get_global_size()
+            )
+
             if distributed.get_global_size() > 1:
-                data = distributed.all_gather(data)
-                targets = distributed.all_gather(targets)
-                is_sup = distributed.all_gather(is_sup)
+                #     data = distributed.all_gather_dict(data)
+                targets = distributed.all_gather_dict(targets)
+                is_sup = distributed.all_gather_dict(is_sup)
+
+            device = next(iter(targets.values())).device
 
             view_graph = nview_graph(
-                batch_size=data["collated_global_crops"].shape[0] // 2,
+                batch_size=graph_batch_size // 2,
                 n_global_crops=2,
                 n_local_crops=cfg.crops.local_crops_number,
-                device=data["collated_global_crops"].device,
+                device=targets,
             )
             labels_graph = label_graph(
                 gathered_targets=targets,
                 n_global_crops=2,
                 n_local_crops=cfg.crops.local_crops_number,
-                device=data["collated_global_crops"].device,
+                device=device,
             )
             semisup_graph_ = semisup_graph(
                 labels_graph=labels_graph,
@@ -313,21 +319,21 @@ def do_train(cfg, model, resume=False):
                 gathered_is_supervised=is_sup,
                 n_global_crops=2,
                 n_local_crops=cfg.crops.local_crops_number,
-                device=data["collated_global_crops"].device,
+                device=device,
             )
 
             view_graph_global = nview_graph(
-                batch_size=data["collated_global_crops"].shape[0] // 2,
+                batch_size=graph_batch_size // 2,
                 n_global_crops=2,
                 n_local_crops=2,
-                device=data["collated_global_crops"].device,
+                device=device,
             )
 
             labels_graph_global = label_graph(
                 gathered_targets=targets,
                 n_global_crops=2,
                 n_local_crops=2,
-                device=data["collated_global_crops"].device,
+                device=device,
             )
 
             semisup_graph_global_ = semisup_graph(
@@ -336,7 +342,7 @@ def do_train(cfg, model, resume=False):
                 gathered_is_supervised=is_sup,
                 n_global_crops=2,
                 n_local_crops=2,
-                device=data["collated_global_crops"].device,
+                device=device,
             )
 
             print("using sem sup graph with ")
@@ -349,28 +355,29 @@ def do_train(cfg, model, resume=False):
         else:
             data = data_
 
-        if cfg.data.semisupervised.get("view_graph" , False ) == True:
-            print("Using view graph")
+            graph_batch_size = (
+                data["collated_global_crops"].shape[0] * distributed.get_global_size()
+            )
+
+        if cfg.data.semisupervised.get("view_graph", False) == True:
             view_graph_global = nview_graph(
-                    batch_size=data["collated_global_crops"].shape[0] // 2,
-                    n_global_crops=2,
-                    n_local_crops=2,
-                    device=data["collated_global_crops"].device,
-                )
+                batch_size=graph_batch_size // 2,
+                n_global_crops=2,
+                n_local_crops=2,
+            ).cuda(non_blocking=True)
+
             view_graph = nview_graph(
-                    batch_size=data["collated_global_crops"].shape[0] // 2,
-                    n_global_crops=cfg.crops.local_crops_number,
-                    n_local_crops=2,
-                    device=data["collated_global_crops"].device,
-                )
-            
+                batch_size=graph_batch_size // 2,
+                n_global_crops=cfg.crops.local_crops_number,
+                n_local_crops=2,
+            ).cuda(non_blocking=True)
+
             graph = {
                 "semisup_graph": view_graph,
                 "semisup_graph_global": view_graph_global,
             }
 
-
-        current_batch_size = data["collated_global_crops"].shape[0] / 2
+        current_batch_size = graph_batch_size / 2
         if iteration > max_iter:
             return
 
@@ -392,7 +399,7 @@ def do_train(cfg, model, resume=False):
             give_graph = graph
 
         if distributed.get_global_size() > 1:
-            data = distributed.all_gather(data)
+            data = distributed.all_gather_dict(data)
 
         loss_dict = model.forward_backward(
             data, teacher_temp=teacher_temp, graph=give_graph

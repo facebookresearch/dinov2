@@ -5,6 +5,7 @@
 
 import logging
 
+from dinov2 import distributed
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -51,6 +52,7 @@ class KoLeoLoss(nn.Module):
         Args:
             student_output (BxD): backbone output of student
         """
+        student_output = distributed.all_gather(student_output, dim=0)
         with torch.cuda.amp.autocast(enabled=False):
             student_output = F.normalize(student_output, eps=eps, p=2, dim=-1)
             I = self.pairwise_NNs_inner(student_output, graph)  # noqa: E741

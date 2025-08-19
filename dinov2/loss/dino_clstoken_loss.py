@@ -1,3 +1,4 @@
+from dinov2 import distributed
 import torch
 import torch.distributed as dist
 import torch.nn.functional as F
@@ -131,7 +132,9 @@ class DINOLoss(nn.Module):
 
         # Calculate cross-entropy loss.
         if len(teacher_out_softmaxed_centered_list) == len(student_output_list):
-            teacher_out_softmaxed_centered_list = list(teacher_out_softmaxed_centered_list[0].chunk(2, dim=0)) [::-1]
+            teacher_out_softmaxed_centered_list = list(
+                teacher_out_softmaxed_centered_list[0].chunk(2, dim=0)
+            )[::-1]
             student_output_list = list(student_output_list[0].chunk(2, dim=0))
         teacher_out_softmaxed_centered_list = normalize_to_list(
             teacher_out_softmaxed_centered_list
@@ -145,13 +148,22 @@ class DINOLoss(nn.Module):
         # b = batch_size, t = n_views_teacher, s = n_views_student, d = output_dim
         t_out = t_out.squeeze()
         s_out = s_out.squeeze()
+
+        t_out = distributed.all_gather(t_out, dim=1)
+        s_out = distributed.all_gather(s_out, dim=1)
+
         if graph is not None:
             bs = t_out.shape[1]
             graph = graph.view(t_out.shape[0], bs, s_out.shape[0], bs)
             graph = graph.float()
             graph = graph.to(t_out.device)
             # print(f"Graph shape: {graph.shape}")
-            loss = - torch.einsum('tbd,tbsb,sbd->ts', t_out, graph,s_out.float(),)
+            loss = -torch.einsum(
+                "tbd,tbsb,sbd->ts",
+                t_out,
+                graph,
+                s_out.float(),
+            )
         else:
             loss = -torch.einsum("tbd,sbd->ts", t_out, s_out.float())
         loss.fill_diagonal_(0)
