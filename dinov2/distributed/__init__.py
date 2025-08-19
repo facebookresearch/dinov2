@@ -118,7 +118,11 @@ _TORCH_DISTRIBUTED_ENV_VARS = (
 
 
 def _collect_env_vars() -> Dict[str, str]:
-    return {env_var: os.environ[env_var] for env_var in _TORCH_DISTRIBUTED_ENV_VARS if env_var in os.environ}
+    return {
+        env_var: os.environ[env_var]
+        for env_var in _TORCH_DISTRIBUTED_ENV_VARS
+        if env_var in os.environ
+    }
 
 
 def _is_slurm_job_process() -> bool:
@@ -145,7 +149,9 @@ def _parse_slurm_node_list(s: str) -> List[str]:
 def _check_env_variable(key: str, new_value: str):
     # Only check for difference with preset environment variables
     if key in os.environ and os.environ[key] != new_value:
-        raise RuntimeError(f"Cannot export environment variables as {key} is already set")
+        raise RuntimeError(
+            f"Cannot export environment variables as {key} is already set"
+        )
 
 
 class _TorchDistributedEnvironment:
@@ -236,7 +242,12 @@ class _TorchDistributedEnvironment:
         return self
 
 
-def enable(*, set_cuda_current_device: bool = True, overwrite: bool = False, allow_nccl_timeout: bool = False):
+def enable(
+    *,
+    set_cuda_current_device: bool = True,
+    overwrite: bool = False,
+    allow_nccl_timeout: bool = False,
+):
     """Enable distributed mode
 
     Args:
@@ -268,3 +279,40 @@ def enable(*, set_cuda_current_device: bool = True, overwrite: bool = False, all
     _LOCAL_RANK = torch_env.local_rank
     _LOCAL_WORLD_SIZE = torch_env.local_world_size
     _restrict_print_to_main_process()
+
+
+def get_rank():
+    if dist.is_available() and dist.is_initialized():
+        return dist.get_rank()
+    return 0
+
+
+class GatherLayer(torch.autograd.Function):
+    """
+    Gathers tensors from all process and supports backward propagation
+    for the gradients across processes.
+    """
+
+    @staticmethod
+    def forward(ctx, x):
+        if dist.is_available() and dist.is_initialized():
+            output = [torch.zeros_like(x) for _ in range(dist.get_world_size())]
+            dist.all_gather(output, x)
+        else:
+            output = [x]
+        return tuple(output)
+
+    @staticmethod
+    def backward(ctx, *grads):
+        if dist.is_available() and dist.is_initialized():
+            all_gradients = torch.stack(grads)
+            dist.all_reduce(all_gradients)
+            grad_out = all_gradients[get_rank()]
+        else:
+            grad_out = grads[0]
+        return grad_out
+
+
+def all_gather(X, dim=0):
+    """Gathers tensors from all processes, supporting backward propagation."""
+    return torch.cat(GatherLayer.apply(X), dim=dim)
