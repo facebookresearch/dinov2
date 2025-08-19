@@ -1,9 +1,0 @@
-# @package _global_
-defaults:
-  - override /hydra/launcher: submitit_local
-
-hydra:
-  launcher:
-    _target_: hydra_plugins.hydra_submitit_launcher.submitit_launcher.LocalLauncher
-    folder: ${hydra:runtime.output_dir}/.submitit/%j
-    max_num_timeout: 30
