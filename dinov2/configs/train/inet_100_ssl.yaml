@@ -102,7 +102,7 @@ optim:
   adamw_beta1: 0.9
   adamw_beta2: 0.999
 train:
-  batch_size_per_gpu: 64
+  batch_size_per_gpu: 32
   output_dir: "./outputs_inet100_graph_check_sup_v3"
   saveckp_freq: 100
   seed: 0
