@@ -5,8 +5,8 @@ def label_graph(gathered_targets, n_global_crops, n_local_crops, device=None):
     """
     Returns: [N_local * bs, N_global * bs] bool matrix
     """
-    local_labels  = gathered_targets.repeat(n_local_crops).unsqueeze(1)   # [N_local, 1]
-    global_labels = gathered_targets.repeat(n_global_crops).unsqueeze(0)  # [1, N_global]
+    local_labels  = gathered_targets.repeat(n_local_crops).unsqueeze(0)   # [N_local, 1]
+    global_labels = gathered_targets.repeat(n_global_crops).unsqueeze(1)  # [1, N_global]
     G = (global_labels == local_labels).bool()  # [N_local * bs, N_global * bs]
 
     if device is not None:
@@ -25,8 +25,8 @@ def semisup_graph(
     
     batch_size = gathered_is_supervised.shape[0]
 
-    local_mask  = gathered_is_supervised.repeat(n_local_crops).unsqueeze(1).bool()
-    global_mask = gathered_is_supervised.repeat(n_global_crops).unsqueeze(0).bool()
+    local_mask  = gathered_is_supervised.repeat(n_local_crops).unsqueeze(0).bool()
+    global_mask = gathered_is_supervised.repeat(n_global_crops).unsqueeze(1).bool()
     mask = global_mask & local_mask  # [N_local * bs, N_global * bs]
 
     G = labels_graph.bool() & mask

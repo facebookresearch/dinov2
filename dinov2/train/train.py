@@ -4,8 +4,8 @@
 # found in the LICENSE file in the root directory of this source tree.
 
 import hydra
-from omegaconf import DictConfig
-
+from omegaconf import DictConfig, OmegaConf # Added OmegaConf for config conversion
+import wandb
 import logging
 import math
 import os
@@ -354,10 +354,11 @@ def do_train(cfg, model, resume=False):
 
         else:
             data = data_
+            graph = None
 
-            graph_batch_size = (
-                data["collated_global_crops"].shape[0] * distributed.get_global_size()
-            )
+        graph_batch_size = (
+            data["collated_global_crops"].shape[0] * distributed.get_global_size()
+        )
 
         if cfg.data.semisupervised.get("view_graph", False) == True:
             view_graph_global = nview_graph(
@@ -368,8 +369,8 @@ def do_train(cfg, model, resume=False):
 
             view_graph = nview_graph(
                 batch_size=graph_batch_size // 2,
-                n_global_crops=cfg.crops.local_crops_number,
-                n_local_crops=2,
+                n_global_crops=2,
+                n_local_crops=cfg.crops.local_crops_number,
             ).cuda(non_blocking=True)
 
             graph = {
@@ -438,6 +439,19 @@ def do_train(cfg, model, resume=False):
             raise AssertionError
         losses_reduced = sum(loss for loss in loss_dict_reduced.values())
 
+        if distributed.is_main_process():
+            log_payload = {
+                "total_loss": losses_reduced,
+                "lr": lr,
+                "wd": wd,
+                "mom": mom,
+                "last_layer_lr": last_layer_lr,
+                "temp": teacher_temp,
+                "batch_size": current_batch_size,
+            }
+            log_payload.update(loss_dict_reduced) # Add individual losses
+            wandb.log(log_payload, step=iteration)
+
         metric_logger.update(lr=lr)
         metric_logger.update(wd=wd)
         metric_logger.update(mom=mom)
@@ -463,6 +477,15 @@ def do_train(cfg, model, resume=False):
 @hydra.main(config_path="../configs", config_name="ssl_default_config")
 def main(cfg: DictConfig):
     cfg = setup(cfg)
+    if distributed.is_main_process():
+        config_dict = OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
+        run_name = os.path.basename(cfg.train.output_dir) if cfg.train.output_dir else None
+        wandb.init(
+            project="dinov2", 
+            config=config_dict,
+            name=run_name,
+        )
+
     model = SSLMetaArch(cfg).to(torch.device("cuda"))
     model.prepare_for_distributed_training()
 
