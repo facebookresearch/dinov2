@@ -65,7 +65,7 @@ data:
     supervised_per_batch: 0
     supervised_proportion: 0 
     seed: 813846
-    view_graph: false 
+    view_graph: true 
 
 
 dino:
