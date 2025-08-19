@@ -1,7 +1,7 @@
 # Example configuration for training with HuggingFace datasets using the new config format
 # This shows how to use the new configuration-based dataset loading system
 
-
+# Hydra configuration
 defaults:
   - _self_
   - override hydra/launcher: submitit_slurm
@@ -11,12 +11,12 @@ hydra:
   mode: MULTIRUN
   launcher:
     max_num_timeout: 999
-    gpus_per_node: 2
+    gpus_per_node: 8
     tasks_per_node: ${hydra.launcher.gpus_per_node}
-    cpus_per_task: 4
-    mem_gb: 32
+    cpus_per_task: 10
+    mem_gb: 60
     timeout_min: 120
-    partition: long
+    partition: scavenge,learnfair,dev
     signal_delay_s: 120
   job:
     chdir: true
@@ -75,7 +75,7 @@ data:
   val_split: "validation"
   config_name: null
   num_classes: 100
-  num_workers: 4
+  num_workers: 10
   seed: 983245
   # Optional additional parameters
   trust_remote_code: true
@@ -125,7 +125,7 @@ optim:
   adamw_beta1: 0.9
   adamw_beta2: 0.999
 train:
-  batch_size_per_gpu: 128
+  batch_size_per_gpu: 32
   output_dir: "./outputs_inet100_graph_check_sup_v3"
   saveckp_freq: 100
   seed: 0
@@ -179,4 +179,3 @@ evaluation:
     epochs: 100
     batch_size: 256
     save_checkpoint_frequency: 1
-
