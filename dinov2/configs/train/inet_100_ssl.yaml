@@ -6,22 +6,22 @@
 #   - _self_
 #   - override hydra/launcher: submitit_slurm
 
-# hydra:
-#   output_subdir: null
-#   mode: MULTIRUN
-#   launcher:
-#     max_num_timeout: 999
-#     gpus_per_node: 2
-#     tasks_per_node: ${hydra.launcher.gpus_per_node}
-#     cpus_per_task: 4
-#     mem_gb: 32
-#     timeout_min: 120
-#     partition: long
-#     signal_delay_s: 120
-#   job:
-#     chdir: true
-#   run:
-#     dir: .
+hydra:
+  output_subdir: null
+  mode: MULTIRUN
+  launcher:
+    max_num_timeout: 999
+    gpus_per_node: 2
+    tasks_per_node: ${hydra.launcher.gpus_per_node}
+    cpus_per_task: 4
+    mem_gb: 32
+    timeout_min: 120
+    partition: long
+    signal_delay_s: 120
+  job:
+    chdir: true
+  run:
+    dir: .
 
 MODEL:
   WEIGHTS: ""
