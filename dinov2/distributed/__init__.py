@@ -315,4 +315,29 @@ class GatherLayer(torch.autograd.Function):
 
 def all_gather(X, dim=0):
     """Gathers tensors from all processes, supporting backward propagation."""
-    return torch.cat(GatherLayer.apply(X), dim=dim)
+
+    if torch.distributed.is_initialized():
+        return torch.cat(GatherLayer.apply(X.contiguous()), dim=dim)
+
+    return X
+
+
+def all_gather_dict(
+    data: Dict[str, torch.Tensor], dim: int = 0
+) -> Dict[str, torch.Tensor]:
+    """Gathers tensors from all processes for a dictionary of tensors.
+    Ensures tensors are CUDA and dense before all_gather.
+    """
+    gathered_data = {}
+    for key, value in data.items():
+        if torch.is_tensor(value):
+            if not value.is_cuda:
+                gathered_data[key] = value.cuda()
+                continue
+            if value.is_sparse:
+                value = value.to_dense()
+            value = value.contiguous()
+            gathered_data[key] = all_gather(value, dim=dim)
+        else:
+            gathered_data[key] = value
+    return gathered_data

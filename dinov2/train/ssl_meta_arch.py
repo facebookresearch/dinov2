@@ -6,6 +6,7 @@
 from functools import partial
 import logging
 
+from dinov2 import distributed
 import torch
 from torch import nn
 
