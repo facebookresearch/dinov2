@@ -52,7 +52,7 @@ data:
   val_split: "validation"
   config_name: null
   num_classes: 100
-  num_workers: 4
+  num_workers: 10
   seed: 983245
   # Optional additional parameters
   trust_remote_code: true
