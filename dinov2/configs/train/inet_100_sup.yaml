@@ -160,11 +160,20 @@ evaluation:
 # Hydra configuration
 defaults:
   - _self_
-  - hydra/launcher: submitit_local # Change to submitit_slurm for SLURM clusters
+  - override hydra/launcher: submitit_slurm
 
-# disable hydra outputs
 hydra:
   output_subdir: null
+  mode: MULTIRUN
+  launcher:
+    max_num_timeout: 999
+    gpus_per_node: 8
+    tasks_per_node: ${hydra.launcher.gpus_per_node}
+    cpus_per_task: 10
+    mem_gb: 60
+    timeout_min: 120
+    partition: scavenge,learnfair,dev
+    signal_delay_s: 120
   job:
     chdir: true
   run:
