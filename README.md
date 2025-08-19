@@ -41,6 +41,7 @@ https://github.com/facebookresearch/dinov2/assets/60359573/f168823e-7922-415a-b4
       <th>ImageNet<br />k-NN</th>
       <th>ImageNet<br />linear</th>
       <th>download</th>
+      <th>Hugging Face<br/>model</th>
     </tr>
   </thead>
   <tbody>
@@ -51,6 +52,7 @@ https://github.com/facebookresearch/dinov2/assets/60359573/f168823e-7922-415a-b4
       <td align="right">79.0%</td>
       <td align="right">81.1%</td>
       <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vits14/dinov2_vits14_pretrain.pth">backbone only</a></td>
+      <td><a href="https://huggingface.co/facebook/dinov2-small">dinov2-small</a></td>
     </tr>
     <tr>
       <td>ViT-S/14 distilled</td>
@@ -67,6 +69,7 @@ https://github.com/facebookresearch/dinov2/assets/60359573/f168823e-7922-415a-b4
       <td align="right">82.1%</td>
       <td align="right">84.5%</td>
       <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitb14/dinov2_vitb14_pretrain.pth">backbone only</a></td>
+      <td><a href="https://huggingface.co/facebook/dinov2-base">dinov2-base</a></td>
     </tr>
     <tr>
       <td>ViT-B/14 distilled</td>
@@ -83,6 +86,7 @@ https://github.com/facebookresearch/dinov2/assets/60359573/f168823e-7922-415a-b4
       <td align="right">83.5%</td>
       <td align="right">86.3%</td>
       <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_pretrain.pth">backbone only</a></td>
+      <td><a href="https://huggingface.co/facebook/dinov2-large">dinov2-large</a></td>
     </tr>
     <tr>
       <td>ViT-L/14 distilled</td>
@@ -99,6 +103,7 @@ https://github.com/facebookresearch/dinov2/assets/60359573/f168823e-7922-415a-b4
       <td align="right">83.5%</td>
       <td align="right">86.5%</td>
       <td><a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitg14/dinov2_vitg14_pretrain.pth">backbone only</a></td>
+      <td><a href="https://huggingface.co/facebook/dinov2-giant">dinov2-giant</a></td>
     </tr>
     <tr>
       <td>ViT-g/14</td>
@@ -132,6 +137,40 @@ dinov2_vitb14_reg = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitb14_reg
 dinov2_vitl14_reg = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14_reg')
 dinov2_vitg14_reg = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14_reg')
 ```
+
+### Pretrained backbones (via Hugging Face Hub)
+
+Please follow the instructions [here](https://pytorch.org/get-started/locally/) to install PyTorch, then install transformers using `pip install transformers` in your environment.
+
+You can download the feature-extraction backbones using code like the following:
+
+```python
+from transformers import AutoModel
+
+dinov2_vits14 = AutoModel.from_pretrained('facebook/dinov2-small')
+dinov2_vitb14 = AutoModel.from_pretrained('facebook/dinov2-base')
+dinov2_vitl14 = AutoModel.from_pretrained('facebook/dinov2-large')
+dinov2_vitg14 = AutoModel.from_pretrained('facebook/dinov2-giant')
+```
+
+Example use in transformers
+
+```python
+from transformers import AutoImageProcessor, AutoModel
+from PIL import Image
+import requests
+
+url = 'http://images.cocodataset.org/val2017/000000039769.jpg'
+image = Image.open(requests.get(url, stream=True).raw)
+
+processor = AutoImageProcessor.from_pretrained('facebook/dinov2-base')
+model = AutoModel.from_pretrained('facebook/dinov2-base')
+
+inputs = processor(images=image, return_tensors="pt")
+outputs = model(**inputs)
+last_hidden_states = outputs.last_hidden_state
+```
+
 
 ### Pretrained heads - Image classification
 
