@@ -107,7 +107,7 @@ train:
   saveckp_freq: 100
   seed: 0
   # num_workers is now taken from data.num_workers
-  OFFICIAL_EPOCH_LENGTH: 1979 #1250 for in-1k? 
+  OFFICIAL_EPOCH_LENGTH: 494 # IN-100 126689 // 256 = 494
   cache_dataset: true
   centering: "centering" # or "sinkhorn_knopp"
 
