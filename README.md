@@ -297,6 +297,8 @@ dinov2_vitg14_reg_lc = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14_
 
 ### Pretrained heads - Semantic segmentation
 
+
+
 <table style="margin: auto">
   <thead>
     <tr>
