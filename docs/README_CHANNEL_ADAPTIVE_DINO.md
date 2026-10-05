@@ -126,12 +126,12 @@ Go to the docs directory, modifify some paths in launcher_CHAMMI_eval.sh and run
 
 ## License
 
-Cell-DINO code is released under the CC by NC licence See [LICENSE_CELL_DINO_CODE](LICENSE_CELL_DINO_CODE) for additional details.
-Model weights will be released under the FAIR Non-Commercial Research License. See [LICENSE_CELL_DINO_MODELS](LICENSE_CELL_DINO_MODELS) for additional details.
+Cell-DINO code is released under the CC by NC licence See [LICENSE_CELL_DINO_CODE](../LICENSE_CELL_DINO_CODE) for additional details.
+Model weights will be released under the FAIR Non-Commercial Research License. See [LICENSE_CELL_DINO_MODELS](../LICENSE_CELL_DINO_MODELS) for additional details.
 
 ## Contributing
 
-See [contributing](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md).
+See [contributing](../CONTRIBUTING.md) and the [code of conduct](../CODE_OF_CONDUCT.md).
 
 ## Citing ChannelAdaptiveDINO and DINOv2
 
