@@ -1,3 +1,7 @@
+<p align="center">
+  <b>English</b> · <a href="README.zh.md">简体中文</a>
+</p>
+
 :new: [2025-12-18] *Added support for loading XRay-DINO backbone following [Advancing human-centric AI for robust X-ray analysis through holistic self-supervised learning](https://arxiv.org/pdf/2405.01469), more details are [here](#pretrained-backbone-xray-dino)*
 
 :new: [2025-12-16] *Added Channel-Adaptive DINO code following [Scaling Channel-Adaptive Self-Supervised Learning](https://openreview.net/forum?id=pT8sgtRVAf), more details are [here](#dinov2-for-biology)*
