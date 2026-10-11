@@ -30,7 +30,7 @@ class KoLeoLoss(nn.Module):
         # parwise dot products (= inverse distance)
         dots = torch.mm(x, x.t())
         n = x.shape[0]
-        dots.view(-1)[:: (n + 1)].fill_(-1)  # Trick to fill diagonal with -1
+        dots.view(-1)[:: (n + 1)].fill_(float("-inf"))  # Exclude self even for antipodal vectors
         # max inner prod -> min distance
         _, I = torch.max(dots, dim=1)  # noqa: E741
         return I
