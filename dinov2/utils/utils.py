@@ -18,7 +18,7 @@ logger = logging.getLogger("dinov2")
 
 
 def load_pretrained_weights(model, pretrained_weights, checkpoint_key):
-    if urlparse(pretrained_weights).scheme:  # If it looks like an URL
+    if urlparse(pretrained_weights).scheme and not os.path.isfile(pretrained_weights):
         kwargs = {}
         # See https://github.com/pytorch/pytorch/releases/tag/v2.1.0 (Misc / #98479)
         if torch.__version__ >= (2, 1):
