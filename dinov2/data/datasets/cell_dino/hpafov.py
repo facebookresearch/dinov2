@@ -249,15 +249,15 @@ class HPAFoV(ExtendedVisionDataset):
 
         self._channels = np.repeat(np.array([[0, 1, 2, 3]]), len(self._image_paths), axis=0).tolist()
 
-        if self.wildcard == _WildCard.SEPARATECHANNELS.value.upper():
+        if self._channels and self.wildcard in (_WildCard.SEPARATECHANNELS, _WildCard.SEPARATECHANNELS.value.upper()):
             image_paths, labels, channels = self._image_paths, self._labels, self._channels
             channels = np.array(channels)
             # separate and stack the columns of the channels array
             C = channels.shape[1]
             channels = np.concatenate([channels[:, i] for i in range(C)])
             self._channels = np.expand_dims(channels, 1).tolist()
-            self.image_paths = image_paths * C
-            self.labels = labels * C
+            self._image_paths = image_paths * C
+            self._labels = labels * C
 
     def get_image_relpath(self, index: int) -> str:
         return self._image_paths[index]
@@ -269,7 +269,7 @@ class HPAFoV(ExtendedVisionDataset):
             image_data = f.read()
         if self.channel_adaptive:
             channels = self._channels[index]
-            return image_data + bytes(channels) + (len(channels)).to_bytes(1, byteorder="big")
+            return image_data + bytes(channels)
         else:
             return image_data
 
